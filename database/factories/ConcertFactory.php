@@ -22,10 +22,9 @@ class ConcertFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake('hu_HU')->word(),
+            'name' => fake()->word(),
             'performer_id' => Performer::all()->random()->id,
             'room_id' => Room::all()->random()->id,
-            'discount_id' => Discount::all()->random()->id,
             'date' => fake()->dateTime(),
             'base_price' => rand(15000,148000),
             'description' => fake()->sentence(),

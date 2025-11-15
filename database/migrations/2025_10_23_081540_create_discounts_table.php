@@ -14,26 +14,26 @@ return new class extends Migration
     {
         Schema::create('discounts', function (Blueprint $table) {
             $table->id(); 
-            $table->string('name', 20)->unique();
-            $table->unsignedTinyInteger('percentage');
+            $table->string('type', 20)->unique();
+            $table->unsignedTinyInteger('value');
             $table->timestamps();
         });
-        // Discount::create([
-        //     'type' => 'normál',
-        //     'value' => '100',
-        // ]);    
-        // Discount::create([
-        //     'type' => 'diák',
-        //     'value' => '50',
-        // ]);       
-        // Discount::create([
-        //     'type' => 'nyugdíjas',
-        //     'value' => '45',
-        // ]); 
-        // Discount::create([
-        //     'type' => 'vip',
-        //     'value' => '25',
-        // ]);        
+        Discount::create([
+            'type' => 'normál',
+            'value' => '100',
+        ]);    
+        Discount::create([
+            'type' => 'diák',
+            'value' => '50',
+        ]);       
+        Discount::create([
+            'type' => 'nyugdíjas',
+            'value' => '45',
+        ]); 
+        Discount::create([
+            'type' => 'vip',
+            'value' => '25',
+        ]);        
     }
 
     /**

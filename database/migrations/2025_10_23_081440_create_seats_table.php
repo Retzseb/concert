@@ -11,14 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('seats', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('room_id')->constrained();
-            $table->integer('row_number');
-            $table->integer('column_number');
-            $table->decimal('price_multiplier', 5, 2)->default(1.00);
-            $table->timestamps();
-        });
+    Schema::create('seats', function (Blueprint $table) {
+        $table->id();
+
+        $table->foreignId('place_id');
+        $table->integer('room_name');
+
+        $table->integer('row_number');
+        $table->integer('column_number');
+        $table->decimal('price_multiplier', 5, 2)->default(1.00);
+        $table->timestamps();
+
+        $table->foreign(['place_id', 'room_name'])
+            ->references(['place_id', 'name'])
+            ->on('rooms')
+            ->onDelete('cascade');
+});
+
     }
 
     /**

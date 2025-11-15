@@ -22,7 +22,7 @@ class TicketFactory extends Factory
         return [
             'reservation_id' => Reservation::all()->random()->id,
             'seat_id' => Seat::all()->random()->id,            
-            'discount_type' => rand(0,2),
+            'discount_type' => rand(1,4),
             'qr_code' => fake()->sentence(),
         ];
     }

@@ -22,8 +22,6 @@ class ReservationFactory extends Factory
         return [
             'user_id' => User::all()->random()->id,
             'concert_id' => Concert::all()->random()->id,
-            'seat_id' => Seat::all()->random()->id,
-            'discount_type' => rand(0,2),
             'reservation_date' => fake()->dateTime(),
             'status' => rand(0,2),
         ];

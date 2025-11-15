@@ -12,7 +12,7 @@ class Reservation extends Model
     protected $fillable = [
         'user_id',
         'concert_id', 
-        'total_price',        
+        //'total_price',        
         'reservation_date',
         'status'
     ];          
