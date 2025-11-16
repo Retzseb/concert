@@ -27,10 +27,14 @@ class SeatController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Seat $seat)
+    public function show($room_id, $row_number, $column_number)
     {
-        //
-    }
+        $lending = Seat::where('room_id',"=", $room_id)
+        ->where('room_id', $room_id)
+        ->where('row_number', $row_number)
+        ->where('column_number', $column_number)
+        ->get();
+        return $lending[0];    }
 
     /**
      * Update the specified resource in storage.

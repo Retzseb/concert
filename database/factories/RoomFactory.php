@@ -15,13 +15,13 @@ class RoomFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
+    public function definition()
     {
         return [
             'place_id' => Place::all()->random()->id,
-            'name' => rand(1,10),
-            'total_rows' => rand(10,30),
-            'total_columns' => rand(10,30)
+            'name' => $this->faker->unique()->numberBetween(1, 100),
+            'total_rows' => rand(5, 20),
+            'total_columns' => rand(5, 20),
         ];
     }
 }

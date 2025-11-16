@@ -15,4 +15,9 @@ class Room extends Model
         'total_rows', 
         'total_columns'
     ];        
+
+    public function place()
+    {
+        return $this->belongsTo(Place::class);
+    }
 }

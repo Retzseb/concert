@@ -14,18 +14,15 @@ return new class extends Migration
     Schema::create('seats', function (Blueprint $table) {
         $table->id();
 
-        $table->foreignId('place_id');
-        $table->integer('room_name');
+        $table->foreignId('room_id')->constrained('rooms');
 
         $table->integer('row_number');
         $table->integer('column_number');
         $table->decimal('price_multiplier', 5, 2)->default(1.00);
         $table->timestamps();
 
-        $table->foreign(['place_id', 'room_name'])
-            ->references(['place_id', 'name'])
-            ->on('rooms')
-            ->onDelete('cascade');
+        $table->unique(['room_id', 'row_number', 'column_number']);
+
 });
 
     }
