@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->tinyInteger('status')->default(0); 
             $table->timestamps();
+
+            $table->unique(['name', 'room_id', 'date']);
         });
 
     }

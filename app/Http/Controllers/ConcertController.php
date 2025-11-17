@@ -27,9 +27,14 @@ class ConcertController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Concert $concert)
+    public function show($performer_id, $name, $room_id)
     {
-        //
+        $lending = Concert::where('performer_id',"=", $performer_id)
+        ->where('performer_id', $performer_id)
+        ->where('name', $name)
+        ->where('room_id', $room_id)
+        ->get();
+        return $lending[0]; 
     }
 
     /**
