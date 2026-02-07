@@ -35,3 +35,24 @@ Route::get("/genres/{id}", [GenreController::class, "show"]);
 Route::get("/performers/{id}", [PerformerController::class, "show"]);
 Route::get("/places/{id}", [PlaceController::class, "show"]);
 Route::get("/rooms/{place_id}/{name}", [RoomController::class, "show"]);
+
+
+Route::post('/register',[RegisteredUserController::class, 'store']);
+Route::post('/login',[AuthenticatedSessionController::class, 'store']);
+
+
+//auth
+Route::middleware(['auth:sanctum'])
+->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+    // Kijelentkezés útvonal
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
+});
+
+//admin
+Route::middleware(['auth:sanctum', Admin::class])
+->group(function () {
+    Route::get('/users', [UserController::class, 'index']);
+});
