@@ -10,42 +10,31 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Handle an incoming authentication request.
-     */
-    public function store(LoginRequest $request): Response
-    {
-        // $request->authenticate();
 
-        // $request->session()->regenerate();
+public function store(Request $request)
+{
+    $credentials = $request->validate([
+        'email' => ['required', 'email'],
+        'password' => ['required'],
+    ]);
 
-        // return response()->noContent();
-
-        $request->validate([
-            'email' => ['required', 'string', 'email'],
-            'password' => ['required', 'string'],
-        ]);
-
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            return response()->json(['message' => 'Invalid login credentials'], 401);
-        }
-
-        /* $user = Auth::user();
-        $token = $user->createToken('auth_token')->plainTextToken; */
-
-        /* return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'user' => $user,
-            'status' => 'Login successful',
-        ]); */
-        return response()->noContent();
+    if (!Auth::attempt($credentials)) {
+        return response()->json(['message' => 'Hibás email vagy jelszó'], 401);
     }
 
-    /**
-     * Destroy an authenticated session.
-     */
-    public function destroy(Request $request): Response
+    $user = $request->user();
+
+    $token = $user->createToken('auth_token')->plainTextToken;
+
+    return response()->json([
+        'access_token' => $token,
+        'token_type' => 'Bearer',
+        'user' => $user,
+        'status' => 'Login successful',
+    ]);
+}
+
+    public function destroy(Request $request)
     {
         Auth::guard("web")->logout();
         $request->session()->invalidate();
