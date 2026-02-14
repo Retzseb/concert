@@ -49,8 +49,9 @@ Route::middleware(['auth:sanctum'])
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-    // Kijelentkezés útvonal
-    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
+
+// Kijelentkezés útvonal
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
 });
 
 //admin

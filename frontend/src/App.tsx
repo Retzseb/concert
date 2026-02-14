@@ -3,49 +3,54 @@ import { useMemo, useState } from "react";
 type Page = "home" | "login";
 
 export default function App() {
-  
   const [page, setPage] = useState<Page>("home");
 
   //LOGIN
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("kasszaspiros@example.com");
+  const [password, setPassword] = useState("kasszas1*/%");
   const [message, setMessage] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
 
   const login = async () => {
-    setMessage("");
+    await fetch("http://localhost:8000/sanctum/csrf-cookie", {
+      method: "GET",
+      credentials: "include", 
+    });
 
-    try {
-      const res = await fetch("http://localhost:8000/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+    const API = "http://localhost:8000/api";
+    const res = await fetch(`${API}/login`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
 
-      if (!res.ok) {
-        setMessage("Hibás email vagy jelszó");
-        return;
-      }
-
-      const data = await res.json();
-      localStorage.setItem("token", data.access_token);
-
-      setLoggedIn(true);
-      setMessage("Sikeres belépés!");
-    } catch {
-      setMessage("Nem sikerült csatlakozni a szerverhez (backend fut?)");
+    if (!res.ok) {
+      setMessage("Hibás email vagy jelszó");
+      return;
     }
+
+    setLoggedIn(true);
+    setMessage("Sikeres belépés!");    
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
+const logout = async () => { 
+  await fetch("http://localhost:8000/api/logout", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include", 
+  });
     setLoggedIn(false);
     setEmail("");
     setPassword("");
     setMessage("Kijelentkezve.");
   };
 
-  
   const fallbackVars = useMemo(
     () =>
       ({
@@ -53,7 +58,7 @@ export default function App() {
         ["--violet2" as any]: "var(--green2)",
         ["--pink" as any]: "var(--green3)",
       }) as React.CSSProperties,
-    []
+    [],
   );
 
   return (
@@ -66,12 +71,7 @@ export default function App() {
             aria-label="SEATY főoldal"
             style={{ background: "transparent", border: 0, cursor: "pointer" }}
           >
-            <img
-              src="/SEATY_logo.jpg"
-              alt="SEATY logó"
-              className="logoImg"
-            />
-
+            <img src="/SEATY_logo.jpg" alt="SEATY logó" className="logoImg" />
           </button>
 
           <nav className="nav" aria-label="Fő navigáció">
@@ -100,10 +100,18 @@ export default function App() {
 
             {!loggedIn ? (
               <>
-                <button className="btn" type="button" onClick={() => setPage("login")}>
+                <button
+                  className="btn"
+                  type="button"
+                  onClick={() => setPage("login")}
+                >
                   Belépés
                 </button>
-                <button className="btn" type="button" onClick={() => setPage("login")}>
+                <button
+                  className="btn"
+                  type="button"
+                  onClick={() => setPage("login")}
+                >
                   Regisztráció
                 </button>
               </>
@@ -127,17 +135,19 @@ export default function App() {
               <div className="container heroGrid">
                 <article className="heroCard">
                   <div className="heroCard__inner">
-                  
-
                     <h1 className="heroTitle">SEATY</h1>
-                    <p className="heroSub">
-                      Gyors jegy, biztos hely!
-                    </p>
+                    <p className="heroSub">Gyors jegy, biztos hely!</p>
 
-                    <div className="searchPanel" aria-label="Kereső (placeholder)">
+                    <div
+                      className="searchPanel"
+                      aria-label="Kereső (placeholder)"
+                    >
                       <div className="field">
                         <div className="label">Keresés</div>
-                        <input className="input" placeholder="Koncert / előadó" />
+                        <input
+                          className="input"
+                          placeholder="Koncert / előadó"
+                        />
                       </div>
 
                       <div className="field">
@@ -173,8 +183,8 @@ export default function App() {
                 </article>
 
                 <aside className="heroSide" aria-label="Oldalsáv">
-                  <div className="miniCard"> 
-                     <h3>Gyors belépés *</h3> {/*nem hiszem, hogy ez kell 2x */}
+                  <div className="miniCard">
+                    <h3>Gyors belépés *</h3> {/*nem hiszem, hogy ez kell 2x */}
                     <p>Ha már van fiókod, lépj be és folytasd a foglalást.</p>
                     <button
                       className="btn"
@@ -188,7 +198,9 @@ export default function App() {
 
                   <div className="miniCard">
                     <h3>SEATY tipp</h3>
-                    <p>Később ide jöhet “kiemelt koncert”, “új események”, stb.</p>
+                    <p>
+                      Később ide jöhet “kiemelt koncert”, “új események”, stb.
+                    </p>
                   </div>
                 </aside>
               </div>
@@ -209,8 +221,12 @@ export default function App() {
                       <span className="badge">Rock</span>
                     </div>
                     <div className="cardBody">
-                      <h3 className="cardTitle">Tankcsapda – Tavaszi koncert</h3>
-                      <p className="meta">2026.03.12 • Budapest Park • Terem 1</p>
+                      <h3 className="cardTitle">
+                        Tankcsapda – Tavaszi koncert
+                      </h3>
+                      <p className="meta">
+                        2026.03.12 • Budapest Park • Terem 1
+                      </p>
                       <div className="priceRow">
                         <span className="price">12 990 Ft</span>
                         <span className="cta">Részletek</span>
@@ -249,7 +265,9 @@ export default function App() {
                       <span className="badge">Indie</span>
                     </div>
                     <div className="cardBody">
-                      <h3 className="cardTitle">Ivan &amp; The Parazol – Klub</h3>
+                      <h3 className="cardTitle">
+                        Ivan &amp; The Parazol – Klub
+                      </h3>
                       <p className="meta">2026.03.08 • Dürer Kert • Terem 1</p>
                       <div className="priceRow">
                         <span className="price">10 990 Ft</span>
@@ -289,7 +307,11 @@ export default function App() {
             <div className="container">
               <div className="sectionHead">
                 <h2>Belépés</h2>
-                <button className="pill" type="button" onClick={() => setPage("home")}>
+                <button
+                  className="pill"
+                  type="button"
+                  onClick={() => setPage("home")}
+                >
                   ← Vissza
                 </button>
               </div>
@@ -299,7 +321,6 @@ export default function App() {
                   <div className="poster" aria-hidden="true" />
                   <div className="detailInfo">
                     <h3>Fiók belépés</h3>
-                    <p>Backend: http://localhost:8000/api/login</p>
 
                     {!loggedIn ? (
                       <div style={{ display: "grid", gap: 12, maxWidth: 420 }}>
@@ -343,7 +364,13 @@ export default function App() {
                         </div>
 
                         {message && (
-                          <p style={{ margin: 0, color: "rgba(243,241,255,.8)", fontWeight: 700 }}>
+                          <p
+                            style={{
+                              margin: 0,
+                              color: "rgba(243,241,255,.8)",
+                              fontWeight: 700,
+                            }}
+                          >
                             {message}
                           </p>
                         )}
@@ -354,11 +381,21 @@ export default function App() {
                           Be vagy jelentkezve mint <b>{email}</b>
                         </p>
                         {message && <p style={{ marginTop: 8 }}>{message}</p>}
-                        <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
-                          <button className="btn" type="button" onClick={() => setPage("home")}>
+                        <div
+                          style={{ display: "flex", gap: 10, marginTop: 12 }}
+                        >
+                          <button
+                            className="btn"
+                            type="button"
+                            onClick={() => setPage("home")}
+                          >
                             Irány a főoldal
                           </button>
-                          <button className="pill" type="button" onClick={logout}>
+                          <button
+                            className="pill"
+                            type="button"
+                            onClick={logout}
+                          >
                             Kilépés
                           </button>
                         </div>
@@ -377,11 +414,11 @@ export default function App() {
           <div className="footGrid">
             <div>
               <div className="brand" style={{ marginBottom: 10 }}>
-                 <img
-              src="/SEATY_logo.jpg"
-              alt="SEATY logó"
-              className="logoImg"
-            />
+                <img
+                  src="/SEATY_logo.jpg"
+                  alt="SEATY logó"
+                  className="logoImg"
+                />
               </div>
               <div style={{ color: "rgba(243,241,255,.65)", fontWeight: 650 }}>
                 Hasznos linkek
@@ -451,9 +488,8 @@ export default function App() {
             }}
           >
             demo UI:
-            <br></br>
-            © 2026 SEATY –  Vizsgaremek UI – React + TypeScript (CRA), 
-                <br></br>Bíró Eszter & Szépréthy Regina
+            <br></br>© 2026 SEATY – Vizsgaremek UI – React + TypeScript (CRA),
+            <br></br>Bíró Eszter & Szépréthy Regina
           </div>
         </div>
       </footer>
