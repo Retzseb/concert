@@ -1,4 +1,6 @@
 import { useMemo, useState } from "react";
+import { Concerts } from "./components/Concert";
+import { ConcertCard } from "./pages/ConcertCard";
 
 type Page = "home" | "login";
 
@@ -37,17 +39,29 @@ export default function App() {
     setMessage("Sikeres belépés!");    
   };
 
-const logout = async () => { 
-  await fetch("http://localhost:8000/api/logout", {
+const logout = async () => {
+    await fetch("http://localhost:8000/sanctum/csrf-cookie", {
+      method: "GET",
+      credentials: "include", 
+    });
+
+    const API = "http://localhost:8000/api";
+    const res = await fetch(`${API}/logout`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      Accept: "application/json",
+      "X-Requested-With": "XMLHttpRequest",
     },
     credentials: "include", 
   });
+
+    if (!res.ok && res.status !== 401) {
+    setMessage("Kijelentkezés sikertelen.");
+    return;
+  }
+  
+
     setLoggedIn(false);
-    setEmail("");
-    setPassword("");
     setMessage("Kijelentkezve.");
   };
 
@@ -135,8 +149,8 @@ const logout = async () => {
               <div className="container heroGrid">
                 <article className="heroCard">
                   <div className="heroCard__inner">
-                    <h1 className="heroTitle">SEATY</h1>
-                    <p className="heroSub">Gyors jegy, biztos hely!</p>
+                    {/* <h1 className="heroTitle">SEATY</h1>
+                    <p className="heroSub">Gyors jegy, biztos hely!</p> */}
 
                     <div
                       className="searchPanel"
@@ -182,9 +196,9 @@ const logout = async () => {
                   </div>
                 </article>
 
-                <aside className="heroSide" aria-label="Oldalsáv">
+                 {/* <aside className="heroSide" aria-label="Oldalsáv">
                   <div className="miniCard">
-                    <h3>Gyors belépés *</h3> {/*nem hiszem, hogy ez kell 2x */}
+                    <h3>Gyors belépés *</h3> 
                     <p>Ha már van fiókod, lépj be és folytasd a foglalást.</p>
                     <button
                       className="btn"
@@ -202,102 +216,30 @@ const logout = async () => {
                       Később ide jöhet “kiemelt koncert”, “új események”, stb.
                     </p>
                   </div>
-                </aside>
+                </aside> */}
               </div>
             </section>
 
-            <section className="section" id="concerts">
-              <div className="container">
-                <div className="sectionHead">
-                  <h2>Koncertek (demo)</h2>
-                  <a href="#" onClick={(e) => e.preventDefault()}>
-                    Összes megtekintése →
-                  </a>
-                </div>
+            <Concerts>
+              {({ concerts, loading, error }) => (
+                <section className="section">
+                  <div className="container">
+                    <h2>Összes koncert</h2>
 
-                <div className="grid">
-                  <article className="card">
-                    <div className="thumb">
-                      <span className="badge">Rock</span>
-                    </div>
-                    <div className="cardBody">
-                      <h3 className="cardTitle">
-                        Tankcsapda – Tavaszi koncert
-                      </h3>
-                      <p className="meta">
-                        2026.03.12 • Budapest Park • Terem 1
-                      </p>
-                      <div className="priceRow">
-                        <span className="price">12 990 Ft</span>
-                        <span className="cta">Részletek</span>
-                      </div>
-                    </div>
-                  </article>
+                    {loading && <p>Betöltés…</p>}
+                    {error && <p>{error}</p>}
 
-                  <article className="card">
-                    <div
-                      className="thumb"
-                      style={{
-                        background:
-                          "linear-gradient(135deg, rgba(34,197,94,.28), rgba(168,85,247,.45))",
-                      }}
-                    >
-                      <span className="badge">Pop</span>
-                    </div>
-                    <div className="cardBody">
-                      <h3 className="cardTitle">Halott Pénz – Turné</h3>
-                      <p className="meta">2026.04.05 • A38 • Terem 1</p>
-                      <div className="priceRow">
-                        <span className="price">14 990 Ft</span>
-                        <span className="cta">Részletek</span>
+                    {!loading && !error && (
+                      <div className="grid">
+                        {concerts.map((c) => (
+                          <ConcertCard key={c.id} concert={c} />
+                        ))}
                       </div>
-                    </div>
-                  </article>
-
-                  <article className="card">
-                    <div
-                      className="thumb"
-                      style={{
-                        background:
-                          "linear-gradient(135deg, rgba(236,72,153,.35), rgba(124,58,237,.38))",
-                      }}
-                    >
-                      <span className="badge">Indie</span>
-                    </div>
-                    <div className="cardBody">
-                      <h3 className="cardTitle">
-                        Ivan &amp; The Parazol – Klub
-                      </h3>
-                      <p className="meta">2026.03.08 • Dürer Kert • Terem 1</p>
-                      <div className="priceRow">
-                        <span className="price">10 990 Ft</span>
-                        <span className="cta">Részletek</span>
-                      </div>
-                    </div>
-                  </article>
-
-                  <article className="card">
-                    <div
-                      className="thumb"
-                      style={{
-                        background:
-                          "linear-gradient(135deg, rgba(59,130,246,.18), rgba(168,85,247,.42))",
-                      }}
-                    >
-                      <span className="badge">Jazz</span>
-                    </div>
-                    <div className="cardBody">
-                      <h3 className="cardTitle">Budapest Jazz Collective</h3>
-                      <p className="meta">2026.03.01 • Müpa • Terem 2</p>
-                      <div className="priceRow">
-                        <span className="price">8 990 Ft</span>
-                        <span className="cta">Részletek</span>
-                      </div>
-                    </div>
-                  </article>
-                </div>
-              </div>
-            </section>
+                    )}
+                  </div>
+                </section>
+              )}
+            </Concerts>
           </>
         )}
 

@@ -107,7 +107,8 @@
       overflow:hidden;
       position:relative;
     }
-    .heroCard__inner{ padding:26px; }
+    .heroCard__inner{ 
+      padding:26px}
     /* .kicker{ // már nincs!
       display:inline-flex; gap:10px; align-items:center;
       padding:6px 10px;
