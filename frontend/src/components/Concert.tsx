@@ -20,12 +20,15 @@ export function Concerts(props: {
       try {
         setLoading(true);
         setError("");
+
         const res = await fetch(API, {
           method: "GET",
           credentials: "include",
           headers: { Accept: "application/json" },
         });
+
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
         const data = await res.json();
         if (alive) setConcerts(data);
       } catch {
@@ -51,14 +54,12 @@ export function Concerts(props: {
 
   const next = index < concerts.length - 1;
 
-  const list = mode === "home" ? concerts.slice(index) : concerts;
-
   return (
     <div>
       {mode === "home" && (
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
         <div className="cards">
-          {list.map((c) => (
+          {concerts.slice(index).map((c) => (
             <ConcertCard key={c.id} concert={c} />
           ))}
         </div>

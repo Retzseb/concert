@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { Concerts } from "./components/Concert";
-import { ConcertCard } from "./components/ConcertCard";
 
 type Page = "home" | "login";
 
