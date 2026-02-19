@@ -1,419 +1,96 @@
 import { useMemo, useState } from "react";
 import { Concerts } from "./components/Concert";
+import { Login } from "./pages/LogInOut";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Home } from "./pages/Home";
 
-type Page = "home" | "login";
+// type Page = "home" | "login";
 
-export default function App() {
-  const [page, setPage] = useState<Page>("home");
+// export default function App() {
+//   const [page, setPage] = useState<Page>("home");
 
-  //LOGIN
-  const [email, setEmail] = useState("kasszaspiros@example.com");
-  const [password, setPassword] = useState("kasszas1*/%");
-  const [message, setMessage] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
+//   //LOGIN
+//   const [email, setEmail] = useState("kasszaspiros@example.com");
+//   const [password, setPassword] = useState("kasszas1*/%");
+//   const [message, setMessage] = useState("");
+//   const [loggedIn, setLoggedIn] = useState(false);
 
-  const login = async () => {
-    await fetch("http://localhost:8000/sanctum/csrf-cookie", {
-      method: "GET",
-      credentials: "include", 
-    });
+//   const login = async () => {
+//     await fetch("http://localhost:8000/sanctum/csrf-cookie", {
+//       method: "GET",
+//       credentials: "include", 
+//     });
 
-    const API = "http://localhost:8000/api";
-    const res = await fetch(`${API}/login`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+//     const API = "http://localhost:8000/api";
+//     const res = await fetch(`${API}/login`, {
+//       method: "POST",
+//       credentials: "include",
+//       headers: {
+//         "Content-Type": "application/json",
+//         Accept: "application/json",
+//       },
+//       body: JSON.stringify({ email, password }),
+//     });
 
-    if (!res.ok) {
-      setMessage("Hibás email vagy jelszó");
-      return;
-    }
+//     if (!res.ok) {
+//       setMessage("Hibás email vagy jelszó");
+//       return;
+//     }
 
-    setLoggedIn(true);
-    setMessage("Sikeres belépés!");    
-  };
+//     setLoggedIn(true);
+//     setMessage("Sikeres belépés!");    
+//   };
 
-const logout = async () => {
-    await fetch("http://localhost:8000/sanctum/csrf-cookie", {
-      method: "GET",
-      credentials: "include", 
-    });
+// const logout = async () => {
+//     await fetch("http://localhost:8000/sanctum/csrf-cookie", {
+//       method: "GET",
+//       credentials: "include", 
+//     });
 
-    const API = "http://localhost:8000/api";
-    const res = await fetch(`${API}/logout`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "X-Requested-With": "XMLHttpRequest",
-    },
-    credentials: "include", 
-  });
+//     const API = "http://localhost:8000/api";
+//     const res = await fetch(`${API}/logout`, {
+//     method: "POST",
+//     headers: {
+//       Accept: "application/json",
+//       "X-Requested-With": "XMLHttpRequest",
+//     },
+//     credentials: "include", 
+//   });
 
-    if (!res.ok && res.status !== 401) {
-    setMessage("Kijelentkezés sikertelen.");
-    return;
-  }
+//     if (!res.ok && res.status !== 401) {
+//     setMessage("Kijelentkezés sikertelen.");
+//     return;
+//   }
   
-    setLoggedIn(false);
-    setMessage("Kijelentkezve.");
-  };
+//     setLoggedIn(false);
+//     setMessage("Kijelentkezve.");
+//   };
 
-  const fallbackVars = useMemo(
-    () =>
-      ({
-        ["--violet" as any]: "var(--green)",
-        ["--violet2" as any]: "var(--green2)",
-        ["--pink" as any]: "var(--green3)",
-      }) as React.CSSProperties,
-    [],
-  );
-
+//   const fallbackVars = useMemo(
+//     () =>
+//       ({
+//         ["--violet" as any]: "var(--green)",
+//         ["--violet2" as any]: "var(--green2)",
+//         ["--pink" as any]: "var(--green3)",
+//       }) as React.CSSProperties,
+//     [],
+//   );
+function App() {
   return (
-    <div style={fallbackVars}>
-      <header className="topbar">
-        <div className="container topbar__inner">
-          <button
-            className="brand"
-            onClick={() => setPage("home")}
-            aria-label="SEATY főoldal"
-            style={{ background: "transparent", border: 0, cursor: "pointer" }}
-          >
-            <img src="/SEATY_logo.jpg" alt="SEATY logó" className="logoImg" />
-          </button>
+    <>
 
-          <nav className="nav" aria-label="Fő navigáció">
-            <a
-              href="#concerts"
-              onClick={(e) => {
-                e.preventDefault();
-                setPage("home");
-              }}
-            >
-              Koncertek
-            </a>
-            <a
-              href="#news"
-              onClick={(e) => {
-                e.preventDefault();
-                setPage("home");
-              }}
-            >
-              Újdonság
-            </a>
-          </nav>
+<BrowserRouter>
+<Routes>
+  <Route>
+        <Route path="/" element={<Home />} />
+  </Route>
+</Routes>
 
-          <div className="actions">
-            <span className="pill">Kosár</span>
-
-            {!loggedIn ? (
-              <>
-                <button
-                  className="btn"
-                  type="button"
-                  onClick={() => setPage("login")}
-                >
-                  Belépés
-                </button>
-                <button
-                  className="btn"
-                  type="button"
-                  onClick={() => setPage("login")}
-                >
-                  Regisztráció
-                </button>
-              </>
-            ) : (
-              <>
-                <span className="pill">Szia, {email}</span>
-                <button className="btn" type="button" onClick={logout}>
-                  Kilépés
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-      </header>
-
-      <main>
-        {/* HOME */}
-        {page === "home" && (
-          <>
-            <section className="hero" aria-label="Kezdőlap">
-              <div className="container heroGrid">
-                <article className="heroCard">
-                  <div className="heroCard__inner">
-                    {/* <h1 className="heroTitle">SEATY</h1>
-                    <p className="heroSub">Gyors jegy, biztos hely!</p> */}
-
-                    <div
-                      className="searchPanel"
-                      aria-label="Kereső (placeholder)"
-                    >
-                      <div className="field">
-                        <div className="label">Keresés</div>
-                        <input
-                          className="input"
-                          placeholder="Koncert / előadó"
-                        />
-                      </div>
-
-                      <div className="field">
-                        <div className="label">Dátum</div>
-                        <input className="input" placeholder="YYYY-MM-DD" />
-                      </div>
-
-                      <div className="field">
-                        <div className="label">Helyszín</div>
-                        <select className="select" defaultValue="Összes">
-                          <option>Összes</option>
-                          <option>Budapest Park</option>
-                          <option>A38</option>
-                          <option>Müpa</option>
-                        </select>
-                      </div>
-
-                      <div className="field">
-                        <div className="label">Műfaj</div>
-                        <select className="select" defaultValue="Összes">
-                          <option>Összes</option>
-                          <option>Rock</option>
-                          <option>Pop</option>
-                          <option>Jazz</option>
-                        </select>
-                      </div>
-
-                      <button className="searchBtn" type="button">
-                        Keresés
-                      </button>
-                    </div>
-                  </div>
-                </article>
-
-                 {/* <aside className="heroSide" aria-label="Oldalsáv">
-                  <div className="miniCard">
-                    <h3>Gyors belépés *</h3> 
-                    <p>Ha már van fiókod, lépj be és folytasd a foglalást.</p>
-                    <button
-                      className="btn"
-                      type="button"
-                      onClick={() => setPage("login")}
-                      style={{ width: "100%", borderRadius: 14, marginTop: 10 }}
-                    >
-                      Belépés
-                    </button>
-                  </div>
-
-                  <div className="miniCard">
-                    <h3>SEATY tipp</h3>
-                    <p>
-                      Később ide jöhet “kiemelt koncert”, “új események”, stb.
-                    </p>
-                  </div>
-                </aside> */}
-              </div>
-            </section>
-
-            <Concerts/>
+</BrowserRouter>
+        <Concerts/>
           </>
-        )}
-
-        {/* LOGIN */}
-        {page === "login" && (
-          <section className="section" aria-label="Belépés">
-            <div className="container">
-              <div className="sectionHead">
-                <h2>Belépés</h2>
-                <button
-                  className="pill"
-                  type="button"
-                  onClick={() => setPage("home")}
-                >
-                  ← Vissza
-                </button>
-              </div>
-
-              <div className="detailWrap" style={{ padding: 16 }}>
-                <div className="detailHero" style={{ alignItems: "stretch" }}>
-                  <div className="poster" aria-hidden="true" />
-                  <div className="detailInfo">
-                    <h3>Fiók belépés</h3>
-
-                    {!loggedIn ? (
-                      <div style={{ display: "grid", gap: 12, maxWidth: 420 }}>
-                        <div>
-                          <div className="label">E-mail</div>
-                          <input
-                            className="input"
-                            type="text"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="email@example.com"
-                          />
-                        </div>
-
-                        <div>
-                          <div className="label">Jelszó</div>
-                          <input
-                            className="input"
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="••••••••"
-                          />
-                        </div>
-
-                        <div style={{ display: "flex", gap: 10 }}>
-                          <button className="btn" type="button" onClick={login}>
-                            Belépés
-                          </button>
-                          <button
-                            className="pill"
-                            type="button"
-                            onClick={() => {
-                              setEmail("");
-                              setPassword("");
-                              setMessage("");
-                            }}
-                          >
-                            Törlés
-                          </button>
-                        </div>
-
-                        {message && (
-                          <p
-                            style={{
-                              margin: 0,
-                              color: "rgba(243,241,255,.8)",
-                              fontWeight: 700,
-                            }}
-                          >
-                            {message}
-                          </p>
-                        )}
-                      </div>
-                    ) : (
-                      <>
-                        <p>
-                          Be vagy jelentkezve mint <b>{email}</b>
-                        </p>
-                        {message && <p style={{ marginTop: 8 }}>{message}</p>}
-                        <div
-                          style={{ display: "flex", gap: 10, marginTop: 12 }}
-                        >
-                          <button
-                            className="btn"
-                            type="button"
-                            onClick={() => setPage("home")}
-                          >
-                            Irány a főoldal
-                          </button>
-                          <button
-                            className="pill"
-                            type="button"
-                            onClick={logout}
-                          >
-                            Kilépés
-                          </button>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
-      </main>
-
-      <footer>
-        <div className="container">
-          <div className="footGrid">
-            <div>
-              <div className="brand" style={{ marginBottom: 10 }}>
-                <img
-                  src="/SEATY_logo.jpg"
-                  alt="SEATY logó"
-                  className="logoImg"
-                />
-              </div>
-              <div style={{ color: "rgba(243,241,255,.65)", fontWeight: 650 }}>
-                Hasznos linkek
-              </div>
-            </div>
-
-            <div>
-              <h5>Menü</h5>
-              <a
-                href="#concerts"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setPage("home");
-                }}
-              >
-                Koncertek
-              </a>
-              <a
-                href="#news"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setPage("home");
-                }}
-              >
-                Újdonság
-              </a>
-            </div>
-
-            <div>
-              <h5>Fiók</h5>
-              <a
-                href="#login"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setPage("login");
-                }}
-              >
-                Belépés
-              </a>
-              <a href="#register" onClick={(e) => e.preventDefault()}>
-                Regisztráció
-              </a>
-            </div>
-
-            <div>
-              <h5>Jogi</h5>
-              <a href="#impresszum" onClick={(e) => e.preventDefault()}>
-                Impresszum
-              </a>
-              <a href="#aszf" onClick={(e) => e.preventDefault()}>
-                ÁSZF
-              </a>
-              <a href="#adatkezeles" onClick={(e) => e.preventDefault()}>
-                Adatkezelés
-              </a>
-            </div>
-          </div>
-
-          <div
-            style={{
-              marginTop: 18,
-              borderTop: "1px solid var(--line)",
-              paddingTop: 14,
-              color: "rgba(243,241,255,.55)",
-              fontWeight: 650,
-              fontSize: 12,
-            }}
-          >
-            demo UI:
-            <br></br>© 2026 SEATY – Vizsgaremek UI – React + TypeScript (CRA),
-            <br></br>Bíró Eszter & Szépréthy Regina
-          </div>
-        </div>
-      </footer>
-    </div>
+ 
   );
 }
+
+export default App;

@@ -3,11 +3,7 @@ import { ConcertCard } from "./ConcertCard";
 
 const API = "http://localhost:8000/api/concerts";
 
-export function Concerts(props: {
-  mode?: "home" | "page"; 
-}) {
-  const mode = props.mode ?? "home";
-
+export function Concerts(){
   const [concerts, setConcerts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -52,24 +48,22 @@ export function Concerts(props: {
   if (error) return <p>{error}</p>;
   if (concerts.length === 0) return <p>Nincs koncert.</p>;
 
-  const next = index < concerts.length - 1;
+  const next = () => {
+    setIndex((i) => (i + 1) % concerts.length);
+  };
 
   return (
     <div>
-      {mode === "home" && (
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
         <div className="cards">
           {concerts.slice(index).map((c) => (
             <ConcertCard key={c.id} concert={c} />
           ))}
         </div>
-          <button disabled={!next} onClick={() => setIndex((i) => i + 1)}>
+          <button className="btn" onClick={next}>
             ▶
           </button>
         </div>
-      )}
-
-
     </div>
   );
 }
