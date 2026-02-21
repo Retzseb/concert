@@ -38,9 +38,8 @@ export function Search() {
   []);
 
   return (
-    <article className="heroCard">
-      <div className="heroCard__inner">
         <div className="searchPanel" aria-label="Kereső (placeholder)">
+
           <div className="field">
             <div className="label">Keresés</div>
             <input className="input" placeholder="Koncert / előadó" />
@@ -75,11 +74,7 @@ export function Search() {
             </select>
           </div>
 
-          <button className="searchBtn" type="button">
-            Keresés
-          </button>
+          <button className="searchBtn" type="button">Keresés</button>
         </div>
-      </div>
-    </article>
   );
 }

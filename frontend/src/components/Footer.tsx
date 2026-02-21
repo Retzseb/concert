@@ -81,7 +81,6 @@ export function Footer() {
               fontSize: 12,
             }}
           >
-            demo UI:
             <br></br>© 2026 SEATY – Vizsgaremek UI – React + TypeScript (CRA),
             <br></br>Bíró Eszter & Szépréthy Regina
           </div>

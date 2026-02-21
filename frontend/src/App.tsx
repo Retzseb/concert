@@ -2,21 +2,23 @@
 
 import { BrowserRouter, Link, Routes, Route } from "react-router-dom";
 import { Home } from "./pages/Home";
+import { Concerts } from "./components/Concert";
+import { ConcertPage } from "./pages/Concerts";
+import { Login } from "./components/Login";
 
 
 function App() {
 
-
   return (
     <BrowserRouter>
-      {/* Navigation */}
       <nav>
-        <Link to="/"></Link>
+        <Link to="/"></Link>       
       </nav>
-
-      {/* Routes */}
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/concerts" element={<ConcertPage />} />
+        <Route path="/login" element={<Login />} />
+        {/* <Route path="/cart" element={<Cart />} />         */}
       </Routes>
     </BrowserRouter>
   );

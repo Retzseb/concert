@@ -1,42 +1,29 @@
-import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 
 export function Header() {
-  const [page, setPage] = useState("home");
-
   return (
-        <div className="container topbar__inner">
-          <button
-            className="brand"
-            onClick={() => setPage("home")}
-            aria-label="SEATY főoldal"
-            style={{ background: "transparent", border: 0, cursor: "pointer" }}
-          >
-            <img src="/SEATY_logo.jpg" alt="SEATY logó" className="logoImg" />
-          </button>
+    <div className="container topbar__inner">
+      <Link to="/" className="brand" aria-label="SEATY főoldal">
+        <img src="/SEATY_logo.jpg" alt="SEATY logó" className="logoImg" />
+      </Link>
 
-          <nav className="nav" aria-label="Fő navigáció">
-            <a
-              href="#concerts"
-              onClick={(e) => {
-                e.preventDefault();
-                setPage("home");
-              }}
-            >
-              Koncertek
-            </a>
-            <a
-              href="#news"
-              onClick={(e) => {
-                e.preventDefault();
-                setPage("home");
-              }}
-            >
-              Újdonság
-            </a>
-          </nav>
-          <div className="actions">
-            <span className="pill">Kosár</span>
-          </div>
-        </div>
+      <nav className="nav" aria-label="Fő navigáció">
+        <Link to="/concerts">Koncertek</Link>
+        <Link to="/">Újdonság</Link>
+      </nav>
+
+      <div className="actions">
+          <Link to="/cart">
+          <img
+            src="cart.png"
+            alt=""
+            style={{ width: "30px", filter: "invert(100%)" }}
+          /></Link>
+      </div>
+
+      <div className="actions">
+        <Link to="/login" className="pill">Bejelentkezés</Link>
+      </div>
+    </div>
   );
 }

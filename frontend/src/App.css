@@ -143,6 +143,8 @@
 
     /* Search Panel */
     .searchPanel{
+      max-width: 70%;
+      margin: auto;
       border:1px solid var(--line);
       background: rgba(9, 16, 10, 0.45);
       border-radius: 16px;

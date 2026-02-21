@@ -67,8 +67,6 @@ export function Login() {
     }
   }
 
-  
-
   return (
     <section className="section">
       <div className="container">
@@ -78,8 +76,8 @@ export function Login() {
           <form
             onSubmit={handleSubmit}
             className="searchPanel"
-            style={{ gridTemplateColumns: "1fr 1fr auto" }}
-          >
+            style={{ gridTemplateColumns: "1fr 1fr auto" }}>
+              
             <div className="field">
               <label className="label">Email</label>
               <input
