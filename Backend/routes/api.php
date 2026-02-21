@@ -63,3 +63,7 @@ Route::middleware(['auth:sanctum', Admin::class])
 Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
     return $request->user();
 });
+
+//Search főoldal
+Route::get('/placeList', [PlaceController::class, 'placeList']);
+Route::get('/genreList', [GenreController::class, 'genreList']);

@@ -47,4 +47,10 @@ class PlaceController extends Controller
     {
         //
     }
+
+    //Search főoldal
+    public function placeList()
+    {
+        return Place::orderBy('name')->get();
+    }
 }
