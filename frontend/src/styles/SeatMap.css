@@ -1,0 +1,85 @@
+/* Seat map */
+    .seatPanel{
+      border:1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(10,9,16,.35);
+      padding:14px;
+    }
+    .legend{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-bottom:12px;
+      font-size:12px;
+      color: rgba(243, 255, 241, 0.75);
+      font-weight:750;
+    }
+    .lg{
+      display:flex; align-items:center; gap:6px;
+      padding:6px 8px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background: rgba(255,255,255,.03);
+    }
+    .sq{ width:10px; height:10px; border-radius:3px; }
+    .sq.free{ background: var(--green); }
+    .sq.sel{ background: var(--yellow); }
+    .sq.sold{ background: #6b806f; }
+
+    .screen{
+      text-align:center;
+      padding:10px 12px;
+      border-radius: 12px;
+      border:1px solid var(--line);
+      background: linear-gradient(135deg, rgba(85, 247, 112, 0.18), rgba(77, 236, 72, 0.1));
+      font-weight:950;
+      letter-spacing:.5px;
+      margin-bottom:12px;
+    }
+
+    .seatGrid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:6px;
+    }
+    .seat{
+      aspect-ratio:1/1;
+      border-radius: 7px;
+      border:1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(34,197,94,.90);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+      cursor:pointer;
+    }
+    .seat:hover{ filter:brightness(1.07); }
+    .seat.sel{ background: rgba(86, 251, 36, 0.95); }
+    .seat.sold{ background: rgba(156, 175, 156, 0.55); cursor:not-allowed; }
+    .seat.empty{ background: transparent; border-color: transparent; box-shadow:none; cursor:default; }
+
+    .sideBox{
+      border:1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(10,9,16,.35);
+      padding:14px;
+      position:sticky;
+      top:86px;
+      height: fit-content;
+    }
+    .sideBox h4{ margin:0 0 8px; font-size:14px; font-weight:950; }
+    .miniRow{
+      display:flex; justify-content:space-between; align-items:center;
+      padding:10px 0;
+      border-bottom:1px dashed rgba(255, 255, 255, 0.1);
+      color: rgba(247, 255, 241, 0.78);
+      font-weight:700;
+      font-size:13px;
+    }
+    .miniRow:last-child{ border-bottom:none; }
+    .total{
+      margin-top:10px;
+      display:flex; justify-content:space-between; align-items:center;
+      font-weight:1000;
+      padding-top:10px;
+      border-top:1px solid var(--line);
+    }
+    .sideActions{
+      display:flex; gap:10px; margin-top:12px;
+    }
+    .sideActions .btn{ width:100%; border-radius:14px; }
