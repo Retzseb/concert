@@ -7,9 +7,8 @@ import { ConcertCard } from "../components/ConcertCard";
 export function Home() {
   return (
     <>
-      <Header />
       <Search />
-     <Concerts>
+      <Concerts>
         {({ concerts, loading, error }) => (
           <section className="section">
             <div className="container">

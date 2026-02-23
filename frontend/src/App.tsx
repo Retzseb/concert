@@ -1,26 +1,55 @@
 //képek vagy frontend képek mappa+adatbázis elérési útvonal vagy adatbázisban BASE64 formatumban
 
-import { BrowserRouter, Link, Routes, Route } from "react-router-dom";
-import { Home } from "./pages/Home";
-import { Concerts } from "./components/Concert";
-import { ConcertPage } from "./pages/Concerts";
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import { Header } from "./components/Header";
 import { Login } from "./components/Login";
+import { ConcertPage } from "./pages/Concerts";
+import { Home } from "./pages/Home"; 
 
+const API = "http://localhost:8000/api";
 
-function App() {
+export default function App() {
+  const [user, setUser] = React.useState<any | null>(null);
+
+  React.useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(`${API}/user`, {
+          credentials: "include",
+          headers: { Accept: "application/json" },
+        });
+        setUser(res.ok ? await res.json() : null);
+      } catch {
+        setUser(null);
+      }
+    })();
+  }, []);
+
+  const logout = async () => {
+    await fetch("http://localhost:8000/sanctum/csrf-cookie", {
+      method: "GET",
+      credentials: "include",
+    });
+
+    await fetch(`${API}/logout`, {
+      method: "POST",
+      credentials: "include",
+      headers: { Accept: "application/json" },
+    });
+
+    setUser(null);
+  };
 
   return (
     <BrowserRouter>
-      <nav>
-        <Link to="/"></Link>       
-      </nav>
+      <Header user={user} onLogout={logout} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/concerts" element={<ConcertPage />} />
-        <Route path="/login" element={<Login />} />
-        {/* <Route path="/cart" element={<Cart />} />         */}
+        <Route path="/login" element={<Login onLogin={setUser} />} />
       </Routes>
     </BrowserRouter>
   );
 }
-export default App;
