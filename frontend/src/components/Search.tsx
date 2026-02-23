@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Concerts } from "./Concert";
 
 export function Search() {
   const PLACES_API = "http://localhost:8000/api/placeList";

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { ReactNode, useCallback, useEffect, useState } from "react";
 
 const API = "http://localhost:8000/api/concerts";
 
@@ -8,7 +8,7 @@ type Props = {
     loading: boolean;
     error: string;
     reload: () => void;
-  }) => React.ReactNode;
+  }) => ReactNode;
 };
 
 export function Concerts({ children }: Props) {

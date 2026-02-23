@@ -1,6 +1,6 @@
 //képek vagy frontend képek mappa+adatbázis elérési útvonal vagy adatbázisban BASE64 formatumban
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { Header } from "./components/Header";
@@ -11,9 +11,9 @@ import { Home } from "./pages/Home";
 const API = "http://localhost:8000/api";
 
 export default function App() {
-  const [user, setUser] = React.useState<any | null>(null);
+  const [user, setUser] = useState<any | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     (async () => {
       try {
         const res = await fetch(`${API}/user`, {

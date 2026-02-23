@@ -1,6 +1,5 @@
 import { Search } from "../components/Search";
 import { Concerts } from "../components/Concert";
-import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import { ConcertCard } from "../components/ConcertCard";
 
