@@ -1,12 +1,14 @@
+import { Topbar } from "../components/Topbar";
 import { Search } from "../components/Search";
 import { Concerts } from "../components/Concert";
-import { Login } from "./LogInOut";
+
+
 
 export function Home() {
   return (
     <>
+      <Topbar />
       <Search />
-      <Login/>
       <Concerts />
     </>
   );
