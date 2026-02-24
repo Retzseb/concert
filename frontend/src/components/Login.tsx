@@ -29,20 +29,22 @@ export function Login(props: { onLogin: (u: any | null) => void }) {
     }
 
     try {
-      await fetch("http://localhost:8000/sanctum/csrf-cookie", {
-        method: "GET",
-        credentials: "include",
-      });
-
       const res = await fetch(`${API}/login`, {
         method: "POST",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
         body: JSON.stringify({ email, password }),
       });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data?.message ?? "Sikertelen belépés");
+      }
+
+      localStorage.setItem("token", data.access_token);
 
       if (!res.ok) {
         let msg = `Sikertelen belépés (HTTP ${res.status}).`;
@@ -54,8 +56,10 @@ export function Login(props: { onLogin: (u: any | null) => void }) {
       }
 
       const meRes = await fetch(`${API}/user`, {
-        credentials: "include",
-        headers: { Accept: "application/json" },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Accept: "application/json",
+        },
       });
 
       const user = meRes.ok ? await meRes.json() : { email };
@@ -79,8 +83,8 @@ export function Login(props: { onLogin: (u: any | null) => void }) {
           <form
             onSubmit={handleSubmit}
             className="searchPanel"
-            style={{ gridTemplateColumns: "1fr 1fr auto" }}
-          >
+            style={{ gridTemplateColumns: "1fr 1fr auto" }}>
+
             <div className="field">
               <label className="label">E-mail</label>
               <input className="input" name="email" type="email" required />
@@ -88,7 +92,11 @@ export function Login(props: { onLogin: (u: any | null) => void }) {
 
             <div className="field">
               <label className="label">Jelszó</label>
-              <input className="input" name="password" type="password" required />
+              <input
+                className="input"
+                name="password"
+                type="password"
+                required/>
             </div>
 
             <button className="searchBtn" type="submit" disabled={loading}>
@@ -97,7 +105,9 @@ export function Login(props: { onLogin: (u: any | null) => void }) {
           </form>
 
           {error && <p style={{ marginTop: 10, color: "red" }}>{error}</p>}
-          {success && <p style={{ marginTop: 10, color: "green" }}>{success}</p>}
+          {success && (
+            <p style={{ marginTop: 10, color: "green" }}>{success}</p>
+          )}
         </div>
       </div>
     </section>

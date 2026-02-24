@@ -36,12 +36,11 @@ public function store(Request $request)
 
     public function destroy(Request $request)
     {
-        Auth::guard("web")->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return response()->noContent();
-        /* $request->user()->currentAccessToken()->delete();
-
-        return response()->json(['message' => 'Logout successful']); */
+        // Auth::guard("web")->logout();
+        // $request->session()->invalidate();
+        // $request->session()->regenerateToken();
+        // return response()->noContent();
+    $request->user()->currentAccessToken()->delete();
+    return response()->json(['message' => 'Logout successful']);
     }
 }

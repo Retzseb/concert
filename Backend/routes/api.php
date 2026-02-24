@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ConcertController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\GenreController;
@@ -39,7 +40,7 @@ Route::get("/places/{id}", [PlaceController::class, "show"]);
 Route::get("/rooms/{place_id}/{name}", [RoomController::class, "show"]);
 
 
-//Route::post('/register',[RegisteredUserController::class, 'store']);
+Route::post('/register',[RegisteredUserController::class, 'store']);
 Route::post('/login',[AuthenticatedSessionController::class, 'store']);
 
 
@@ -55,10 +56,10 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
 });
 
 //admin
-Route::middleware(['auth:sanctum', Admin::class])
-->group(function () {
-    Route::get('/users', [UserController::class, 'index']);
-});
+// Route::middleware(['auth:sanctum', Admin::class])
+// ->group(function () {
+//     Route::get('/users', [UserController::class, 'index']);
+// });
 
 Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
     return $request->user();

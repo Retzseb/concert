@@ -48,7 +48,7 @@ export function Header(props: { user: any | null; onLogout: () => void }) {
                 }}
               >
                 <div style={{ marginBottom: 10, opacity: 0.85 }}>
-                  {props.user.email ?? "Bejelentkezve"}
+                  {props.user.name ?? "Bejelentkezve"}
                 </div>
 
                 <div style={{ display: "grid", gap: 8 }}>

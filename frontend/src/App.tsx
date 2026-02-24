@@ -13,34 +13,38 @@ const API = "http://localhost:8000/api";
 export default function App() {
   const [user, setUser] = useState<any | null>(null);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch(`${API}/user`, {
-          credentials: "include",
-          headers: { Accept: "application/json" },
-        });
-        setUser(res.ok ? await res.json() : null);
-      } catch {
-        setUser(null);
-      }
-    })();
-  }, []);
+useEffect(() => {
+  (async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
 
-  const logout = async () => {
-    await fetch("http://localhost:8000/sanctum/csrf-cookie", {
-      method: "GET",
-      credentials: "include",
-    });
+    try {
+      const res = await fetch(`${API}/user`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      });
 
-    await fetch(`${API}/logout`, {
-      method: "POST",
-      credentials: "include",
-      headers: { Accept: "application/json" },
-    });
+      setUser(res.ok ? await res.json() : null);
+    } catch {
+      setUser(null);
+    }
+  })();
+}, []);
 
-    setUser(null);
-  };
+const logout = async () => {
+  await fetch(`${API}/logout`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      Accept: "application/json",
+    },
+  });
+
+  localStorage.removeItem("token");
+  setUser(null);
+};
 
   return (
     <BrowserRouter>
