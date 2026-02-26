@@ -15,7 +15,7 @@ export function Header(props: { user: any | null; onLogout: () => void }) {
         <Link to="/">Újdonság</Link>
       </nav>
 
-      <div className="actions">
+      <div className="actions" style={{ position: "relative" }}>
         <Link to="/cart">
           <img
             src="cart.png"
@@ -23,9 +23,6 @@ export function Header(props: { user: any | null; onLogout: () => void }) {
             style={{ width: "30px", filter: "invert(100%)" }}
           />
         </Link>
-      </div>
-
-      <div className="actions" style={{ position: "relative" }}>
         {!props.user ? (
           <Link to="/login" className="pill">
             Bejelentkezés

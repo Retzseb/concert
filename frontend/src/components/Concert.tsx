@@ -1,6 +1,6 @@
 import React, { ReactNode, useCallback, useEffect, useState } from "react";
 
-const API = "http://localhost:8000/api/concerts";
+const API = "http://localhost:8000/api/concerts/all";
 
 type Props = {
   children: (args: {

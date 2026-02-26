@@ -43,10 +43,6 @@
       padding:14px 0;
       gap:14px;
     }
-    /* .brand{
-      display:flex; align-items:center; gap:10px;
-      font-weight:300; letter-spacing:.2px;
-    } */
     .logoMark{
       width:36px; height:36px; border-radius:12px;
       background: radial-gradient(circle at 35% 35%, rgba(255,255,255,.18), transparent 55%),
@@ -97,33 +93,13 @@
       align-items:stretch;
     }
     .heroCard{
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      background:
-        radial-gradient(900px 280px at 30% 0%, rgba(85, 247, 107, 0.26), transparent 55%),
-        radial-gradient(700px 250px at 85% 35%, rgba(138, 236, 72, 0.14), transparent 55%),
-        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255, 255, 255, 0.02));
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      position:relative;
-    }
-    .heroCard__inner{ 
-      padding:26px}
-    /* .kicker{ // már nincs!
-      display:inline-flex; gap:10px; align-items:center;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background: rgba(255, 255, 255, 0.03);
-      font-family: "Nunito Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      font-weight:300;
-      color: rgba(243,241,255,.86);
-    }
-    .kicker .dot{
-      width:8px; height:8px; border-radius:999px;
-      background: var(--pink);
-      box-shadow: 0 0 0 6px rgba(72, 236, 80, 0.16);
-    } */
+      background-image: url(../public/female-student-playing-violin.jpg);
+      padding-block: 9rem;
+      background-position: bottom;
+      background-size: cover;
+      background-repeat: no-repeat;
+     }
+
     .heroTitle{
       margin:14px 0 10px;
       font-size: clamp(28px, 3.2vw, 44px);

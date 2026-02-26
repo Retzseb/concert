@@ -18,7 +18,7 @@ export function ConcertPage() {
               <ul>
                 {concerts.map((c) => (
                   <li key={c.id}>
-                    {c.name} – {c.date} – {c.base_price} Ft
+                    {c.name} - {c.performer_name} – {c.date} – {c.base_price} Ft - {c.place_name}
                   </li>
                 ))}
               </ul>

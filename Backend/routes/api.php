@@ -66,5 +66,6 @@ Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
 });
 
 //Search főoldal
-Route::get('/placeList', [PlaceController::class, 'placeList']);
-Route::get('/genreList', [GenreController::class, 'genreList']);
+Route::get('/place/all', [PlaceController::class, 'placeList']);
+Route::get('/genre/all', [GenreController::class, 'genreList']);
+Route::get('/concerts/all', [ConcertController::class, 'concertAllDataList']);

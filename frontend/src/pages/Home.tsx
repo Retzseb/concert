@@ -1,33 +1,48 @@
-import { Search } from "../components/Search";
+import { useState } from "react";
+import { Search, SearchFilters } from "../components/Search";
 import { Concerts } from "../components/Concert";
-import { Footer } from "../components/Footer";
 import { ConcertCard } from "../components/ConcertCard";
+import { Footer } from "../components/Footer";
 
 export function Home() {
+  const [filters, setFilters] = useState<SearchFilters>({
+    q: "",
+    date: "",
+    placeId: "",
+    genreId: "",
+  });
   return (
     <>
-      <Search />
+      <div className="heroCard">
+        <Search onSearch={setFilters} />
+      </div>
+
       <Concerts>
-        {({ concerts, loading, error }) => (
-          <section className="section">
-            <div className="container">
-              <div className="sectionHead">
-                <h2>Koncertek</h2>
-              </div>
+        {({ concerts, loading, error }) => {
+          if (loading) return <p>Betöltés…</p>;
+          if (error) return <p>{error}</p>;
 
-              {loading && <p>Betöltés…</p>}
-              {error && <p>{error}</p>}
+          const filtered = concerts.filter((c: any) => {
+            const q = filters.q.trim().toLowerCase();
+            const date = filters.date.trim();
+            const genre = filters.genreId.toLowerCase();
 
-              {!loading && !error && (
-                <div className="grid">
-                  {concerts.map((c) => (
-                    <ConcertCard key={c.id} concert={c} />
-                  ))}
-                </div>
-              )}
+            return (
+              (!q || String(c?.name ?? "").toLowerCase() .includes(q) || String(c?.performer_name ?? "") .toLowerCase() .includes(q)) &&
+              (!date || String(c?.date ?? "").startsWith(date)) &&
+              (!filters.placeId || String(c?.place_id ?? "") === filters.placeId) &&
+              (!filters.genreId || String(c?.genre_name ?? "").toLowerCase() === genre)
+            );
+          });
+
+          return (
+            <div className="cards">
+              {filtered.map((c: any) => (
+                <ConcertCard key={c.id} concert={c} />
+              ))}
             </div>
-          </section>
-        )}
+          );
+        }}
       </Concerts>
       <Footer />
     </>
