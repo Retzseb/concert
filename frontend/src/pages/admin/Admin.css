@@ -1,0 +1,310 @@
+
+.adminShell { min-height: 100vh; }
+
+.adminTop{
+  position: sticky; top: 0; z-index: 60;
+  backdrop-filter: blur(14px);
+  background: rgba(9, 16, 9, 0.65);
+  border-bottom: 1px solid var(--line);
+  padding: 14px 18px;
+  display:flex; justify-content:space-between; align-items:center;
+  gap: 14px;
+}
+
+.adminBrand{ display:flex; align-items:center; gap: 12px; }
+.adminLogo{ width: 42px; height: 42px; border-radius: 12px; object-fit: cover; }
+.adminBrandTitle{ font-weight: 900; letter-spacing:.3px; }
+.adminBrandSub{ font-size: 12px; color: rgba(243,241,255,.7); font-weight: 650; }
+
+.adminTop__right{ display:flex; align-items:center; gap: 10px; }
+
+.adminBtn{
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.03);
+  color: rgba(243,241,255,.92);
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor:pointer;
+  font-weight: 800;
+  font-size: 13px;
+}
+.adminBtn--solid{
+  border: 0;
+  background: linear-gradient(135deg, var(--green), var(--green2));
+  box-shadow: 0 14px 35px rgba(64, 237, 58, 0.24);
+}
+.adminBtn--ghost{ text-decoration:none; display:inline-flex; align-items:center; }
+
+.adminMenu{ position: relative; }
+.adminMenu__drop{
+  position:absolute; right:0; top: calc(100% + 8px);
+  border:1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(10,9,16,.88);
+  overflow:hidden;
+  min-width: 180px;
+  z-index: 999;
+}
+.adminMenu:hover .adminMenu__drop{ display:block; }
+.adminMenu__item{
+  width:100%;
+  text-align:left;
+  padding: 12px 14px;
+  background: transparent;
+  border:0;
+  color: rgba(243,241,255,.92);
+  cursor:pointer;
+  font-weight: 800;
+}
+.adminMenu__item:hover{ background: rgba(255,255,255,.06); }
+
+.adminBody{
+  display:grid;
+  grid-template-columns: 260px 1fr;
+  gap: 0;
+  min-height: calc(100vh - 70px);
+}
+
+.adminSide{
+  border-right: 1px solid var(--line);
+  background: rgba(255,255,255,.02);
+  padding: 18px 14px;
+}
+
+.adminNavItem{
+  display:block;
+  padding: 14px 14px;
+  margin: 8px 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: rgba(243,241,255,.9);
+  font-weight: 900;
+  text-decoration:none;
+  background: rgba(10,9,16,.25);
+}
+.adminNavItem:hover{ border-color: rgba(148,229,108,.35); }
+.adminNavItem.active{
+  background: rgba(148,229,108,.12);
+  border-color: rgba(148,229,108,.35);
+}
+.adminNavItem--disabled{
+  opacity:.55;
+  cursor: not-allowed;
+}
+
+.adminMain{
+  padding: 18px;
+}
+
+.adminCard{
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255,255,255,.03);
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+
+.adminCardHead{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.adminCardHead h2{ margin:0; font-weight: 950; letter-spacing: .2px; }
+
+.adminMuted{ color: rgba(243,241,255,.7); font-weight: 650; }
+
+.adminTableWrap{ overflow:auto; border-radius: 12px; border: 1px solid var(--line); }
+.adminTable{
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 820px;
+  background: rgba(10,9,16,.22);
+}
+.adminTable th{
+  text-align:left;
+  padding: 12px 12px;
+  background: rgba(148,229,108,.14);
+  border-bottom: 1px solid var(--line);
+  font-weight: 950;
+}
+.adminTable td{
+  padding: 12px 12px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  font-weight: 700;
+  color: rgba(243,241,255,.9);
+}
+
+.adminSelect{
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.03);
+  color: rgba(243,241,255,.92);
+  padding: 10px 10px;
+  font-weight: 800;
+}
+.adminSelect, .select {
+  background: rgba(10, 9, 16, 0.85);
+  color: rgba(243, 241, 255, 0.92);
+  border: 1px solid var(--line);
+}
+
+
+.adminSelect option, .select option {
+  background: #0b0a10; /* fekete/sötét */
+  color: #f3f1ff;      /* fehér */
+}
+
+.adminDanger{
+  border: 0;
+  background: #f97316;
+  color: white;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-weight: 950;
+  cursor:pointer;
+}
+.adminDanger:hover{ filter: brightness(1.06); }
+
+.adminGrid2{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 12px;
+}
+.adminPanel{
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(10,9,16,.25);
+  padding: 14px;
+}
+.adminPanel h3{ margin:0 0 10px; font-weight: 950; }
+
+.adminForm{ display:grid; gap: 8px; }
+.adminInput{
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.03);
+  color: rgba(243,241,255,.92);
+  padding: 10px 12px;
+  outline:none;
+  font-weight: 650;
+}
+.adminRow{ display:flex; gap: 10px; margin-top: 8px; }
+
+.adminPlaceholder{
+  border: 1px dashed rgba(255,255,255,.18);
+  border-radius: 14px;
+  padding: 12px;
+  color: rgba(243,241,255,.75);
+  font-weight: 650;
+  display:grid;
+  gap: 6px;
+}
+.adminTable .adminInput,
+.adminTable .adminSelect{
+  height: 40px;
+}
+/* Seats page layout */
+.adminSeatsLayout{
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.adminStageWrap{
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(10,9,16,.25);
+  padding: 14px;
+}
+
+.adminStage{
+  width: 220px;
+  margin: 0 auto 14px;
+  text-align: center;
+  padding: 14px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(148,229,108,.12);
+  font-weight: 950;
+}
+
+.adminSeatGrid{
+  display: grid;
+  grid-template-columns: repeat(5, 46px);
+  gap: 10px;
+  justify-content: center;
+  padding: 8px 0 12px;
+}
+
+.adminSeat{
+  height: 46px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.12);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight: 950;
+  cursor: default;
+}
+
+.adminSeat--A{ background: rgba(148,229,108,.95); color: #0b0a10; }
+.adminSeat--B{ background: rgba(34,197,94,.95); color: #0b0a10; }
+.adminSeat--C{ background: rgba(16,185,129,.55); color: rgba(243,241,255,.92); }
+
+.adminSeatLegend{
+  display:flex;
+  justify-content:center;
+  gap: 12px;
+  flex-wrap: wrap;
+  color: rgba(243,241,255,.75);
+  font-weight: 750;
+  font-size: 12px;
+}
+
+.adminSwatch{
+  display:inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  margin-right: 6px;
+  vertical-align: -2px;
+  border: 1px solid rgba(255,255,255,.12);
+}
+.adminSwatch--A{ background: rgba(148,229,108,.95); }
+.adminSwatch--B{ background: rgba(34,197,94,.95); }
+.adminSwatch--C{ background: rgba(16,185,129,.55); }
+
+.adminPriceBox{
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(10,9,16,.25);
+  padding: 14px;
+  height: fit-content;
+  position: sticky;
+  top: 86px;
+}
+.adminPriceBox h3{ margin: 0 0 10px; font-weight: 950; }
+
+.adminPriceRow{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 980px){
+  .adminSeatsLayout{ grid-template-columns: 1fr; }
+  .adminPriceBox{ position: relative; top: auto; }
+}
+
+@media (max-width: 980px){
+  .adminBody{ grid-template-columns: 1fr; }
+  .adminSide{ border-right: 0; border-bottom: 1px solid var(--line); }
+  .adminGrid2{ grid-template-columns: 1fr; }
+}
+
