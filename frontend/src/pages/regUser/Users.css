@@ -1,0 +1,199 @@
+
+.userShell { min-height: 100vh; }
+
+.userTop{
+  position: sticky; top: 0; z-index: 60;
+  backdrop-filter: blur(14px);
+  background: rgba(9, 16, 9, 0.65);
+  border-bottom: 1px solid var(--line);
+  padding: 14px 18px;
+  display:flex; justify-content:space-between; align-items:center;
+  gap: 14px;
+}
+
+.userBrand{ display:flex; align-items:center; gap: 12px; }
+.userLogo{ width: 42px; height: 42px; border-radius: 12px; object-fit: cover; }
+.userBrandTitle{ font-weight: 900; letter-spacing:.3px; }
+.userBrandSub{ font-size: 12px; color: rgba(243,241,255,.7); font-weight: 650; }
+.userTop__right{ display:flex; align-items:center; gap: 10px; }
+
+.userBtn{
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.03);
+  color: rgba(243,241,255,.92);
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor:pointer;
+  font-weight: 800;
+  font-size: 13px;
+}
+.userBtn--solid{
+  border: 0;
+  background: linear-gradient(135deg, var(--green), var(--green2));
+  box-shadow: 0 14px 35px rgba(64, 237, 58, 0.24);
+}
+.userBtn--ghost{ text-decoration:none; display:inline-flex; align-items:center; }
+
+.userMenu{ position: relative; }
+.userMenu__drop{
+  position:absolute; right:0; top: calc(100% + 8px);
+  border:1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(10,9,16,.88);
+  overflow:hidden;
+  min-width: 180px;
+  z-index: 999;
+}
+.userMenu__item{
+  width:100%;
+  text-align:left;
+  padding: 12px 14px;
+  background: transparent;
+  border:0;
+  color: rgba(243,241,255,.92);
+  cursor:pointer;
+  font-weight: 800;
+}
+.userMenu__item:hover{ background: rgba(255,255,255,.06); }
+
+/* Body */
+.userBody{
+  display:grid;
+  grid-template-columns: 300px 1fr;
+  min-height: calc(100vh - 70px);
+}
+
+.userSide{
+  border-right: 1px solid var(--line);
+  background: rgba(255,255,255,.02);
+  padding: 18px 14px;
+}
+
+.userNavItem{
+  display:block;
+  padding: 16px 14px;
+  margin: 8px 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: rgba(243,241,255,.9);
+  font-weight: 900;
+  text-decoration:none;
+  background: rgba(10,9,16,.25);
+}
+.userNavItem.active{
+  background: rgba(120,170,255,.18);
+  border-color: rgba(120,170,255,.35);
+}
+.userNavItem--disabled{ opacity:.55; cursor: not-allowed; }
+
+.userMain{
+  padding: 18px;
+  /* drótváz kék panel hangulat */
+  background: rgba(120, 160, 220, 0.18);
+}
+
+/* Content cards */
+.userCard{
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255,255,255,.03);
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+
+.userCardHead{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.userCardHead h2{ margin:0; font-weight: 950; letter-spacing: .2px; }
+
+/* Personal data form */
+.userFormWrap{
+  max-width: 720px;
+  margin: 0 auto;
+  display:grid;
+  gap: 18px;
+  padding: 18px 6px;
+}
+.userFormRow{
+  display:grid;
+  grid-template-columns: 220px 1fr;
+  align-items:center;
+  gap: 16px;
+}
+.userLabel{
+  font-weight: 900;
+  color: rgba(243,241,255,.88);
+}
+.userInput{
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.06);
+  color: rgba(243,241,255,.92);
+  padding: 12px 16px;
+  outline: none;
+}
+.userFormActions{
+  display:flex;
+  justify-content:center;
+  margin-top: 10px;
+}
+
+/* Orders grid */
+.userOrdersGrid{
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.userOrderTile{
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow:hidden;
+  background: rgba(10,9,16,.25);
+  box-shadow: var(--shadow);
+}
+
+.userOrderPoster{
+  height: 140px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight: 900;
+  background: rgba(255,255,255,.06);
+}
+
+.userOrderMeta{
+  padding: 12px;
+}
+.userOrderTitle{
+  font-weight: 950;
+  margin-bottom: 6px;
+}
+.userOrderDate{
+  border: 2px solid rgba(255, 210, 60, 0.9);
+  padding: 6px 8px;
+  border-radius: 10px;
+  font-weight: 900;
+  margin: 8px 0;
+}
+.userOrderSmall{
+  color: rgba(243,241,255,.75);
+  font-weight: 700;
+  font-size: 12px;
+}
+
+@media (max-width: 1100px){
+  .userOrdersGrid{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 980px){
+  .userBody{ grid-template-columns: 1fr; }
+  .userSide{ border-right: 0; border-bottom: 1px solid var(--line); }
+}
+@media (max-width: 520px){
+  .userOrdersGrid{ grid-template-columns: 1fr; }
+  .userFormRow{ grid-template-columns: 1fr; }
+}

@@ -8,6 +8,9 @@ import { UsersPage } from "./pages/admin/UsersPage";
 import { OrdersPage } from "./pages/admin/OrdersPage";
 import { ShowsPage } from "./pages/admin/ShowsPage";
 import { SeatsPage } from "./pages/admin/SeatsPage";
+import { UserLayout } from "./pages/regUser/UserLayout";
+import { PersonalData } from "./pages/regUser/PersonalData";
+import { REG_OrdersPage } from "./pages/regUser/REG_OrdersPage";
 
 function App() {
   return (
@@ -25,7 +28,13 @@ function App() {
           <Route path="orders" element={<OrdersPage />} />
           <Route path="shows" element={<ShowsPage />} />
           <Route path="seats" element={<SeatsPage />} />
-        </Route>
+          </Route>
+      {/*Regisztrált felhasználó */}
+          <Route path="/user" element={<UserLayout />}>
+          <Route index element={<Navigate to="personal" replace />} />
+          <Route path="orders" element={<REG_OrdersPage />} />
+          <Route path="personal" element={<PersonalData />} />
+          </Route>
         
 </Routes>
 
