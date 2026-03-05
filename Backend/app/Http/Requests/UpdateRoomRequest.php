@@ -22,7 +22,10 @@ class UpdateRoomRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'place_id' => ['sometimes', 'integer', 'exists:places,id'],
+            'name' => ['sometimes', 'integer'],
+            'total_rows' => ['sometimes', 'integer', 'min:1'],
+            'total_columns' => ['sometimes', 'integer', 'min:1'],
         ];
     }
 }

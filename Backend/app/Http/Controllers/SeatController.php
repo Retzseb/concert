@@ -40,9 +40,12 @@ class SeatController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSeatRequest $request, Seat $seat)
+    public function update(UpdateSeatRequest $request, $seat_id, $row_number, $column_number, $price_multiplier)
     {
-        //
+        $concert = $this->show($row_number, $column_number, $price_multiplier);
+        $concert->fill($request->all());
+        $concert->save();
+        return response()->json($concert, 200);
     }
 
     /**

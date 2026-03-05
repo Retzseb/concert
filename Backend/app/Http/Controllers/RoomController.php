@@ -21,19 +21,16 @@ class RoomController extends Controller
      */
     public function store(StoreRoomRequest $request)
     {
-        //
+        $room = Room::create($request->validated());
+        return response()->json($room, 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($place_id, $name)
+    public function show(string $id)
     {
-        $lending = Room::where('place_id',"=", $place_id)
-        ->where('place_id', $place_id)
-        ->where('name', $name)
-        ->get();
-        return $lending[0];
+        return Room::find($id);
     }
 
     /**
@@ -41,7 +38,8 @@ class RoomController extends Controller
      */
     public function update(UpdateRoomRequest $request, Room $room)
     {
-        //
+        $room->update($request->validated());
+        return response()->json($room);
     }
 
     /**
@@ -49,6 +47,27 @@ class RoomController extends Controller
      */
     public function destroy(Room $room)
     {
-        //
+        $room->delete();
+        return response()->json(['message' => 'Deleted']);
     }
+
+    public function adminShow(Room $room)
+    {
+        return $room;
+    }
+
+    public function adminStore(StoreRoomRequest $request)
+    {
+        return $this->store($request);
+    }
+
+    public function adminUpdate(UpdateRoomRequest $request, Room $room)
+    {
+        return $this->update($request, $room);
+    }
+
+    public function adminDestroy(Room $room)
+    {
+        return $this->destroy($room);
+    }    
 }

@@ -22,7 +22,10 @@ class UpdatePerformerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['sometimes', 'string', 'max:50'],
+            'genre' => ['sometimes', 'integer', 'exists:genres,id'],
+            'description' => ['nullable', 'string'],
+            'country' => ['sometimes', 'string', 'max:20'],
         ];
     }
 }

@@ -22,7 +22,10 @@ class StoreRoomRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'place_id' => ['required', 'integer', 'exists:places,id'],
+            'name' => ['required', 'integer'],
+            'total_rows' => ['required', 'integer', 'min:1'],
+            'total_columns' => ['required', 'integer', 'min:1'],
         ];
     }
 }

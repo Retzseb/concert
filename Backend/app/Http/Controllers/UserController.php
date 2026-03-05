@@ -4,69 +4,117 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        return User::all();
+        return User::query()->orderBy('id')->get();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $user = new User();
-        $user->fill($request->all());
-        $user->save();
+        $data = $request->validate([
+            'name' => ['required','string','max:255'],
+            'email' => ['required','email','max:255', Rule::unique('users','email')],
+            'password' => ['required','string','min:6','max:255'],
+            'role' => ['nullable','integer','in:0,1,2'],
+        ]);
+
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'role' => $data['role'] ?? 2,
+        ]);
+
         return response()->json($user, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-       return User::find($id);
+        return User::findOrFail($id);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        $user = User::find($id);
-        $user->fill($request->all());
+        $user = User::findOrFail($id);
+
+        $data = $request->validate([
+            'name' => ['sometimes','string','max:255'],
+            'email' => ['sometimes','email','max:255', Rule::unique('users','email')->ignore($user->id)],
+            'role' => ['sometimes','integer','in:0,1,2'],
+        ]);
+
+        $user->fill($data);
         $user->save();
+
         return response()->json($user, 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function updateRole(Request $request, string $id)
     {
-        $user = User::find($id)->delete;
-        return response()->json(null, 200);
+        $data = $request->validate([
+            'role' => ['required','integer','in:0,1,2'],
+        ]);
+
+        $user = User::findOrFail($id);
+        $user->role = $data['role'];
+        $user->save();
+
+        return response()->json($user, 200);
     }
 
-    public function updatePassword(Request $request, $id)
+    public function updatePassword(Request $request, string $id)
     {
-        $validator = Validator::make($request->all(), [
-            "password" => 'string|min:3|max:50'
+        $data = $request->validate([
+            'password' => ['required','string','min:6','max:255'],
         ]);
-        if ($validator->fails()) {
-            return response()->json(["message" => $validator->errors()->all()], 400);
+
+        $user = User::findOrFail($id);
+        $user->password = Hash::make($data['password']);
+        $user->save();
+
+        return response()->json(['message' => 'Password updated.'], 200);
+    }
+
+    public function destroy(string $id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return response()->json(null, 204);
+    }
+
+        public function updateMe(Request $request)
+    {
+        $user = $request->user();
+
+        $data = $request->validate([
+            'name' => ['sometimes', 'string', 'max:255'],
+            'email' => ['sometimes', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
+            'password' => ['sometimes', 'string', 'min:6', 'max:255', 'confirmed'],
+            'current_password' => ['required_with:password', 'string'],
+        ]);
+
+        if (array_key_exists('password', $data)) {
+            if (!Hash::check($data['current_password'], $user->password)) {
+                return response()->json([
+                    'message' => 'The given data was invalid.',
+                    'errors' => [
+                        'current_password' => ['Current password is incorrect.'],
+                    ],
+                ], 422);
+            }
+            $user->password = Hash::make($data['password']);
         }
-        $user = User::where("id", $id)->update([
-            "password" => Hash::make($request->password),
-        ]);
-        return response()->json(["user" => $user]);
+
+        $user->fill(collect($data)->only(['name', 'email'])->toArray());
+        $user->save();
+
+        return response()->json($user, 200);
     }
 
 }

@@ -11,7 +11,7 @@ class UpdatePlaceRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class UpdatePlaceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['sometimes', 'required', 'string', 'max:50'],
+            'city' => ['sometimes', 'required', 'string', 'max:20'],
+            'address' => ['sometimes', 'required', 'string', 'max:255'],
         ];
     }
 }

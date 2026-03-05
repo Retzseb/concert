@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Place;
 use App\Http\Requests\StorePlaceRequest;
 use App\Http\Requests\UpdatePlaceRequest;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class PlaceController extends Controller
 {
@@ -13,7 +14,7 @@ class PlaceController extends Controller
      */
     public function index()
     {
-        return Place::all();
+        return Place::orderBy('name')->get();
     }
 
     /**
@@ -21,7 +22,12 @@ class PlaceController extends Controller
      */
     public function store(StorePlaceRequest $request)
     {
-        //
+        $place = Place::create($request->validated());
+
+        return response()->json([
+            'message' => 'Place created',
+            'place' => $place,
+        ], 201);
     }
 
     /**
@@ -37,7 +43,19 @@ class PlaceController extends Controller
      */
     public function update(UpdatePlaceRequest $request, Place $place)
     {
-        //
+        $place->update($request->validated());
+        return $place;
+    }
+
+    //admin update
+    public function adminUpdate(UpdatePlaceRequest $request, Place $place): JsonResponse
+    {
+        $place->update($request->validated());
+
+        return response()->json([
+            'message' => 'Place updated',
+            'place' => $place->fresh(),
+        ]);
     }
 
     /**
@@ -45,6 +63,23 @@ class PlaceController extends Controller
      */
     public function destroy(Place $place)
     {
-        //
+        $place->delete();
+        return response()->noContent();
+    }
+
+    //admin törlés
+    public function adminDestroy(Place $place): JsonResponse
+    {
+        $place->delete();
+
+        return response()->json([
+            'message' => 'Place deleted',
+        ], 200);
+    }
+
+    //Search főoldal
+    public function placeList()
+    {
+        return Place::orderBy('name')->get();
     }
 }

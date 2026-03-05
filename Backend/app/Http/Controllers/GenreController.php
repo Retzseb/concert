@@ -47,4 +47,10 @@ class GenreController extends Controller
     {
         //
     }
+
+    //Search főoldal
+    public function genreList()
+    {
+        return Genre::orderBy('name')->get();
+    }
 }

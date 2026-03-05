@@ -11,7 +11,7 @@ class StoreConcertRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,13 @@ class StoreConcertRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:50'],
+            'performer_id' => ['required', 'integer', 'exists:performers,id'],
+            'room_id' => ['required', 'integer', 'exists:rooms,id'],
+            'date' => ['required', 'date'],
+            'base_price' => ['required', 'integer', 'min:0'],
+            'description' => ['nullable', 'string'],
+            'status' => ['nullable', 'integer', 'min:0', 'max:1'],
         ];
     }
 }

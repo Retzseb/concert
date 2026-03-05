@@ -11,7 +11,7 @@ class UpdateConcertRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,13 @@ class UpdateConcertRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['sometimes', 'required', 'string', 'max:50'],
+            'performer_id' => ['sometimes', 'required', 'integer', 'exists:performers,id'],
+            'room_id' => ['sometimes', 'required', 'integer', 'exists:rooms,id'],
+            'date' => ['sometimes', 'required', 'date'],
+            'base_price' => ['sometimes', 'required', 'integer', 'min:0'],
+            'description' => ['sometimes', 'nullable', 'string'],
+            'status' => ['sometimes', 'nullable', 'integer', 'min:0', 'max:1'],
         ];
     }
 }

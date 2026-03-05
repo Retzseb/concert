@@ -22,7 +22,10 @@ class StorePerformerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:50'],
+            'genre' => ['required', 'integer', 'exists:genres,id'],
+            'description' => ['nullable', 'string'],
+            'country' => ['required', 'string', 'max:20'],
         ];
     }
 }
