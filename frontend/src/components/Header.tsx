@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ThemeToggle } from "./ThemeToggle";
 import { Link } from "react-router-dom";
 
 export function Header(props: { user: any | null; onLogout: () => void }) {
@@ -17,12 +18,9 @@ export function Header(props: { user: any | null; onLogout: () => void }) {
 
       <div className="actions" style={{ position: "relative" }}>
         <Link to="/cart">
-          <img
-            src="cart.png"
-            alt=""
-            style={{ width: "30px", filter: "invert(100%)" }}
-          />
+          <img src="cart.png" alt="" className="cartIcon" style={{ width: "30px" }} />
         </Link>
+        <ThemeToggle />
         {!props.user ? (
           <Link to="/login" className="pill">
             Bejelentkezés
