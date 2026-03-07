@@ -140,13 +140,11 @@ export function ConcertDetailsPage() {
                   <button
                     key={sid}
                     type="button"
-                    className={`adminSeat ${MULTI_UI[cat].seatClass}`}
+                    className={`adminSeat ${MULTI_UI[cat].seatClass} ${isSel ? "isSelected" : ""}`}
                     onClick={() => toggleSeat(sid)}
                     title={`#${n} (${sid}) • ${seatPrice(sid)} Ft`}
                     style={{
-                      cursor: "pointer",
-                      outline: isSel ? "3px solid white" : "none",
-                      outlineOffset: 2,
+                      cursor: "pointer"
                     }}
                   >
                     {n}
