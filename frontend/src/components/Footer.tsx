@@ -14,7 +14,7 @@ export function Footer() {
                   className="logoImg"
                 />
               </div>
-              <div style={{ color: "rgba(243,241,255,.65)", fontWeight: 650 }}>
+              <div style={{ fontWeight: 650 }}>
                 Hasznos linkek
               </div>
             </div>
@@ -71,16 +71,7 @@ export function Footer() {
             </div>
           </div>
 
-          <div
-            style={{
-              marginTop: 18,
-              borderTop: "1px solid var(--line)",
-              paddingTop: 14,
-              color: "rgba(243,241,255,.55)",
-              fontWeight: 650,
-              fontSize: 12,
-            }}
-          >
+          <div className="authors">
             <br></br>© 2026 SEATY – Vizsgaremek UI – React + TypeScript (CRA),
             <br></br>Bíró Eszter & Szépréthy Regina
           </div>

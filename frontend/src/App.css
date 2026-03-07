@@ -51,17 +51,23 @@
 
 :root[data-theme="light"] body{
   background:
-    radial-gradient(900px 350px at 30% -10%, rgba(26,163,163,0.12), transparent 60%),
-    radial-gradient(800px 350px at 80% 15%, rgba(111,218,211,0.12), transparent 55%),
-    linear-gradient(180deg, var(--bg), var(--bg2) 40%, #ffffff 100%);
+    var(--surface-strong);
   color: var(--text);
+}
+:root[data-theme="light"] .heroCard{
+  background-image: url(../public/violin-bow-white-background.jpg);
+  padding-block: 9rem;
+  background-position: bottom;
+  background-size:contain;
+  background-repeat: no-repeat;
+
 }
 
 
 :root[data-theme="light"] .topbar,
 :root[data-theme="light"] .adminTop,
 :root[data-theme="light"] .userTop{
-  background: rgba(255,255,255,0.75);
+  background: var(--surface-strong);
   border-bottom: 1px solid var(--line);
 }
 
@@ -82,9 +88,37 @@
 .cartIcon{ filter: invert(100%); }
 :root[data-theme="light"] .cartIcon{ filter: none; }
 :root[data-theme="light"] .select option{
-  background: #ffffff;
+  background: var(--surface-strong);
   color: #101828;
 }
+:root[data-theme="light"] footer{
+  background: var(--surface-strong);
+  border-top: 1px solid var(--line);
+}
+
+:root[data-theme="light"] .footGrid{
+  color: rgba(16,24,40,.78);
+}
+
+:root[data-theme="light"] .footGrid h5{
+  color: rgba(16,24,40,.92);
+}
+
+:root[data-theme="light"] .footGrid a{
+  color: rgba(16,24,40,.78);
+}
+
+:root[data-theme="light"] .footGrid a:hover{
+  color: rgba(16,24,40,1);
+}
+:root[data-theme="light"] .select{
+  background: var(--surface-strong);
+  color: var(--text);
+  border-color: var(--line);
+}
+:root[data-theme="light"] .input,
+:root[data-theme="light"] .select{
+  background: rgba(255,255,255,.70);}
 /*Világos vége*/
 * {
   box-sizing: border-box;
@@ -109,6 +143,7 @@ img {
   display: block;
 }
 .container {
+  padding-top: 30px;
   width: min(1120px, 92vw);
   margin: 0 auto;
 }
@@ -225,6 +260,9 @@ img {
   display: grid;
   grid-template-columns: 1.5fr 1fr 1fr 1fr auto;
   gap: 10px;
+  align-items: end;
+  
+
 }
 .field {
   display: flex;
@@ -242,6 +280,7 @@ img {
 .input,
 .select {
   width: 100%;
+  height: 44px;
   border-radius: 12px;
   border: 1px solid var(--line);
   background: var(--surface);
@@ -276,6 +315,10 @@ img {
   font-weight: 300;
   cursor: pointer;
   box-shadow: 0 14px 35px rgba(64, 237, 58, 0.24);
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .searchBtn:hover {
   filter: brightness(1.06);
@@ -377,6 +420,7 @@ img {
   background: radial-gradient(120px 80px at 25% 25%, rgba(255, 255, 255, 0.16), transparent 60%), linear-gradient(135deg, rgba(163, 247, 85, 0.55), rgba(110, 236, 72, 0.32));
   position: relative;
 }
+
 .badge {
   position: absolute;
   left: 12px;
@@ -393,14 +437,14 @@ img {
 }
 .cardTitle {
   margin: 0 0 6px;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 200;
 }
 .meta {
   margin: 0;
-  color: rgba(243, 241, 255, 0.7);
+  color: var(--text-faint);
   font-weight: 300;
-  font-size: 12px;
+  font-size: 15px;
   line-height: 1.35;
 }
 .priceRow {
@@ -620,7 +664,7 @@ footer {
   display: grid;
   grid-template-columns: 1.2fr 0.8fr 0.8fr 0.8fr;
   gap: 18px;
-  color: rgba(243, 255, 241, 0.78);
+  color: var(--text-soft);
   font-weight: 300;
   font-size: 15px;
 }
@@ -629,17 +673,21 @@ footer {
   font-size: 12px;
   font-weight: 1000;
   letter-spacing: 0.25px;
-  color: rgba(241, 255, 242, 0.9);
+  color: var(--text);
   text-transform: uppercase;
 }
 .footGrid a {
   display: block;
   padding: 4px 0;
   opacity: 0.9;
+  color: var(--text);
 }
 .footGrid a:hover {
   color: #fff;
   opacity: 1;
+}
+.authors{
+  font-size: 12px;
 }
 
 /* Responsive */
@@ -739,6 +787,8 @@ footer {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(20%, 1fr));
   gap: 16px;
+  padding-bottom: 32px;
+
 }
 
 .c_list {
