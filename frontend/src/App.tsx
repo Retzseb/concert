@@ -17,6 +17,8 @@ import { getRole } from "./utility/Auth";
 import { CartProvider } from "./cart/cartProvider";
 import { Cart } from "./pages/all/Cart";
 import { ConcertDetailsPage } from "./pages/all/ConcertDetailsPage";
+import { CheckoutSuccess } from "./pages/all/CheckoutSuccess";
+import "../src/pages/admin/Admin.css";
 
 function RequireRole(props: {
   user: any | null;
@@ -77,11 +79,13 @@ function AppRoutes() {
               path="personal"
               element={<PersonalData onUserUpdated={() => refresh()} />}
             />
-            <Route path="orders" element={<REG_OrdersPage />} />
+            <Route path="orders" element={<REG_OrdersPage user={user} />} />
           </Route>
-          <Route path="/cart" element={<Cart />} />
+          <Route path="/cart" element={<Cart user={user} />} />
           <Route path="/concerts/:id" element={<ConcertDetailsPage />} />
+          <Route path="/checkout/success/:orderId" element={<CheckoutSuccess />} />
           <Route path="*" element={<Navigate to="/" replace />} />
+          
         </Routes>
       </BrowserRouter>
     </CartProvider>

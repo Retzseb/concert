@@ -3,6 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import { useConcerts } from "../../hooks/useConcerts";
 import { useSeatLayout, MultiplierKey } from "../../hooks/useSeatLayout";
 import { useCart } from "../../cart/cartProvider";
+import { getSoldSeats } from "../../order/ordersStorage";
+import "../../pages/admin/Admin.css";
 
 function seatId(r: number, c: number) {
   return `R${r}C${c}`;
@@ -21,8 +23,11 @@ const MULTI_UI: Record<MultiplierKey, { seatClass: string }> = {
 export function ConcertDetailsPage() {
   const params = useParams();
   const id = Number(params.id);
+
   const { concerts, loading, error } = useConcerts();
-  const { layout, loading: layoutLoading, error: layoutError } = useSeatLayout(Number.isFinite(id) ? id : "");
+  const { layout, loading: layoutLoading, error: layoutError } = useSeatLayout(
+    Number.isFinite(id) ? id : ""
+  );
   const { addItems } = useCart();
 
   const concert = concerts.find((c) => c.id === id);
@@ -32,6 +37,9 @@ export function ConcertDetailsPage() {
   const rows = concert?.room_total_rows ?? 0;
   const cols = concert?.room_total_columns ?? 0;
   const basePrice = concert?.base_price ?? 0;
+
+  // ✅ SOLD seat-ek (checkout után ide kerülnek)
+  const soldSeats = Number.isFinite(id) ? getSoldSeats(id) : new Set<string>();
 
   const priceFor = (m: MultiplierKey) => {
     const mult = layout.multipliers[m] ?? 1;
@@ -78,7 +86,9 @@ export function ConcertDetailsPage() {
     return (
       <section className="section">
         <p>Hibás koncert azonosító.</p>
-        <Link className="btn" to="/concerts">Vissza</Link>
+        <Link className="btn" to="/concerts">
+          Vissza
+        </Link>
       </section>
     );
   }
@@ -87,15 +97,15 @@ export function ConcertDetailsPage() {
     <section className="section">
       <div className="sectionHead">
         <h2>Koncert</h2>
-        <Link className="btn" to="/cart">Kosár</Link>
+        <Link className="btn" to="/cart">
+          Kosár
+        </Link>
       </div>
 
       {loading && <p>Betöltés…</p>}
       {error && <p>{error}</p>}
 
-      {!loading && !error && !concert && (
-        <p>Nem található ilyen koncert.</p>
-      )}
+      {!loading && !error && !concert && <p>Nem található ilyen koncert.</p>}
 
       {concert && (
         <>
@@ -112,19 +122,37 @@ export function ConcertDetailsPage() {
           {layoutLoading && <p>Kiosztás betöltése…</p>}
           {layoutError && <p>{layoutError}</p>}
 
-          <div className="adminSeatLegend" style={{ display: "flex", gap: 16, alignItems: "center" }}>
+          <div
+            className="adminSeatLegend"
+            style={{ display: "flex", gap: 16, alignItems: "center" }}
+          >
             {(["M1", "M2", "M3"] as MultiplierKey[]).map((k) => (
-              <span key={k} style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-                <i className={`adminSwatch ${MULTI_UI[k].seatClass.replace("adminSeat", "adminSwatch")}`} />
+              <span
+                key={k}
+                style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+              >
+                <i
+                  className={`adminSwatch ${MULTI_UI[k].seatClass.replace(
+                    "adminSeat",
+                    "adminSwatch"
+                  )}`}
+                />
                 <b>{k}</b>: {priceFor(k)} Ft
               </span>
             ))}
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+            <i className="adminSwatch adminSwatch--SOLD" />
+            <b>FOGLALT</b>
+          </span>
           </div>
 
           <div
-            className="adminSeatGrid"
+            className="adminSeatGrid adminSeatGrid--details"
             aria-label="Seatmap"
-            style={{ gridTemplateColumns: `repeat(${cols || 1}, 1fr)`, marginTop: 12 }}
+            style={{
+              gridTemplateColumns: `repeat(${cols || 1}, 1fr)`,
+              marginTop: 12,
+            }}
           >
             {Array.from({ length: rows }).map((_, rIdx) => {
               const r = rIdx + 1;
@@ -136,16 +164,27 @@ export function ConcertDetailsPage() {
                 const cat = seatCategory(sid);
                 const isSel = !!selected[sid];
 
+                // ✅ sold?
+                const isSold = soldSeats.has(sid);
+
                 return (
                   <button
                     key={sid}
                     type="button"
-                    className={`adminSeat ${MULTI_UI[cat].seatClass} ${isSel ? "isSelected" : ""}`}
-                    onClick={() => toggleSeat(sid)}
-                    title={`#${n} (${sid}) • ${seatPrice(sid)} Ft`}
-                    style={{
-                      cursor: "pointer"
+                    className={`adminSeat ${MULTI_UI[cat].seatClass} ${
+                      isSel ? "isSelected" : ""
+                    } ${isSold ? "isSold" : ""}`}
+                    disabled={isSold}
+                    onClick={() => {
+                      if (isSold) return;
+                      toggleSeat(sid);
                     }}
+                    title={
+                      isSold
+                        ? `#${n} (${sid}) • FOGLALT`
+                        : `#${n} (${sid}) • ${seatPrice(sid)} Ft`
+                    }
+                    style={{ cursor: isSold ? "not-allowed" : "pointer" }}
                   >
                     {n}
                   </button>
@@ -160,9 +199,7 @@ export function ConcertDetailsPage() {
             </button>
             <div style={{ opacity: 0.85 }}>
               Összesen:{" "}
-              <b>
-                {selectedSeatIds.reduce((sum, sid) => sum + seatPrice(sid), 0)} Ft
-              </b>
+              <b>{selectedSeatIds.reduce((sum, sid) => sum + seatPrice(sid), 0)} Ft</b>
             </div>
           </div>
         </>
