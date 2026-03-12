@@ -11,7 +11,8 @@ export function Header(props: { user: any | null; onLogout: () => void }) {
   return (
     <div className="container topbar__inner">
       <Link to="/" className="brand" aria-label="SEATY főoldal">
-        <img src="/SEATY_logo.jpg" alt="SEATY logó" className="logoImg" />
+        <img src="/SEATY_newLogo_Black.png" alt="SEATY logó" className="logoImg logoImg--dark" />
+        <img src="/SEATY_newLogo_White.jpg" alt="SEATY logó" className="logoImg logoImg--light" />
       </Link>
 
       <nav className="nav" aria-label="Fő navigáció">

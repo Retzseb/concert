@@ -525,9 +525,6 @@ footer{
   border: 1px solid var(--line);
 }
 
-/* ConcertDetailsPage: tedd rá a grid divre ezt a class-t:
-   className="adminSeatGrid adminSeatGrid--details"
-*/
 .adminSeatGrid--details{
   gap: 8px;                 
   max-width: 980px;         
@@ -594,11 +591,18 @@ footer{
 @keyframes App-logo-spin{ from{ transform:rotate(0deg);} to{ transform:rotate(360deg);} }
 
 .logoImg{
-  width: 40px;
-  height: 40px;
-  display:block;
-  object-fit: cover;
+  
+  height: 34px;      
+  width: auto;
+  display: block;
+  object-fit: contain;
 }
+/* Logo theme switch */
+.logoImg--light{ display: none; }
+.logoImg--dark{ display: block; }
+
+:root[data-theme="light"] .logoImg--dark{ display: none; }
+:root[data-theme="light"] .logoImg--light{ display: block; }
 
 .cards{
   max-width: 90%;
