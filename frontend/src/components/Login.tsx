@@ -54,7 +54,7 @@ export function Login() {
       if (role === 0) {
         navigate("/admin", { replace: true });
       } else if (role === 2) {
-        navigate("/user", { replace: true });
+        navigate("/", { replace: true });
       } else {
         navigate("/", { replace: true });
       }

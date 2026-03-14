@@ -37,6 +37,14 @@ export function Home() {
     return placeOk && genreOk && qOk && dateOk;
   });
 
+  const latestConcert =
+    filtered.length > 0
+      ? [...filtered].sort(
+          (a: any, b: any) =>
+            new Date(b.date).getTime() - new Date(a.date).getTime()
+        )[0]
+      : null;
+
   if (loading) return <p>Betöltés…</p>;
   if (error) return <p>{error}</p>;
 
@@ -51,10 +59,16 @@ export function Home() {
         />
       </div>
 
+      <h3>Összes koncert</h3>
       <div className="cards">
         {filtered.map((c: any) => (
           <ConcertCard key={c.id} concert={c} />
         ))}
+      </div>
+
+      <h3>Ezt is várjuk</h3>
+      <div className="cards">
+        {latestConcert && <ConcertCard key={latestConcert.id} concert={latestConcert} />}
       </div>
 
       <Footer />

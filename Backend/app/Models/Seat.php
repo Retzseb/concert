@@ -14,5 +14,15 @@ class Seat extends Model
         'row_number',
         'column_number', 
         'price_multiplier'
-    ];          
+    ];      
+    
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
 }

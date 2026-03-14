@@ -90,4 +90,9 @@ class SeatController extends Controller
 
         return response()->noContent();
     }
+
+    public function userShow(Seat $seat)
+    {
+        return $seat;
+    }
 }

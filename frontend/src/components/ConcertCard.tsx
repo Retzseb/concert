@@ -7,7 +7,15 @@ export function ConcertCard({ concert }: { concert: any }) {
       style={{ textDecoration: "none", color: "inherit" }}
     >
       <article className="card" role="button">
-        <div className="thumb" />
+        <div
+          className="thumb"
+          style={{
+            backgroundImage: concert.picture ? `url(${concert.picture})` : "none",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            minHeight: 180,
+          }}
+        />
         <div className="cardBody">
           <h3 className="cardTitle">{concert.name}</h3>
           <p className="meta">

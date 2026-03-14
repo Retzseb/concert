@@ -4,10 +4,12 @@ import { API_BASE } from "../utility/config";
 export type Concert = {
   id: number;
   name: string;
+  picture?: string;
 
   date?: string;
   base_price?: number;
   status?: number;
+  soft_delete?: boolean;
 
   performer_id?: number;
   performer_name?: string;
@@ -45,10 +47,12 @@ function mapConcert(c: any): Concert {
   return {
     id: Number(c.id),
     name: String(c.name ?? c.title ?? ""),
+    picture: str(c.picture ?? c.pict ?? c.kep),
 
     date: str(c.date ?? c.datetime),
     base_price: num(c.base_price ?? c.basePrice),
     status: num(c.status ?? c.state),
+    soft_delete: Boolean(c.soft_delete ?? false),
 
     performer_id: num(c.performer_id ?? c.performerId ?? performer?.id),
     performer_name: str(c.performer_name ?? c.performerName ?? performer?.name),
@@ -108,6 +112,15 @@ export function useConcerts() {
     } finally {
       setLoading(false);
     }
+
+      const last = await fetch(`${API_BASE}/api/lastConcert`, {
+        method: "GET",
+        credentials: "include",
+        headers: { Accept: "application/json" },
+      });
+
+      console.log(last)
+
   }, []);
 
   useEffect(() => {

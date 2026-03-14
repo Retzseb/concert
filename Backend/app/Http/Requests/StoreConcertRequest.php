@@ -14,6 +14,7 @@ class StoreConcertRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'picture' => ['nullable', 'string', 'max:2048'],
             'name' => ['required', 'string', 'max:50'],
             'performer_id' => ['required', 'integer', 'exists:performers,id'],
             'room_id' => ['required', 'integer', 'exists:rooms,id'],
@@ -21,6 +22,7 @@ class StoreConcertRequest extends FormRequest
             'base_price' => ['required', 'integer', 'min:0'],
             'description' => ['nullable', 'string'],
             'status' => ['nullable', 'integer', 'in:0,1,2'],
+            'soft_delete' => ['nullable', 'boolean'],
         ];
     }
 }

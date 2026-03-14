@@ -35,31 +35,35 @@ Route::get('/discounts/{id}', [DiscountController::class, 'show']);
 Route::get('/genres/{id}', [GenreController::class, 'show']);
 Route::get('/performers/{id}', [PerformerController::class, 'show']);
 Route::get('/places/{id}', [PlaceController::class, 'show']);
-Route::get('/reservations/{id}', [ReservationController::class, 'show']);
+Route::get('/reservations/{reservation}', [ReservationController::class, 'show']);
 Route::get('/rooms/{id}', [RoomController::class, 'show']);
 Route::get('/seats/{id}', [SeatController::class, 'show']);
 Route::get('/tickets/{id}', [TicketController::class, 'show']);
 
 Route::get('/concerts/all', [ConcertController::class, 'concertAllDataList']);
+Route::get('/concerts/{concert}/seats', [ConcertController::class, 'seats']);
 Route::get('/place/all', [PlaceController::class, 'index']);
 Route::get('/genre/all', [GenreController::class, 'index']);
-
-
 
 //AUTH (protected)
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', fn (Request $request) => $request->user());
     Route::put('/me', [UserController::class, 'updateMe']);
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
+    Route::post('/reservations', [ReservationController::class, 'store']);
+    Route::get('/my-reservations', [ReservationController::class, 'myReservations']);
+    Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy']);
 
 //ADMIN
 Route::middleware('admin')->group(function () {
+    Route::get('/admin/reservations', [ReservationController::class, 'adminIndex']);
+
     //concert
-    Route::get('/admin/concerts', [ConcertController::class, 'index']);
     Route::get('/admin/concerts/{concert}', [ConcertController::class, 'adminShow']);
     Route::post('/admin/concerts', [ConcertController::class, 'store']);
     Route::put('/admin/concerts/{concert}', [ConcertController::class, 'adminUpdate']);
     Route::delete('/admin/concerts/{concert}', [ConcertController::class, 'adminDestroy']);
+    Route::get('/admin/concerts', [ConcertController::class, 'adminIndex']);
 
     //place
     Route::get('/admin/places', [PlaceController::class, 'index']);
@@ -78,24 +82,24 @@ Route::middleware('admin')->group(function () {
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
 
     // Performers
-    Route::get('/performers', [PerformerController::class, 'adminIndex']);
-    Route::get('/performers/{performer}', [PerformerController::class, 'adminShow']);
-    Route::post('/performers', [PerformerController::class, 'adminStore']);
-    Route::put('/performers/{performer}', [PerformerController::class, 'adminUpdate']);
-    Route::delete('/performers/{performer}', [PerformerController::class, 'adminDestroy']);
+    Route::get('/admin/performers', [PerformerController::class, 'adminIndex']);
+    Route::get('/admin/performers/{performer}', [PerformerController::class, 'adminShow']);
+    Route::post('/admin/performers', [PerformerController::class, 'adminStore']);
+    Route::put('/admin/performers/{performer}', [PerformerController::class, 'adminUpdate']);
+    Route::delete('/admin/performers/{performer}', [PerformerController::class, 'adminDestroy']);
 
     // Rooms
-    Route::get('/rooms', [RoomController::class, 'adminIndex']);
-    Route::get('/rooms/{room}', [RoomController::class, 'adminShow']);
-    Route::post('/rooms', [RoomController::class, 'adminStore']);
-    Route::put('/rooms/{room}', [RoomController::class, 'adminUpdate']);
-    Route::delete('/rooms/{room}', [RoomController::class, 'adminDestroy']);
+    Route::get('/admin/rooms', [RoomController::class, 'adminIndex']);
+    Route::get('/admin/rooms/{room}', [RoomController::class, 'adminShow']);
+    Route::post('/admin/rooms', [RoomController::class, 'adminStore']);
+    Route::put('/admin/rooms/{room}', [RoomController::class, 'adminUpdate']);
+    Route::delete('/admin/rooms/{room}', [RoomController::class, 'adminDestroy']);
 
     // Seats
-    Route::get('/seats', [SeatController::class, 'adminIndex']);
-    Route::get('/seats/{seat}', [SeatController::class, 'adminShow']);
-    Route::post('/seats', [SeatController::class, 'adminStore']);
-    Route::put('/seats/{seat}', [SeatController::class, 'adminUpdate']);
-    Route::delete('/seats/{seat}', [SeatController::class, 'adminDestroy']);
-});
+    Route::get('/admin/seats', [SeatController::class, 'adminIndex']);
+    Route::get('/admin/seats/{seat}', [SeatController::class, 'adminShow']);
+    Route::post('/admin/seats', [SeatController::class, 'adminStore']);
+    Route::put('/admin/seats/{seat}', [SeatController::class, 'adminUpdate']);
+    Route::delete('/admin/seats/{seat}', [SeatController::class, 'adminDestroy']);
+    });
 });

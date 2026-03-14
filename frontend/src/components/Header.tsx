@@ -11,7 +11,8 @@ export function Header(props: { user: any | null; onLogout: () => void }) {
   return (
     <div className="container topbar__inner">
       <Link to="/" className="brand" aria-label="SEATY főoldal">
-        <img src="/SEATY_logo.jpg" alt="SEATY logó" className="logoImg" />
+        <img src="/SEATY_newLogo_Black.png" alt="SEATY logó" className="logoImg logoImg--dark" />
+        <img src="/SEATY_newLogo_White.jpg" alt="SEATY logó" className="logoImg logoImg--light" />
       </Link>
 
       <nav className="nav" aria-label="Fő navigáció">
@@ -21,11 +22,7 @@ export function Header(props: { user: any | null; onLogout: () => void }) {
 
       <div className="actions" style={{ position: "relative" }}>
         <Link to="/cart">
-          <img
-            src="cart.png"
-            alt=""
-            style={{ width: "30px", filter: "invert(100%)" }}
-          />
+          <img src="/cart.png" alt="Kosár" className="cartIcon" style={{ width: "30px" }} />
         </Link>
         <ThemeToggle />
         {!props.user ? (

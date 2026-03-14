@@ -77,9 +77,7 @@ export function UserLayout({ user, onLogout }: UserLayoutProps) {
             Foglalásai / vásárlásai
           </NavLink>
 
-          <div className="userNavItem userNavItem--disabled">
-            Fiókbeállítások (később)
-          </div>
+
         </aside>
 
         <main className="userMain">

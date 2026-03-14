@@ -301,6 +301,15 @@ td{
   gap: 10px;
   margin-bottom: 10px;
 }
+.adminSeat.isSold{
+  opacity: 0.45;
+  filter: grayscale(1);
+  box-shadow: none;
+}
+.adminSwatch--SOLD{
+  background: #6b806f;
+  border: 1px solid var(--line);
+}
 
 @media (max-width: 980px){
   .adminSeatsLayout{ grid-template-columns: 1fr; }
@@ -312,4 +321,3 @@ td{
   .adminSide{ border-right: 0; border-bottom: 1px solid var(--line); }
   .adminGrid2{ grid-template-columns: 1fr; }
 }
-

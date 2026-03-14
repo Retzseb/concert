@@ -1,37 +1,46 @@
 import { useState } from "react";
-import { useUsers, type Role, type UserRow } from "../../hooks/useUsers";
+import {useUsers, type NewUserInput, type Role} from "../../hooks/useUsers";
+
+const EMPTY_DRAFT: NewUserInput = {
+  username: "",
+  email: "",
+  name: "",
+  password: "",
+  role: "Felhasználó",
+};
 
 export function UsersPage() {
   const { users, loading, error, addUser, updateRole, removeUser, reload } = useUsers();
 
   const [isAdding, setIsAdding] = useState(false);
-  const [draft, setDraft] = useState<Omit<UserRow, "id">>({
-    username: "",
-    email: "",
-    name: "",
-    role: "Felhasználó",
-  });
+  const [draft, setDraft] = useState<NewUserInput>(EMPTY_DRAFT);
 
   const startAdd = () => {
     setIsAdding(true);
-    setDraft({ username: "", email: "", name: "", role: "Felhasználó" });
+    setDraft(EMPTY_DRAFT);
   };
 
   const cancelAdd = () => {
     setIsAdding(false);
-    setDraft({ username: "", email: "", name: "", role: "Felhasználó" });
+    setDraft(EMPTY_DRAFT);
   };
 
   const saveAdd = async () => {
+    if (!draft.name.trim() || !draft.email.trim() || !draft.password.trim()) {
+      alert("A név, e-mail és jelszó megadása kötelező.");
+      return;
+    }
+
     try {
       await addUser({
         username: draft.username.trim(),
         email: draft.email.trim(),
         name: draft.name.trim(),
+        password: draft.password,
         role: draft.role,
       });
       setIsAdding(false);
-      setDraft({ username: "", email: "", name: "", role: "Felhasználó" });
+      setDraft(EMPTY_DRAFT);
     } catch (e: any) {
       alert(e?.message ?? "Nem sikerült menteni.");
     }
@@ -104,69 +113,84 @@ export function UsersPage() {
               </tr>
             )}
 
-            {!loading && users.map((u) => (
-              <tr key={u.id}>
-                <td>{u.username}</td>
-                <td>{u.email}</td>
-                <td>{u.name}</td>
-                <td>
-                  <select
-                    className="adminSelect"
-                    value={u.role}
-                    onChange={(e) => onUpdateRole(u.id, e.target.value as Role)}
-                  >
-                    <option value="Admin">Admin</option>
-                    <option value="Jegykezelő">Jegykezelő</option>
-                    <option value="Felhasználó">Felhasználó</option>
-                  </select>
-                </td>
-                <td>
-                  <button className="adminDanger" type="button" onClick={() => onRemove(u.id)}>
-                    Profil törlése
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {!loading &&
+              users.map((u) => (
+                <tr key={u.id}>
+                  <td>{u.username || u.name}</td>
+                  <td>{u.email}</td>
+                  <td>{u.name}</td>
+                  <td>
+                    <select
+                      className="adminSelect"
+                      value={u.role}
+                      onChange={(e) => onUpdateRole(u.id, e.target.value as Role)}
+                    >
+                      <option value="Admin">Admin</option>
+                      <option value="Jegykezelő">Jegykezelő</option>
+                      <option value="Felhasználó">Felhasználó</option>
+                    </select>
+                  </td>
+                  <td>
+                    <button className="adminDanger" type="button" onClick={() => onRemove(u.id)}>
+                      Profil törlése
+                    </button>
+                  </td>
+                </tr>
+              ))}
 
             {isAdding && (
-              <tr>
-                <td>
-                  <input
-                    className="adminInput"
-                    placeholder="profilnev"
-                    value={draft.username}
-                    onChange={(e) => setDraft((d) => ({ ...d, username: e.target.value }))}
-                  />
-                </td>
-                <td>
-                  <input
-                    className="adminInput"
-                    placeholder="email@pelda.hu"
-                    value={draft.email}
-                    onChange={(e) => setDraft((d) => ({ ...d, email: e.target.value }))}
-                  />
-                </td>
-                <td>
-                  <input
-                    className="adminInput"
-                    placeholder="Teljes név"
-                    value={draft.name}
-                    onChange={(e) => setDraft((d) => ({ ...d, name: e.target.value }))}
-                  />
-                </td>
-                <td>
-                  <select
-                    className="adminSelect"
-                    value={draft.role}
-                    onChange={(e) => setDraft((d) => ({ ...d, role: e.target.value as Role }))}
-                  >
-                    <option value="Admin">Admin</option>
-                    <option value="Jegykezelő">Jegykezelő</option>
-                    <option value="Felhasználó">Felhasználó</option>
-                  </select>
-                </td>
-                <td style={{ color: "rgba(243,241,255,.7)", fontWeight: 700 }}>Új felhasználó…</td>
-              </tr>
+              <>
+                <tr>
+                  <td>
+                    <input
+                      className="adminInput"
+                      placeholder="profilnev (opcionális)"
+                      value={draft.username}
+                      onChange={(e) => setDraft((d) => ({ ...d, username: e.target.value }))}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      className="adminInput"
+                      placeholder="email@pelda.hu"
+                      value={draft.email}
+                      onChange={(e) => setDraft((d) => ({ ...d, email: e.target.value }))}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      className="adminInput"
+                      placeholder="Teljes név"
+                      value={draft.name}
+                      onChange={(e) => setDraft((d) => ({ ...d, name: e.target.value }))}
+                    />
+                  </td>
+                  <td>
+                    <select
+                      className="adminSelect"
+                      value={draft.role}
+                      onChange={(e) => setDraft((d) => ({ ...d, role: e.target.value as Role }))}
+                    >
+                      <option value="Admin">Admin</option>
+                      <option value="Jegykezelő">Jegykezelő</option>
+                      <option value="Felhasználó">Felhasználó</option>
+                    </select>
+                  </td>
+                  <td style={{ color: "rgba(243,241,255,.7)", fontWeight: 700 }}>Új felhasználó…</td>
+                </tr>
+                <tr>
+                  <td colSpan={5}>
+                    <input
+                      className="adminInput"
+                      type="password"
+                      placeholder="Kezdő jelszó (min. 6 karakter)"
+                      value={draft.password}
+                      onChange={(e) => setDraft((d) => ({ ...d, password: e.target.value }))}
+                      style={{ width: 280 }}
+                    />
+                  </td>
+                </tr>
+              </>
             )}
           </tbody>
         </table>

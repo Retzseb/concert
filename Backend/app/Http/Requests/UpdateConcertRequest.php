@@ -14,6 +14,7 @@ class UpdateConcertRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'picture' => ['sometimes', 'nullable', 'string', 'max:2048'],
             'name' => ['sometimes', 'string', 'max:50'],
             'performer_id' => ['sometimes', 'integer', 'exists:performers,id'],
             'room_id' => ['sometimes', 'integer', 'exists:rooms,id'],
@@ -21,6 +22,7 @@ class UpdateConcertRequest extends FormRequest
             'base_price' => ['sometimes', 'integer', 'min:0'],
             'description' => ['nullable', 'string'],
             'status' => ['sometimes', 'integer', 'in:0,1,2'],
+            'soft_delete' => ['sometimes', 'boolean'],
         ];
     }
 }

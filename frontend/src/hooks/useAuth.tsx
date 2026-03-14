@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { API_BASE } from "../utility/config";
 
 const API = `${API_BASE}/api`;
@@ -57,15 +57,22 @@ export function AuthProvider(props: { children: React.ReactNode }) {
         headers: { Accept: "application/json", Authorization: `Bearer ${token}` },
       });
 
-      if (!res.ok) throw new Error(await extractErrorMessage(res));
+      if (!res.ok) {
+        const message = await extractErrorMessage(res);
+
+        if (res.status === 401 || res.status === 403 || res.status === 419) {
+          localStorage.removeItem("token");
+          setUser(null);
+        }
+
+        throw new Error(message);
+      }
 
       const me = await res.json();
       setUser(me);
       return me;
     } catch (e) {
       console.error(e);
-      localStorage.removeItem("token");
-      setUser(null);
       return null;
     } finally {
       setAuthChecked(true);
@@ -134,12 +141,7 @@ export function AuthProvider(props: { children: React.ReactNode }) {
     }
   }, []);
 
-  const value = useMemo(
-    () => ({ user, authChecked, refresh, login, register, logout }),
-    [user, authChecked, refresh, login, register, logout]
-  );
-
-  return <AuthCtx.Provider value={value}>{props.children}</AuthCtx.Provider>;
+  return <AuthCtx.Provider value={{ user, authChecked, refresh, login, register, logout }}>{props.children}</AuthCtx.Provider>;
 }
 
 export function useAuth() {

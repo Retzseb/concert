@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Room;
 use App\Http\Requests\StoreRoomRequest;
 use App\Http\Requests\UpdateRoomRequest;
+use App\Models\Room;
+use Illuminate\Support\Facades\DB;
 
 class RoomController extends Controller
 {
@@ -22,6 +23,9 @@ class RoomController extends Controller
     public function store(StoreRoomRequest $request)
     {
         $room = Room::create($request->validated());
+
+        $room->syncSeats();   
+
         return response()->json($room, 201);
     }
 
@@ -39,6 +43,9 @@ class RoomController extends Controller
     public function update(UpdateRoomRequest $request, Room $room)
     {
         $room->update($request->validated());
+
+        $room->syncSeats(); 
+
         return response()->json($room);
     }
 
@@ -74,5 +81,5 @@ class RoomController extends Controller
     public function adminDestroy(Room $room)
     {
         return $this->destroy($room);
-    }    
+    }
 }

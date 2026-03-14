@@ -10,58 +10,63 @@ use Illuminate\Http\Request;
 
 class ConcertController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    private function markExpiredConcertsAsSoftDeleted(): void
     {
-        return Concert::all();
+        Concert::query()
+            ->where('date', '<', now())
+            ->where('soft_delete', false)
+            ->update(['soft_delete' => true]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    public function index()
+    {
+        $this->markExpiredConcertsAsSoftDeleted();
+
+        return Concert::query()
+            ->where('soft_delete', false)
+            ->where('date', '>=', now())
+            ->orderBy('date')
+            ->get();
+    }
+
     public function store(StoreConcertRequest $request)
     {
         $concert = new Concert();
-        $concert->fill($request->all());
+        $concert->fill($request->validated());
         $concert->save();
-        return response()->json($concert, 201);    }
 
-    /**
-     * Display the specified resource.
-     */
+        return response()->json($concert, 201);
+    }
+
     public function show($performer_id, $name, $room_id)
     {
-        $data = Concert::where('performer_id',"=", $performer_id)
-        ->where('performer_id', $performer_id)
-        ->where('name', $name)
-        ->where('room_id', $room_id)
-        ->get();
-        return $data[0]; 
+        $this->markExpiredConcertsAsSoftDeleted();
+
+        return Concert::query()
+            ->where('soft_delete', false)
+            ->where('date', '>=', now())
+            ->where('performer_id', $performer_id)
+            ->where('name', $name)
+            ->where('room_id', $room_id)
+            ->firstOrFail();
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateConcertRequest $request, $concert_id, $performer_id, $name, $room_id)
     {
-        //
+        // unused route in current project
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Concert $concert)
     {
-        //
+        // unused route in current project
     }
 
-    //teljes lista mindenkinek
     public function concertAllDataList(Request $request)
     {
-        $conc = $request->query('conc');          
-        $date = $request->query('date');       
+        $this->markExpiredConcertsAsSoftDeleted();
+
+        $conc = $request->query('conc');
+        $date = $request->query('date');
         $performerId = $request->query('performer_id');
         $roomId = $request->query('room_id');
         $placeId = $request->query('place_id');
@@ -74,11 +79,13 @@ class ConcertController extends Controller
             ->leftJoin('genres', 'genres.id', '=', 'performers.genre')
             ->select([
                 'concerts.id',
+                'concerts.picture',
                 'concerts.name',
                 'concerts.date',
                 'concerts.base_price',
                 'concerts.description',
                 'concerts.status',
+                'concerts.soft_delete',
                 'concerts.performer_id',
                 'performers.name as performer_name',
                 'concerts.room_id',
@@ -90,7 +97,9 @@ class ConcertController extends Controller
                 'places.city as place_city',
                 'genres.id as genre_id',
                 'genres.name as genre_name',
-            ]);
+            ])
+            ->where('concerts.soft_delete', false)
+            ->where('concerts.date', '>=', now());
 
         if ($performerId) $query->where('concerts.performer_id', $performerId);
         if ($roomId) $query->where('concerts.room_id', $roomId);
@@ -104,15 +113,40 @@ class ConcertController extends Controller
         if ($conc) {
             $query->where(function ($w) use ($conc) {
                 $w->where('concerts.name', 'like', "%$conc%")
-                ->orWhere('performers.name', 'like', "%$conc%");
+                    ->orWhere('performers.name', 'like', "%$conc%");
             });
         }
 
         return $query->orderBy('concerts.date')->get();
-        
     }
 
-    //admin
+    public function seats(Concert $concert)
+    {
+        $reservedSeatIds = DB::table('tickets')
+            ->join('reservations', 'reservations.id', '=', 'tickets.reservation_id')
+            ->where('reservations.concert_id', $concert->id)
+            ->pluck('tickets.seat_id')
+            ->map(fn ($id) => (int) $id)
+            ->all();
+
+        return DB::table('seats')
+            ->select(['id', 'room_id', 'row_number', 'column_number', 'price_multiplier'])
+            ->where('room_id', $concert->room_id)
+            ->orderBy('row_number')
+            ->orderBy('column_number')
+            ->get()
+            ->map(function ($seat) use ($reservedSeatIds) {
+                $seat->reserved = in_array((int) $seat->id, $reservedSeatIds, true);
+                return $seat;
+            })
+            ->values();
+    }
+
+    public function adminIndex()
+    {
+        return Concert::query()->orderBy('date')->get();
+    }
+
     public function adminShow(Concert $concert)
     {
         return response()->json($concert, 200);

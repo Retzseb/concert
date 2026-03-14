@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useConcerts } from "../../hooks/useConcerts";
 import { useSeatLayout, MultiplierKey } from "../../hooks/useSeatLayout";
 import { useCart } from "../../cart/cartProvider";
+import { API_BASE } from "../../utility/config";
 
 function seatId(r: number, c: number) {
   return `R${r}C${c}`;
@@ -22,12 +23,48 @@ export function ConcertDetailsPage() {
   const params = useParams();
   const id = Number(params.id);
   const { concerts, loading, error } = useConcerts();
-  const { layout, loading: layoutLoading, error: layoutError } = useSeatLayout(Number.isFinite(id) ? id : "");
   const { addItems } = useCart();
 
   const concert = concerts.find((c) => c.id === id);
+  const { layout, seatIds, loading: layoutLoading, error: layoutError } = useSeatLayout(concert?.room_id ?? "");
 
   const [selected, setSelected] = useState<Record<string, boolean>>({});
+  const [reservedSeatMap, setReservedSeatMap] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadReservedSeats = async () => {
+      if (!concert?.id) {
+        setReservedSeatMap({});
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/api/concerts/${concert.id}/seats`, {
+          headers: { Accept: "application/json" },
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (cancelled || !Array.isArray(data)) return;
+
+        const next: Record<string, boolean> = {};
+        data.forEach((seat: any) => {
+          const key = seatId(Number(seat.row_number), Number(seat.column_number));
+          next[key] = !!seat.reserved;
+        });
+        setReservedSeatMap(next);
+      } catch (error) {
+        console.error(error);
+        if (!cancelled) setReservedSeatMap({});
+      }
+    };
+
+    loadReservedSeats();
+    return () => {
+      cancelled = true;
+    };
+  }, [concert?.id]);
 
   const rows = concert?.room_total_rows ?? 0;
   const cols = concert?.room_total_columns ?? 0;
@@ -45,12 +82,15 @@ export function ConcertDetailsPage() {
   const seatPrice = (sid: string) => priceFor(seatCategory(sid));
 
   const toggleSeat = (sid: string) => {
+    if (!seatIds[sid] || reservedSeatMap[sid]) return;
     setSelected((prev) => ({ ...prev, [sid]: !prev[sid] }));
   };
 
   const selectedSeatIds = Object.entries(selected)
-    .filter(([, v]) => v)
+    .filter(([k, v]) => v && !reservedSeatMap[k])
     .map(([k]) => k);
+
+  const reservedCount = useMemo(() => Object.values(reservedSeatMap).filter(Boolean).length, [reservedSeatMap]);
 
   const addToCart = () => {
     if (!concert) return;
@@ -60,14 +100,18 @@ export function ConcertDetailsPage() {
     }
 
     addItems(
-      selectedSeatIds.map((sid) => ({
-        concertId: concert.id,
-        concertName: concert.name,
-        date: concert.date,
-        place: concert.place_name,
-        seatId: sid,
-        price: seatPrice(sid),
-      }))
+      selectedSeatIds
+        .filter((sid) => !!seatIds[sid])
+        .map((sid) => ({
+          concertId: concert.id,
+          concertName: concert.name,
+          date: concert.date,
+          place: concert.place_name,
+          seatId: sid,
+          seatDbId: seatIds[sid],
+          price: seatPrice(sid),
+          discountId: 1,
+        }))
     );
 
     setSelected({});
@@ -99,7 +143,12 @@ export function ConcertDetailsPage() {
 
       {concert && (
         <>
-          <div className="miniCard" style={{ marginBottom: 14 }}>
+          <div className="miniCard" style={{ marginBottom: 14, overflow: "hidden" }}>
+            <img
+              src={concert.picture ?? ""}
+              alt={concert.name}
+              style={{ width: "100%", maxHeight: 280, objectFit: "cover", borderRadius: 12, marginBottom: 12 }}
+            />
             <h3 style={{ marginTop: 0 }}>{concert.name}</h3>
             <p style={{ marginBottom: 0, opacity: 0.9 }}>
               <b>Előadó:</b> {concert.performer_name} <br />
@@ -108,7 +157,8 @@ export function ConcertDetailsPage() {
               <b>Alapár:</b> {basePrice} Ft
             </p>
           </div>
-
+          <div className="adminStageWrap">
+          <div className="adminStage">Színpad</div>
           {layoutLoading && <p>Kiosztás betöltése…</p>}
           {layoutError && <p>{layoutError}</p>}
 
@@ -120,7 +170,7 @@ export function ConcertDetailsPage() {
               </span>
             ))}
           </div>
-
+            
           <div
             className="adminSeatGrid"
             aria-label="Seatmap"
@@ -135,6 +185,8 @@ export function ConcertDetailsPage() {
 
                 const cat = seatCategory(sid);
                 const isSel = !!selected[sid];
+                const existsInDb = !!seatIds[sid];
+                const isReserved = !!reservedSeatMap[sid];
 
                 return (
                   <button
@@ -142,18 +194,22 @@ export function ConcertDetailsPage() {
                     type="button"
                     className={`adminSeat ${MULTI_UI[cat].seatClass} ${isSel ? "isSelected" : ""}`}
                     onClick={() => toggleSeat(sid)}
-                    title={`#${n} (${sid}) • ${seatPrice(sid)} Ft`}
+                    title={isReserved ? `#${n} (${sid}) • FOGLALT` : `#${n} (${sid}) • ${seatPrice(sid)} Ft`}
+                    disabled={!existsInDb || isReserved}
                     style={{
-                      cursor: "pointer"
+                      cursor: existsInDb && !isReserved ? "pointer" : "not-allowed",
+                      opacity: existsInDb ? 1 : 0.35,
+                      filter: isReserved ? "grayscale(1)" : "none",
+                      position: "relative",
                     }}
                   >
-                    {n}
+                    {isReserved ? "X" : n}
                   </button>
                 );
               });
             })}
           </div>
-
+</div>
           <div style={{ display: "flex", gap: 12, alignItems: "center", marginTop: 14 }}>
             <button className="btn" onClick={addToCart}>
               Kosárba ({selectedSeatIds.length})
