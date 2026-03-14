@@ -536,6 +536,17 @@ img{ max-width:100%; display:block; }
   align-items: center;
   gap: 12px;
 }
+.noResults{
+  width: min(1120px, 92vw);
+  margin: 18px auto 0;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px dashed var(--line);
+  background: var(--surface);
+  color: var(--text);
+  text-align: center;
+  font-weight: 700;
+}
 
 .cardsSlider{
   display: grid;
