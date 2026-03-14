@@ -226,6 +226,95 @@
 :root[data-theme="light"] .adminSeatLegend{
   color: rgba(16,24,40,.72);
 }
+/* =========================
+   LIGHT MODE: User felület 
+   ========================= */
+
+:root[data-theme="light"] .userTop{
+  background: rgba(255,255,255,.75);
+  border-bottom: 1px solid var(--line);
+}
+
+:root[data-theme="light"] .userSide{
+  background: rgba(255,255,255,.55);
+  border-right: 1px solid var(--line);
+}
+
+
+:root[data-theme="light"] .userCard,
+:root[data-theme="light"] .userPanel,
+:root[data-theme="light"] .userPlaceholder,
+:root[data-theme="light"] .userBox{
+  background: rgba(255,255,255,.85);
+  color: var(--text);
+  border-color: var(--line);
+}
+:root[data-theme="light"] .userLabel{
+  color: var(--text);
+}
+
+
+:root[data-theme="light"] .userMuted,
+:root[data-theme="light"] .userSub,
+:root[data-theme="light"] .userHint{
+  color: rgba(16,24,40,.70);
+}
+
+:root[data-theme="light"] .userNavItem{
+  background: rgba(16,24,40,.04);
+  color: rgba(16,24,40,.92);
+  border-color: var(--line);
+}
+
+:root[data-theme="light"] .userNavItem:hover{
+  border-color: rgba(26,163,163,.35);
+}
+
+:root[data-theme="light"] .userNavItem.active{
+  background: rgba(26,163,163,.12);
+  border-color: rgba(26,163,163,.35);
+  color: rgba(16,24,40,1);
+}
+
+
+:root[data-theme="light"] .userBtn{
+  background: rgba(16,24,40,.04);
+  color: rgba(16,24,40,.92);
+  border-color: var(--line);
+}
+
+:root[data-theme="light"] .userBtn--solid{
+  background: linear-gradient(135deg, var(--green2), var(--green));
+  color: #fff;
+  border: 0;
+}
+
+
+:root[data-theme="light"] .userInput,
+:root[data-theme="light"] .userSelect{
+  background: rgba(255,255,255,.92);
+  color: rgba(16,24,40,.92);
+  border-color: var(--line);
+}
+
+:root[data-theme="light"] .userSelect option{
+  background: #fff;
+  color: rgba(16,24,40,.92);
+}
+
+
+:root[data-theme="light"] .userMenu__drop{
+  background: rgba(255,255,255,.95);
+  border-color: var(--line);
+}
+
+:root[data-theme="light"] .userMenu__item{
+  color: rgba(16,24,40,.92);
+}
+
+:root[data-theme="light"] .userMenu__item:hover{
+  background: rgba(16,24,40,.06);
+}
 
 
 /*Light theme vége*/

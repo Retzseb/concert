@@ -11,12 +11,12 @@ export function Header(props: { user: any | null; onLogout: () => void }) {
   const menuRef = useRef<HTMLDivElement | null>(null);
   const location = useLocation();
 
-  // 1) Route váltáskor csukjuk be
+ 
   useEffect(() => {
     setOpen(false);
   }, [location.pathname]);
 
-  // 2) Kattintás a menün kívül → csukjuk be
+
   useEffect(() => {
     function onDocMouseDown(e: MouseEvent) {
       if (!open) return;
@@ -49,7 +49,7 @@ export function Header(props: { user: any | null; onLogout: () => void }) {
         <Link to="/">Újdonság</Link>
       </nav>
 
-      {/* ref ide kerüljön, hogy a dropdown + gomb is “bent” legyen */}
+      
       <div className="actions" ref={menuRef} style={{ position: "relative" }}>
         <Link to="/cart">
           <img

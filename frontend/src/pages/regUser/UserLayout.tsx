@@ -19,11 +19,12 @@ export function UserLayout({ user, onLogout }: UserLayoutProps) {
       <header className="userTop">
         <div className="userTop__left">
           <div className="userBrand">
-            <img src={logo} alt="SEATY logó" className="userLogo" />
-            <div className="userBrandText">
-              <div className="userBrandTitle">SEATY</div>
-              <div className="userBrandSub">Fiók</div>
-            </div>
+            <button
+              className="userBtn userBtn--solid"
+
+            >
+              👤 {userName}
+            </button>
           </div>
         </div>
 
@@ -33,15 +34,7 @@ export function UserLayout({ user, onLogout }: UserLayoutProps) {
           </Link>
 
           <div className="userMenu" ref={menuRef}>
-            <button
-              className="userBtn userBtn--solid"
-              type="button"
-              onClick={() => setMenuOpen((v) => !v)}
-              aria-haspopup="menu"
-              aria-expanded={menuOpen}
-            >
-              👤 {userName} ▾
-            </button>
+            
 
             {menuOpen && (
               <div className="userMenu__drop" role="menu">
@@ -77,9 +70,6 @@ export function UserLayout({ user, onLogout }: UserLayoutProps) {
             Foglalásai / vásárlásai
           </NavLink>
 
-          <div className="userNavItem userNavItem--disabled">
-            Fiókbeállítások (később)
-          </div>
         </aside>
 
         <main className="userMain">
