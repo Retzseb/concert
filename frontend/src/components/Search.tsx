@@ -56,7 +56,14 @@ export function Search(props: {
   }
 
   return (
-    <div className="searchPanel" aria-label="Kereső">
+    <form
+      className="searchPanel"
+      aria-label="Kereső"
+      onSubmit={(e) => {
+        e.preventDefault();
+        doSearch();
+      }}
+    >
       <div className="field">
         <div className="label">Keresés</div>
         <input
@@ -110,9 +117,10 @@ export function Search(props: {
       </div>
 
       <div>
-        <button className="searchBtn" type="button" onClick={doSearch}>
+        <button className="searchBtn" type="submit">
           Keresés
         </button>
+
         <button
           className="searchBtn"
           type="button"
@@ -122,6 +130,6 @@ export function Search(props: {
           Törlés
         </button>
       </div>
-    </div>
+    </form>
   );
 }
