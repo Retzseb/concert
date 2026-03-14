@@ -7,14 +7,11 @@ export function Footer() {
         <div className="container">
           <div className="footGrid">
             <div>
-              <div className="brand" style={{ marginBottom: 10 }}>
-                <img
-                  src="/SEATY_logo.jpg"
-                  alt="SEATY logó"
-                  className="logoImg"
-                />
+              <div className="logoImg" style={{ marginBottom: 10 }}>
+                <img src="/SEATY_newLogo_Black.png" alt="SEATY logó" className="logoImg logoImg--dark" />
+        <img src="/SEATY_newLogo_White.jpg" alt="SEATY logó" className="logoImg logoImg--light" />
               </div>
-              <div style={{ color: "rgba(243,241,255,.65)", fontWeight: 650 }}>
+              <div className="footKicker">
                 Hasznos linkek
               </div>
             </div>
