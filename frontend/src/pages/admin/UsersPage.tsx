@@ -2,7 +2,6 @@ import { useState } from "react";
 import {useUsers, type NewUserInput, type Role} from "../../hooks/useUsers";
 
 const EMPTY_DRAFT: NewUserInput = {
-  username: "",
   email: "",
   name: "",
   password: "",
@@ -33,7 +32,6 @@ export function UsersPage() {
 
     try {
       await addUser({
-        username: draft.username.trim(),
         email: draft.email.trim(),
         name: draft.name.trim(),
         password: draft.password,
@@ -96,7 +94,6 @@ export function UsersPage() {
         <table className="adminTable">
           <thead>
             <tr>
-              <th>Profilnév</th>
               <th>Email cím</th>
               <th>Név</th>
               <th>Státusz</th>
@@ -116,7 +113,6 @@ export function UsersPage() {
             {!loading &&
               users.map((u) => (
                 <tr key={u.id}>
-                  <td>{u.username || u.name}</td>
                   <td>{u.email}</td>
                   <td>{u.name}</td>
                   <td>
@@ -141,14 +137,6 @@ export function UsersPage() {
             {isAdding && (
               <>
                 <tr>
-                  <td>
-                    <input
-                      className="adminInput"
-                      placeholder="profilnev (opcionális)"
-                      value={draft.username}
-                      onChange={(e) => setDraft((d) => ({ ...d, username: e.target.value }))}
-                    />
-                  </td>
                   <td>
                     <input
                       className="adminInput"

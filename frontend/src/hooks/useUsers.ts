@@ -7,7 +7,6 @@ export type Role = "Admin" | "Jegykezelő" | "Felhasználó";
 
 export type UserRow = {
   id: number;
-  username: string;
   email: string;
   name: string;
   role: Role;

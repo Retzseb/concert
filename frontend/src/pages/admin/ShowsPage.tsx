@@ -1,43 +1,92 @@
 import { useEffect, useState } from "react";
 import { useShows, ShowRow, ShowStatus } from "../../hooks/useShows";
-import { logAction } from "../../utility/logger";
+import { API_BASE } from "../../utility/config";
+
+const STATUS_TO_API: Record<ShowStatus, number> = {
+  Ongoing: 0,
+  Cancelled: 1,
+  "Sold out": 2,
+};
+
+function formatNotifyList(data: any) {
+  const list = data?.notify_buyers;
+  if (!Array.isArray(list) || list.length === 0) return "Nincs értesítendő vásárló.";
+  return [
+    "Az alábbi vásárlókat kell értesíteni:",
+    ...list.map((row: any) => `- ${row.name || "Ismeretlen"} (${row.email || "nincs email"})`),
+  ].join("");
+}
 
 export function ShowsPage() {
   const { shows: serverShows, loading, error, reload } = useShows();
-
   const [shows, setShows] = useState<ShowRow[]>([]);
+  const [busyId, setBusyId] = useState<string | null>(null);
 
   useEffect(() => {
     setShows(serverShows);
   }, [serverShows]);
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (!window.confirm("Biztosan törlöd?")) return;
-    setShows((prev) => prev.filter((s) => s.id !== id));
-    logAction({ type: "SHOW_DELETE", payload: { id } });
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+      setBusyId(id);
+      const res = await fetch(`${API_BASE}/api/admin/concerts/${id}`, {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) throw new Error(data?.message || `HTTP ${res.status}`);
+      alert(formatNotifyList(data));
+      await reload();
+    } catch (e: any) {
+      alert(e?.message || "A törlés nem sikerült.");
+    } finally {
+      setBusyId(null);
+    }
   };
 
-  const handleStatusChange = (id: string, status: ShowStatus) => {
-    setShows((prev) => prev.map((s) => (s.id === id ? { ...s, status } : s)));
-    logAction({ type: "SHOW_STATUS_UPDATE", payload: { id, status } });
+  const handleStatusChange = async (id: string, status: ShowStatus) => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+      setBusyId(id);
+      const res = await fetch(`${API_BASE}/api/admin/concerts/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ status: STATUS_TO_API[status] }),
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) throw new Error(data?.message || `HTTP ${res.status}`);
+      if (Array.isArray(data?.notify_buyers) && data.notify_buyers.length > 0) {
+        alert(formatNotifyList(data));
+      }
+      await reload();
+    } catch (e: any) {
+      alert(e?.message || "A státusz mentése nem sikerült.");
+    } finally {
+      setBusyId(null);
+    }
   };
 
   return (
-      <section className="adminCard">
-        <div className="adminCardHead">
-          <h2>Előadások</h2>
-          <div style={{ display: "flex", gap: 10 }}>
-          <button className="adminBtn adminBtn--solid" type="button">
-            + Új előadás felvétele
+    <section className="adminCard">
+      <div className="adminCardHead">
+        <h2>Előadások</h2>
+        <div style={{ display: "flex", gap: 10 }}>
+          <button className="adminBtn adminBtn--solid" type="button" onClick={reload}>
+            Frissítés
           </button>
-            <button className="adminBtn adminBtn--solid" type="button">
-              Mentés
-            </button>
-            <button className="adminBtn" type="button">
-              Mégse
-            </button>
-          </div>
         </div>
+      </div>
 
       {loading && <p>Betöltés...</p>}
       {error && (
@@ -46,42 +95,43 @@ export function ShowsPage() {
           <button onClick={reload}>Újratöltés</button>
         </div>
       )}
-        <div className="adminTableWrap">
+      <div className="adminTableWrap">
         <table className="adminTable">
-        <thead>
-          <tr>
-            <th>Cím</th>
-            <th>Előadók</th>
-            <th>Helyszín</th>
-            <th>Státusz</th>
-            <th>Ár</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {shows.map((s) => (
-            <tr key={s.id}>
-              <td>{s.title}</td>
-              <td>{s.performer_name}</td>
-              <td>{s.place_name}</td>
-              <td>
-                <select
-                  value={s.status}
-                  onChange={(e) =>
-                    handleStatusChange(s.id, e.target.value as ShowStatus)
-                  }
-                >
-                  <option value="Ongoing">Ongoing</option>
-                  <option value="Cancelled">Cancelled</option>
-                  <option value="Sold out">Sold out</option>
-                </select>
-              </td>
-              <td>{s.basePrice} Ft</td>
-              <td>
-                <button onClick={() => handleDelete(s.id)}>Törlés</button>
-              </td>
+          <thead>
+            <tr>
+              <th>Cím</th>
+              <th>Előadók</th>
+              <th>Helyszín</th>
+              <th>Státusz</th>
+              <th>Ár</th>
+              <th>Törölve</th>
+              <th></th>
             </tr>
-          ))}
+          </thead>
+          <tbody>
+            {shows.map((s) => (
+              <tr key={s.id}>
+                <td>{s.title}</td>
+                <td>{s.performer_name}</td>
+                <td>{s.place_name}</td>
+                <td>
+                  <select
+                    value={s.status}
+                    disabled={busyId === s.id}
+                    onChange={(e) => handleStatusChange(s.id, e.target.value as ShowStatus)}
+                  >
+                    <option value="Ongoing">Ongoing</option>
+                    <option value="Cancelled">Cancelled</option>
+                    <option value="Sold out">Sold out</option>
+                  </select>
+                </td>
+                <td>{s.basePrice} Ft</td>
+                <td>{s.soft_delete ? "igen" : "nem"}</td>
+                <td>
+                  <button onClick={() => handleDelete(s.id)} disabled={busyId === s.id}>Törlés</button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

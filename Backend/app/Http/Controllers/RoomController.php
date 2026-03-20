@@ -5,56 +5,58 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreRoomRequest;
 use App\Http\Requests\UpdateRoomRequest;
 use App\Models\Room;
-use Illuminate\Support\Facades\DB;
+use App\Models\Ticket;
 
 class RoomController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return Room::all();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreRoomRequest $request)
     {
         $room = Room::create($request->validated());
-
-        $room->syncSeats();   
-
+        $room->syncSeats();
         return response()->json($room, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         return Room::find($id);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateRoomRequest $request, Room $room)
     {
         $room->update($request->validated());
-
-        $room->syncSeats(); 
-
+        $room->syncSeats();
         return response()->json($room);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Room $room)
     {
+        $room->loadMissing(['seats', 'place']);
+
+        $concertCount = $room->concerts()->count();
+        if ($concertCount > 0) {
+            return response()->json([
+                'message' => 'A terem nem törölhető, mert még koncert tartozik hozzá.',
+                'concert_count' => $concertCount,
+            ], 422);
+        }
+
+        $seatIds = $room->seats->pluck('id');
+        $ticketCount = $seatIds->isEmpty() ? 0 : Ticket::query()->whereIn('seat_id', $seatIds)->count();
+        if ($ticketCount > 0) {
+            return response()->json([
+                'message' => 'A terem nem törölhető, mert a székeihez már tartozik jegy.',
+                'ticket_count' => $ticketCount,
+            ], 422);
+        }
+
+        $room->seats()->delete();
         $room->delete();
+
         return response()->json(['message' => 'Deleted']);
     }
 

@@ -165,14 +165,13 @@ export function ConcertDetailsPage() {
           <div className="adminSeatLegend" style={{ display: "flex", gap: 16, alignItems: "center" }}>
             {(["M1", "M2", "M3"] as MultiplierKey[]).map((k) => (
               <span key={k} style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-                <i className={`adminSwatch ${MULTI_UI[k].seatClass.replace("adminSeat", "adminSwatch")}`} />
-                <b>{k}</b>: {priceFor(k)} Ft
-              </span>
+                <i className={`adminSwatch adminSwatch--SOLD ${MULTI_UI[k].seatClass.replace("adminSeat", "adminSwatch")}`} />
+                <b>{k}:</b> {priceFor(k)} Ft
+              </span>                
             ))}
           </div>
-            
           <div
-            className="adminSeatGrid"
+            className="adminSeatGrid adminSeatGrid--details"
             aria-label="Seatmap"
             style={{ gridTemplateColumns: `repeat(${cols || 1}, 1fr)`, marginTop: 12 }}
           >
@@ -199,7 +198,8 @@ export function ConcertDetailsPage() {
                     style={{
                       cursor: existsInDb && !isReserved ? "pointer" : "not-allowed",
                       opacity: existsInDb ? 1 : 0.35,
-                      filter: isReserved ? "grayscale(1)" : "none",
+                      backgroundColor: isReserved ? "rgb(141, 3, 3)" : "none",
+                      color: isReserved ? "white" : "none",
                       position: "relative",
                     }}
                   >

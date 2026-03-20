@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { API_BASE } from "../utility/config";
 
-export type MultiplierKey = "M1" | "M2" | "M3";
+export type MultiplierKey = "M1" | "M2" | "M3" ;
 
 export type SeatLayout = {
   multipliers: Record<MultiplierKey, number>;

@@ -18,6 +18,54 @@ class ConcertController extends Controller
             ->update(['soft_delete' => true]);
     }
 
+    private function affectedBuyersPayload(Concert $concert): array
+    {
+        $reservations = $concert->reservations()
+            ->with('user:id,name,email')
+            ->get();
+
+        return $reservations
+            ->map(fn ($reservation) => [
+                'reservation_id' => $reservation->id,
+                'user_id' => $reservation->user?->id,
+                'name' => $reservation->user?->name,
+                'email' => $reservation->user?->email,
+            ])
+            ->unique(fn ($row) => ($row['user_id'] ?? 'x') . '|' . ($row['email'] ?? ''))
+            ->values()
+            ->all();
+    }
+
+    private function adminConcertQuery()
+    {
+        return DB::table('concerts')
+            ->join('performers', 'performers.id', '=', 'concerts.performer_id')
+            ->join('rooms', 'rooms.id', '=', 'concerts.room_id')
+            ->join('places', 'places.id', '=', 'rooms.place_id')
+            ->leftJoin('genres', 'genres.id', '=', 'performers.genre')
+            ->select([
+                'concerts.id',
+                'concerts.picture',
+                'concerts.name',
+                'concerts.date',
+                'concerts.base_price',
+                'concerts.description',
+                'concerts.status',
+                'concerts.soft_delete',
+                'concerts.performer_id',
+                'performers.name as performer_name',
+                'concerts.room_id',
+                'rooms.name as room_name',
+                'rooms.total_rows as room_total_rows',
+                'rooms.total_columns as room_total_columns',
+                'places.id as place_id',
+                'places.name as place_name',
+                'places.city as place_city',
+                'genres.id as genre_id',
+                'genres.name as genre_name',
+            ]);
+    }
+
     public function index()
     {
         $this->markExpiredConcertsAsSoftDeleted();
@@ -72,32 +120,7 @@ class ConcertController extends Controller
         $placeId = $request->query('place_id');
         $genreId = $request->query('genre_id');
 
-        $query = DB::table('concerts')
-            ->join('performers', 'performers.id', '=', 'concerts.performer_id')
-            ->join('rooms', 'rooms.id', '=', 'concerts.room_id')
-            ->join('places', 'places.id', '=', 'rooms.place_id')
-            ->leftJoin('genres', 'genres.id', '=', 'performers.genre')
-            ->select([
-                'concerts.id',
-                'concerts.picture',
-                'concerts.name',
-                'concerts.date',
-                'concerts.base_price',
-                'concerts.description',
-                'concerts.status',
-                'concerts.soft_delete',
-                'concerts.performer_id',
-                'performers.name as performer_name',
-                'concerts.room_id',
-                'rooms.name as room_name',
-                'rooms.total_rows as room_total_rows',
-                'rooms.total_columns as room_total_columns',
-                'places.id as place_id',
-                'places.name as place_name',
-                'places.city as place_city',
-                'genres.id as genre_id',
-                'genres.name as genre_name',
-            ])
+        $query = $this->adminConcertQuery()
             ->where('concerts.soft_delete', false)
             ->where('concerts.date', '>=', now());
 
@@ -144,7 +167,7 @@ class ConcertController extends Controller
 
     public function adminIndex()
     {
-        return Concert::query()->orderBy('date')->get();
+        return $this->adminConcertQuery()->orderBy('concerts.date')->get();
     }
 
     public function adminShow(Concert $concert)
@@ -154,14 +177,40 @@ class ConcertController extends Controller
 
     public function adminUpdate(UpdateConcertRequest $request, Concert $concert)
     {
-        $concert->fill($request->validated());
+        $beforeStatus = (int) $concert->status;
+        $beforeSoftDelete = (bool) $concert->soft_delete;
+        $payload = $request->validated();
+
+        $concert->fill($payload);
         $concert->save();
-        return response()->json($concert, 200);
+
+        $shouldNotify = (($payload['status'] ?? $beforeStatus) == 1 && $beforeStatus !== 1)
+            || (($payload['soft_delete'] ?? $beforeSoftDelete) && !$beforeSoftDelete);
+
+        $response = [
+            'message' => 'A koncert frissítve lett.',
+            'concert' => $concert->fresh(),
+        ];
+
+        if ($shouldNotify) {
+            $response['notify_buyers'] = $this->affectedBuyersPayload($concert->fresh());
+            $response['notification_reason'] = (($payload['status'] ?? $beforeStatus) == 1) ? 'cancelled' : 'removed';
+        }
+
+        return response()->json($response, 200);
     }
 
     public function adminDestroy(Concert $concert)
     {
+        $notify = $this->affectedBuyersPayload($concert);
+        $concertName = $concert->name;
         $concert->delete();
-        return response()->noContent();
+
+        return response()->json([
+            'message' => 'A koncert törölve lett.',
+            'deleted_concert_name' => $concertName,
+            'notify_buyers' => $notify,
+            'notification_reason' => 'deleted',
+        ]);
     }
 }

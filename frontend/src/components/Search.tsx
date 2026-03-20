@@ -29,7 +29,7 @@ export function Search(props: {
     }))
     .filter((p) => p.id && p.name)
     .sort((a, b) =>
-      `${a.name} ${a.city}`.localeCompare(`${b.name} ${b.city}`, "hu")
+      `${a.name} ${a.city}`.localeCompare(`${b.name} ${b.city}`, "hu"),
     );
 
   const genres = (props.genres ?? [])
@@ -56,7 +56,14 @@ export function Search(props: {
   }
 
   return (
-    <div className="searchPanel" aria-label="Kereső">
+    <form
+      className="searchPanel"
+      aria-label="Kereső"
+      onSubmit={(e) => {
+        e.preventDefault();
+        doSearch();
+      }}
+    >
       <div className="field">
         <div className="label">Keresés</div>
         <input
@@ -122,6 +129,6 @@ export function Search(props: {
           Törlés
         </button>
       </div>
-    </div>
+    </form>
   );
 }

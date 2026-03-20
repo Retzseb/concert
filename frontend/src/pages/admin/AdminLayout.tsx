@@ -23,11 +23,16 @@ export function AdminLayout() {
       <header className="adminTop">
         <div className="adminTop__left">
           <div className="adminBrand">
-            <img src={logo} alt="SEATY logó" className="adminLogo" />
-            <div className="adminBrandText">
-              <div className="adminBrandTitle">SEATY</div>
-              <div className="adminBrandSub">Admin felület</div>
-            </div>
+            <button
+              className="adminBtn adminBtn--solid"
+              type="button"
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-haspopup="menu"
+              aria-expanded={menuOpen}
+            >
+              👑 Admin vezérlőpult
+            </button>
+
           </div>
         </div>
 
@@ -37,15 +42,6 @@ export function AdminLayout() {
           </Link>
 
           <div className="adminMenu" ref={menuRef}>
-            <button
-              className="adminBtn adminBtn--solid"
-              type="button"
-              onClick={() => setMenuOpen((v) => !v)}
-              aria-haspopup="menu"
-              aria-expanded={menuOpen}
-            >
-              👑 Admin vezérlőpult ▾
-            </button>
 
             {menuOpen && (
               <div className="adminMenu__drop" role="menu">

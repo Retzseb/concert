@@ -33,22 +33,11 @@ function money(value?: number) {
   return `${Math.round(Number(value || 0))} Ft`;
 }
 
-function seatsText(reservation: Reservation) {
-  return (reservation.tickets || [])
-    .map((ticket) => {
-      const row = ticket.seat?.row_number;
-      const column = ticket.seat?.column_number;
-      const seat = row && column ? `${row}/${column}` : "-";
-      const discount = ticket.discount?.type || "normál";
-      return `${seat} (${discount})`;
-    })
-    .join(", ");
-}
-
 export function OrdersPage() {
   const [orders, setOrders] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [busy, setBusy] = useState<string>("");
 
   const load = async () => {
     const token = localStorage.getItem("token");
@@ -83,6 +72,52 @@ export function OrdersPage() {
     load();
   }, []);
 
+  const deleteReservation = async (reservationId: number) => {
+    const token = localStorage.getItem("token");
+    if (!token || !window.confirm("Biztosan törlöd a teljes foglalást?")) return;
+    try {
+      setBusy(`reservation-${reservationId}`);
+      const res = await fetch(`${API_BASE}/api/reservations/${reservationId}`, {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      await load();
+    } catch (e) {
+      console.error(e);
+      alert("A foglalás törlése nem sikerült.");
+    } finally {
+      setBusy("");
+    }
+  };
+
+  const deleteTicket = async (ticketId: number) => {
+    const token = localStorage.getItem("token");
+    if (!token || !window.confirm("Biztosan törlöd ezt a jegyet?")) return;
+    try {
+      setBusy(`ticket-${ticketId}`);
+      const res = await fetch(`${API_BASE}/api/tickets/${ticketId}`, {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) throw new Error(data?.message || `HTTP ${res.status}`);
+      if (data?.message) alert(data.message);
+      await load();
+    } catch (e) {
+      console.error(e);
+      alert("A jegy törlése nem sikerült.");
+    } finally {
+      setBusy("");
+    }
+  };
+
   return (
     <section className="adminCard">
       <div className="adminCardHead">
@@ -105,15 +140,16 @@ export function OrdersPage() {
                 <th>Felhasználó</th>
                 <th>Koncert</th>
                 <th>Dátum</th>
-                <th>Székek</th>
+                <th>Jegyek</th>
                 <th>Összeg</th>
                 <th>Státusz</th>
+                <th>Művelet</th>
               </tr>
             </thead>
             <tbody>
               {orders.length === 0 ? (
                 <tr>
-                  <td colSpan={7}>Nincs még rendelés.</td>
+                  <td colSpan={8}>Nincs még rendelés.</td>
                 </tr>
               ) : (
                 orders.map((order) => (
@@ -125,9 +161,29 @@ export function OrdersPage() {
                     </td>
                     <td>{order.concert?.name || "-"}</td>
                     <td>{order.concert?.date || order.reservation_date || "-"}</td>
-                    <td>{seatsText(order)}</td>
+                    <td>
+                      {(order.tickets || []).map((ticket) => {
+                        const row = ticket.seat?.row_number;
+                        const column = ticket.seat?.column_number;
+                        const seat = row && column ? `${row}/${column}` : "-";
+                        const discount = ticket.discount?.type || "normál";
+                        return (
+                          <div key={ticket.id} style={{ marginBottom: 6 }}>
+                            {seat} ({discount}) – {money(ticket.final_price)}{" "}
+                            <button onClick={() => deleteTicket(ticket.id)} disabled={busy === `ticket-${ticket.id}`}>
+                              Jegy törlése
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </td>
                     <td>{money(order.total_price)}</td>
                     <td>{order.status === 0 ? "aktív" : String(order.status ?? "-")}</td>
+                    <td>
+                      <button onClick={() => deleteReservation(order.id)} disabled={busy === `reservation-${order.id}`}>
+                        Foglalás törlése
+                      </button>
+                    </td>
                   </tr>
                 ))
               )}

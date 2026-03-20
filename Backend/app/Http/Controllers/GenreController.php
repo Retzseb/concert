@@ -13,7 +13,7 @@ class GenreController extends Controller
      */
     public function index()
     {
-        return Genre::all();
+        return Genre::orderBy('name')->get();
     }
 
     /**
@@ -21,7 +21,8 @@ class GenreController extends Controller
      */
     public function store(StoreGenreRequest $request)
     {
-        //
+        $genre = Genre::create($request->validated());
+        return response()->json($genre, 201);
     }
 
     /**
@@ -37,7 +38,8 @@ class GenreController extends Controller
      */
     public function update(UpdateGenreRequest $request, Genre $genre)
     {
-        //
+        $genre->update($request->validated());
+        return response()->json($genre);
     }
 
     /**
@@ -45,12 +47,39 @@ class GenreController extends Controller
      */
     public function destroy(Genre $genre)
     {
-        //
+        $genre->delete();
+        return response()->json(['message' => 'Deleted']);
     }
 
     //Search főoldal
     public function genreList()
     {
         return Genre::orderBy('name')->get();
+    }
+
+    // admin
+    public function adminIndex()
+    {
+        return $this->index();
+    }
+
+    public function adminShow(Genre $genre)
+    {
+        return response()->json($genre, 200);
+    }
+
+    public function adminStore(StoreGenreRequest $request)
+    {
+        return $this->store($request);
+    }
+
+    public function adminUpdate(UpdateGenreRequest $request, Genre $genre)
+    {
+        return $this->update($request, $genre);
+    }
+
+    public function adminDestroy(Genre $genre)
+    {
+        return $this->destroy($genre);
     }
 }

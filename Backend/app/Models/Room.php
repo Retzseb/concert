@@ -27,6 +27,11 @@ class Room extends Model
     public function seats()
     {
         return $this->hasMany(Seat::class);
+    }
+
+    public function concerts()
+    {
+        return $this->hasMany(Concert::class);
     }    
 
     public function syncSeats(bool $deleteOutsideBounds = true): void
