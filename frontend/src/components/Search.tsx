@@ -116,20 +116,15 @@ export function Search(props: {
         </select>
       </div>
 
-      <div>
-        <button className="searchBtn" type="submit">
-          Keresés
-        </button>
+      <div className="searchActions">
+  <button className="searchBtn" type="button" onClick={doSearch}>
+    Keresés
+  </button>
 
-        <button
-          className="searchBtn"
-          type="button"
-          onClick={clearSearch}
-          style={{ marginLeft: 8 }}
-        >
-          Törlés
-        </button>
-      </div>
+  <button className="searchBtn" type="button" onClick={clearSearch}>
+    Törlés
+  </button>
+</div>
     </form>
   );
 }

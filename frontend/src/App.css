@@ -1,8 +1,16 @@
+/* =========================
+   SEATY - App.css (dark/base)
+   ========================= */
+
+/* =========================
+   THEME VARIABLES (Dark default)
+   ========================= */
 :root{
   --bg:#0b0a10;
   --bg2:#0f0d17;
   --card:#141225;
   --card2:#15132a;
+
   --muted:#abc0a5;
   --text:#f3f1ff;
   --line:rgba(255,255,255,0.08);
@@ -19,305 +27,10 @@
 
   --text-soft: rgba(243,241,255,.78);
   --text-faint: rgba(243,241,255,.65);
+
   --surface: rgba(255,255,255,.03);
   --surface-strong: rgba(9,16,10,.45);
 }
-
-/* =========================
-   LIGHT THEME
-   ========================= */
-:root[data-theme="light"]{
-  --bg:#f7f8fb;
-  --bg2:#ffffff;
-
-  --card:#ffffff;
-  --card2:#f2f4f8;
-
-  --text:#101828;
-  --muted:#475467;
-
-  --line:rgba(16,24,40,0.10);
-
-  --green:#1aa3a3;
-  --green2:#0b6b6b;
-  --green3:#6fdad3;
-
-  --yellow:#f59e0b;
-  --gray:#667085;
-
-  --shadow:0 18px 55px rgba(16,24,40,0.10);
-
-  --text-soft: rgba(16,24,40,.78);
-  --text-faint: rgba(16,24,40,.62);
-  --surface: rgba(16,24,40,.03);
-  --surface-strong: rgba(255,255,255,.70);
-}
-
-:root[data-theme="light"] body{
-  background: var(--surface-strong);
-  color: var(--text);
-}
-
-:root[data-theme="light"] .heroCard{
-  background-image: url(../public/violin-bow-white-background.jpg);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: bottom;
-}
-
-:root[data-theme="light"] .topbar,
-:root[data-theme="light"] .adminTop,
-:root[data-theme="light"] .userTop{
-  background: var(--surface-strong);
-  border-bottom: 1px solid var(--line);
-}
-
-:root[data-theme="light"] .nav{ color: rgba(16,24,40,.75); }
-:root[data-theme="light"] .nav a:hover{ color: rgba(16,24,40,1); }
-
-:root[data-theme="light"] .pill{
-  background: rgba(16,24,40,0.03);
-  color: rgba(16,24,40,.92);
-}
-
-/* cart icon */
-.cartIcon{ filter: invert(100%); }
-:root[data-theme="light"] .cartIcon{ filter: none; }
-
-/* selects */
-:root[data-theme="light"] .select{
-  background: var(--surface-strong);
-  color: var(--text);
-  border-color: var(--line);
-}
-:root[data-theme="light"] .input,
-:root[data-theme="light"] .select{
-  background: rgba(255,255,255,.70);
-}
-:root[data-theme="light"] .select option{
-  background: var(--surface-strong);
-  color: #101828;
-}
-
-/* selected seat outline in light */
-:root[data-theme="light"] .seat.sel{ outline-color: rgba(16,24,40,.75); }
-:root[data-theme="light"] .adminSeat.isSelected{ outline-color: rgba(16,24,40,.75); }
-
-/* footer in light */
-:root[data-theme="light"] footer{
-  background: var(--surface-strong);
-  border-top: 1px solid var(--line);
-}
-:root[data-theme="light"] .footGrid{ color: rgba(16,24,40,.78); }
-:root[data-theme="light"] .footGrid h5{ color: rgba(16,24,40,.92); }
-:root[data-theme="light"] .footGrid a{ color: rgba(16,24,40,.78); }
-:root[data-theme="light"] .footGrid a:hover{ color: rgba(16,24,40,1); }
-
-/* =========================
-   LIGHT MODE: Admin/User
-   ========================= */
-
-:root[data-theme="light"] .adminCard,
-:root[data-theme="light"] .adminPanel,
-:root[data-theme="light"] .adminStageWrap,
-:root[data-theme="light"] .adminPriceBox,
-:root[data-theme="light"] .miniCard,
-:root[data-theme="light"] .userCard,
-:root[data-theme="light"] .userPanel{
-  background: rgba(255,255,255,.85);
-  color: var(--text);
-  border-color: var(--line);
-}
-
-
-:root[data-theme="light"] .adminSide{
-  background: rgba(255,255,255,.55);
-  border-color: var(--line);
-}
-
-:root[data-theme="light"] .adminNavItem{
-  background: rgba(16,24,40,.04);
-  color: rgba(16,24,40,.92);
-  border-color: var(--line);
-}
-
-:root[data-theme="light"] .adminNavItem:hover{
-  border-color: rgba(26,163,163,.35);
-}
-
-:root[data-theme="light"] .adminNavItem.active{
-  background: rgba(26,163,163,.12);
-  border-color: rgba(26,163,163,.35);
-  color: rgba(16,24,40,1);
-}
-
-
-:root[data-theme="light"] .adminMuted{
-  color: rgba(16,24,40,.70);
-}
-
-
-:root[data-theme="light"] .adminBtn{
-  background: rgba(16,24,40,.04);
-  color: rgba(16,24,40,.92);
-  border-color: var(--line);
-}
-
-:root[data-theme="light"] .adminBtn--solid{
-  background: linear-gradient(135deg, var(--green2), var(--green));
-  color: #fff;
-}
-
-
-:root[data-theme="light"] .adminMenu__drop,
-:root[data-theme="light"] .userMenu__drop{
-  background: rgba(255,255,255,.95);
-  border-color: var(--line);
-}
-
-:root[data-theme="light"] .adminMenu__item,
-:root[data-theme="light"] .userMenu__item{
-  color: rgba(16,24,40,.92);
-}
-
-:root[data-theme="light"] .adminMenu__item:hover,
-:root[data-theme="light"] .userMenu__item:hover{
-  background: rgba(16,24,40,.06);
-}
-
-
-:root[data-theme="light"] .adminTable{
-  background: rgba(255,255,255,.90);
-  border-color: var(--line);
-}
-
-:root[data-theme="light"] .adminTable th{
-  background: rgba(26,163,163,.14);
-  color: rgba(16,24,40,.95);
-  border-bottom-color: var(--line);
-}
-
-:root[data-theme="light"] .adminTable td{
-  color: rgba(16,24,40,.90);
-  border-bottom-color: rgba(16,24,40,.08);
-}
-
-
-:root[data-theme="light"] .adminInput,
-:root[data-theme="light"] .adminSelect,
-:root[data-theme="light"] .adminShell .select{
-  background: rgba(255,255,255,.92);
-  color: rgba(16,24,40,.92);
-  border-color: var(--line);
-}
-
-:root[data-theme="light"] .adminSelect option,
-:root[data-theme="light"] .adminShell .select option{
-  background: #ffffff;
-  color: rgba(16,24,40,.92);
-}
-
-
-:root[data-theme="light"] .adminDanger{
-  filter: saturate(1.05);
-}
-
-
-:root[data-theme="light"] .adminSeatLegend{
-  color: rgba(16,24,40,.72);
-}
-/* =========================
-   LIGHT MODE: User felület 
-   ========================= */
-
-:root[data-theme="light"] .userTop{
-  background: rgba(255,255,255,.75);
-  border-bottom: 1px solid var(--line);
-}
-
-:root[data-theme="light"] .userSide{
-  background: rgba(255,255,255,.55);
-  border-right: 1px solid var(--line);
-}
-
-
-:root[data-theme="light"] .userCard,
-:root[data-theme="light"] .userPanel,
-:root[data-theme="light"] .userPlaceholder,
-:root[data-theme="light"] .userBox{
-  background: rgba(255,255,255,.85);
-  color: var(--text);
-  border-color: var(--line);
-}
-:root[data-theme="light"] .userLabel{
-  color: var(--text);
-}
-
-
-:root[data-theme="light"] .userMuted,
-:root[data-theme="light"] .userSub,
-:root[data-theme="light"] .userHint{
-  color: rgba(16,24,40,.70);
-}
-
-:root[data-theme="light"] .userNavItem{
-  background: rgba(16,24,40,.04);
-  color: rgba(16,24,40,.92);
-  border-color: var(--line);
-}
-
-:root[data-theme="light"] .userNavItem:hover{
-  border-color: rgba(26,163,163,.35);
-}
-
-:root[data-theme="light"] .userNavItem.active{
-  background: rgba(26,163,163,.12);
-  border-color: rgba(26,163,163,.35);
-  color: rgba(16,24,40,1);
-}
-
-
-:root[data-theme="light"] .userBtn{
-  background: rgba(16,24,40,.04);
-  color: rgba(16,24,40,.92);
-  border-color: var(--line);
-}
-
-:root[data-theme="light"] .userBtn--solid{
-  background: linear-gradient(135deg, var(--green2), var(--green));
-  color: #fff;
-  border: 0;
-}
-
-
-:root[data-theme="light"] .userInput,
-:root[data-theme="light"] .userSelect{
-  background: rgba(255,255,255,.92);
-  color: rgba(16,24,40,.92);
-  border-color: var(--line);
-}
-
-:root[data-theme="light"] .userSelect option{
-  background: #fff;
-  color: rgba(16,24,40,.92);
-}
-
-
-:root[data-theme="light"] .userMenu__drop{
-  background: rgba(255,255,255,.95);
-  border-color: var(--line);
-}
-
-:root[data-theme="light"] .userMenu__item{
-  color: rgba(16,24,40,.92);
-}
-
-:root[data-theme="light"] .userMenu__item:hover{
-  background: rgba(16,24,40,.06);
-}
-
-
-/*Light theme vége*/
 
 /* =========================
    BASE / RESET
@@ -376,7 +89,57 @@ img{ max-width:100%; display:block; }
   align-items:center;
 }
 
+/* =========================
+   DROPDOWN 
+   ========================= */
+.dropMenu{
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  min-width: 220px;
+  z-index: 9999;
 
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(10, 9, 16, 0.88);
+  box-shadow: var(--shadow);
+
+  padding: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+/* a user neve / header sor */
+.dropMenuTitle{
+  font-weight: 700;
+  color: rgba(243,241,255,.75);
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+
+
+.dropMenu .btn{
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  border-radius: 12px;
+  padding: 10px 14px;
+  box-shadow: 0 14px 35px rgba(64, 237, 58, 0.24);
+}
+
+
+.dropMenu .btn,
+.dropMenu .btn:link,
+.dropMenu .btn:visited{
+  text-decoration: none;
+}
+
+/* =========================
+   BUTTONS / PILLS
+   ========================= */
 .pill{
   border: 1px solid var(--line);
   background: rgba(255,255,255,0.03);
@@ -399,6 +162,45 @@ img{ max-width:100%; display:block; }
   cursor:pointer;
 }
 .btn:hover{ filter: brightness(1.07); }
+
+/* =========================
+   CART ICON
+   ========================= */
+.cartIcon{ filter: invert(100%); }
+
+/* =========================
+   INPUTS / SELECTS
+   ========================= */
+.input, .select{
+  width:100%;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  padding: 10px 12px;
+  outline:none;
+  font-weight: 300;
+}
+.input::placeholder{
+  color: color-mix(in srgb, var(--text) 40%, transparent);
+}
+.select{
+  appearance:none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, rgba(255,255,255,0.6) 50%),
+    linear-gradient(135deg, rgba(255,255,255,0.6) 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) calc(50% - 3px),
+    calc(100% - 13px) calc(50% - 3px);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat:no-repeat;
+  padding-right: 34px;
+}
+.select option{
+  background: var(--bg);
+  color: var(--text);
+}
 
 /* =========================
    HERO
@@ -447,14 +249,12 @@ img{ max-width:100%; display:block; }
   gap: 10px;
   align-items:end;
 }
-
 .field{
   display:flex;
   flex-direction:column;
   gap: 6px;
   min-width:0;
 }
-
 .label{
   font-size: 12px;
   font-weight: 600;
@@ -462,39 +262,6 @@ img{ max-width:100%; display:block; }
   letter-spacing: .25px;
   text-transform: uppercase;
 }
-
-.input, .select{
-  width:100%;
-  height: 44px;
-  border-radius: 12px;
-  border: 1px solid var(--line);
-  background: var(--surface);
-  color: var(--text);
-  padding: 10px 12px;
-  outline:none;
-  font-weight: 300;
-}
-.input::placeholder{
-  color: color-mix(in srgb, var(--text) 40%, transparent);
-}
-
-.select{
-  appearance:none;
-  background-image:
-    linear-gradient(45deg, transparent 50%, rgba(255,255,255,0.6) 50%),
-    linear-gradient(135deg, rgba(255,255,255,0.6) 50%, transparent 50%);
-  background-position:
-    calc(100% - 18px) calc(50% - 3px),
-    calc(100% - 13px) calc(50% - 3px);
-  background-size: 5px 5px, 5px 5px;
-  background-repeat:no-repeat;
-  padding-right: 34px;
-}
-.select option{
-  background: var(--bg);
-  color: var(--text);
-}
-
 .searchBtn{
   align-self:end;
   height: 44px;
@@ -512,6 +279,14 @@ img{ max-width:100%; display:block; }
 }
 .searchBtn:hover{ filter: brightness(1.06); }
 
+.searchActions{
+  display: flex;
+  gap: 10px;          /* ez adja a távolságot desktopon */
+  justify-content: flex-end;
+  align-items: end;
+}
+
+
 /* =========================
    MINI CARD (generic)
    ========================= */
@@ -527,6 +302,9 @@ img{ max-width:100%; display:block; }
 .miniCard h3{ margin:0 0 8px; font-weight:300; letter-spacing:.2px; }
 .miniCard p{ margin:0; color: var(--text-faint); font-weight:300; font-size:15px; line-height:1.45; }
 
+/* =========================
+   SLIDER
+   ========================= */
 .cardsSliderWrap{
   width: min(1120px, 92vw);
   margin: 18px auto 0;
@@ -547,7 +325,6 @@ img{ max-width:100%; display:block; }
   text-align: center;
   font-weight: 700;
 }
-
 .cardsSlider{
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -555,15 +332,12 @@ img{ max-width:100%; display:block; }
 }
 .sliderLabel{
   width: min(1120px, 92vw);
-  margin: 18px auto 8px;  
-  text-align: center;       
+  margin: 18px auto 8px;
+  text-align: center;
   color: var(--text);
   font-weight: 400;
   font-size: 18px;
-  font-family:"Nunito Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
-
-/* Nyilak */
 .cardsArrow{
   height: 44px;
   width: 44px;
@@ -578,24 +352,13 @@ img{ max-width:100%; display:block; }
   align-items: center;
   justify-content: center;
 }
-
 .cardsArrow:hover{ filter: brightness(1.08); }
 .cardsArrow:disabled{ opacity: .35; cursor: not-allowed; }
-
-/* Responsive: 2 kártya / 1 kártya */
-@media (max-width: 980px){
-  .cardsSlider{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-@media (max-width: 520px){
-  .cardsSliderWrap{ grid-template-columns: 40px 1fr 40px; }
-  .cardsSlider{ grid-template-columns: 1fr; }
-}
 
 /* =========================
    SECTION HEAD
    ========================= */
 .section{ padding: 18px 0 8px; }
-
 .sectionHead{
   display:flex;
   align-items:flex-end;
@@ -609,15 +372,9 @@ img{ max-width:100%; display:block; }
   font-weight: 300;
 }
 .sectionHead .btn{ margin-right: 30px; }
-.sectionHead a{
-  font-size: 13px;
-  font-weight: 800;
-  color: rgba(241,255,243,0.7);
-}
-.sectionHead a:hover{ color:#fff; }
 
 /* =========================
-   CARDS GRID
+   CARDS GRID / CARD
    ========================= */
 .grid{
   display:grid;
@@ -633,7 +390,6 @@ img{ max-width:100%; display:block; }
   transition: transform .15s ease, border-color .15s ease;
 }
 .card:hover{ transform: translateY(-2px); border-color: rgba(85,247,120,0.25); }
-
 .thumb{
   height: 140px;
   background:
@@ -641,7 +397,6 @@ img{ max-width:100%; display:block; }
     linear-gradient(135deg, rgba(163,247,85,0.55), rgba(110,236,72,0.32));
   position:relative;
 }
-
 .badge{
   position:absolute;
   left:12px;
@@ -662,7 +417,6 @@ img{ max-width:100%; display:block; }
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   overflow: hidden;
-
   line-height: 1.15;
   min-height: calc(2 * 1.15em);
 }
@@ -675,7 +429,7 @@ img{ max-width:100%; display:block; }
 }
 
 /* =========================
-   FOOTER
+   FOOTER (dark)
    ========================= */
 footer{
   margin-top: 50px;
@@ -716,12 +470,9 @@ footer{
 .authors{ font-size: 12px; }
 
 /* =========================
-   CART
+   CART (dark)
    ========================= */
-.c_list{
-  max-width: 90%;
-  margin:auto;
-}
+.c_list{ max-width: 90%; margin:auto; }
 .c_element{
   margin: 1rem;
   display:grid;
@@ -733,7 +484,6 @@ footer{
   box-shadow: var(--shadow);
   transition: transform .15s ease, border-color .15s ease;
 }
-
 .c_element_thumb{
   background:
     radial-gradient(120px 80px at 25% 25%, rgba(255,255,255,0.16), transparent 60%),
@@ -748,11 +498,7 @@ footer{
   border-bottom-left-radius: 0% !important;
 }
 .c_element_data{ padding: 1rem; }
-
-.c_element_data .select{
-  width: 240px;
-  max-width: 100%;
-}
+.c_element_data .select{ width: 240px; max-width: 100%; }
 
 .c_element--cart{ grid-template-columns: 1fr; }
 
@@ -781,7 +527,7 @@ footer{
 .cartRemove{ border-radius: 12px; }
 
 /* =========================
-   SEATMAP (ConcertDetails uses adminSeat classes)
+   SEATMAP (dark/base)
    ========================= */
 .adminSeatLegend span{ color: var(--text-faint); }
 
@@ -794,29 +540,24 @@ footer{
   font-weight: 950;
   padding: 0;
 }
-
 .adminSeat.isSelected{
   outline: 3px solid rgba(255,255,255,.95);
   outline-offset: 2px;
 }
-
 .adminSeat.isSold{
   opacity: 0.45;
   filter: grayscale(1);
   box-shadow: none;
 }
-
 .adminSwatch--SOLD{
   background: #6b806f;
   border: 1px solid var(--line);
 }
-
 .adminSeatGrid--details{
-  gap: 8px;                 
-  max-width: 980px;         
+  gap: 8px;
+  max-width: 980px;
   margin-inline: auto;
 }
-
 .adminSeatGrid--details .adminSeat{
   width: clamp(32px, 4.2vw, 52px);
   height: clamp(32px, 4.2vw, 52px);
@@ -824,40 +565,81 @@ footer{
 }
 
 /* =========================
-   RESPONSIVE
+   LOGO (dark/light swap rules live in theme-light.css too)
    ========================= */
-@media (max-width: 980px){
-  .heroGrid{ grid-template-columns: 1fr; }
-  .searchPanel{ grid-template-columns: 1fr 1fr; }
-  .searchBtn{ grid-column: 1 / -1; }
-  .grid{ grid-template-columns: repeat(2, 1fr); }
+.logoImg{
+  height: 34px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+.logoImg--light{ display: none; }
+.logoImg--dark{ display: block; }
+
+/* =========================
+   DROPDOWNS (Profile + Mobile menu unified look)
+   ========================= */
+.profileDrop,
+.mobileMenuDrop{
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  min-width: 220px;
+  z-index: 9999;
+
+  border: 1px solid var(--line);
+  border-radius: 12px;
+
+  background: rgba(10,9,16,.88);
+  box-shadow: var(--shadow);
+
+  padding: 10px;
 }
 
-@media (max-width: 700px){
-  .cartItem{ grid-template-columns: 1fr; }
-  .cartItemSide{ justify-items: stretch; }
-  .cartDiscount, .cartRemove{ width: 100%; }
+.mobileMenuItem{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 10px 12px;
+  border-radius: 10px;
+
+  color: rgba(243,241,255,.92);
+  font-weight: 800;
+  text-decoration: none;
+
+  background: transparent;
+  border: 0;
+}
+.mobileMenuItem:hover{
+  background: rgba(255,255,255,.06);
+}
+.mobileMenuDivider{
+  height: 1px;
+  margin: 8px 2px;
+  background: var(--line);
+}
+.mobileMenuItemBtn{
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
 }
 
-@media (max-width: 520px){
-  .nav{ display:none; }
-  .grid{ grid-template-columns: 1fr; }
-  .searchPanel{ grid-template-columns: 1fr; }
-  .footGrid{ grid-template-columns: 1fr 1fr; }
-
-  .adminSeatGrid--details{
-    max-width: 100%;
-    gap: 5px;
-  }
-  .adminSeatGrid--details .adminSeat{
-    width: 28px;
-    height: 28px;
-    font-size: 11px;
-    border-radius: 9px;
-  }
+/* =========================
+   CARDS container (legacy)
+   ========================= */
+.cards{
+  max-width: 90%;
+  margin:auto;
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(20%, 1fr));
+  gap: 16px;
+  padding-bottom: 32px;
 }
 
-/* CRA default (maradhat, nem bántja) */
+/* =========================
+   CRA default (ok to keep)
+   ========================= */
 .App{ text-align:center; }
 .App-logo{ height: 40vmin; pointer-events:none; }
 @media (prefers-reduced-motion: no-preference){
@@ -875,26 +657,3 @@ footer{
 }
 .App-link{ color:#61dafb; }
 @keyframes App-logo-spin{ from{ transform:rotate(0deg);} to{ transform:rotate(360deg);} }
-
-.logoImg{
-  
-  height: 34px;      
-  width: auto;
-  display: block;
-  object-fit: contain;
-}
-/* Logo theme switch */
-.logoImg--light{ display: none; }
-.logoImg--dark{ display: block; }
-
-:root[data-theme="light"] .logoImg--dark{ display: none; }
-:root[data-theme="light"] .logoImg--light{ display: block; }
-
-.cards{
-  max-width: 90%;
-  margin:auto;
-  display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(20%, 1fr));
-  gap: 16px;
-  padding-bottom: 32px;
-}

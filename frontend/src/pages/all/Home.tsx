@@ -1,12 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
 import { Search, SearchFilters } from "../../components/Search";
-import { ConcertCard } from "../../components/ConcertCard";
 import { Footer } from "../../components/Footer";
 import { useConcerts } from "../../hooks/useConcerts";
 import { usePlaces } from "../../hooks/usePlaces";
 import { useGenres } from "../../hooks/useGenres";
+import { ConcertSlider } from "../../components/ConcertSlider";
 
-const WINDOW = 4;
+function getWindowSize() {
+  const w = window.innerWidth;
+  if (w <= 520) return 1;     // mobil
+  if (w <= 980) return 2;     // tablet
+  if (w <= 1280) return 3;    // laptop
+  return 4;                   // PC
+}
 
 export function Home() {
   const { concerts, loading, error } = useConcerts();
@@ -20,7 +26,13 @@ export function Home() {
     genreId: "",
   });
 
-  const [start, setStart] = useState(0);
+  const [windowSize, setWindowSize] = useState<number>(() => getWindowSize());
+
+  useEffect(() => {
+    const onResize = () => setWindowSize(getWindowSize());
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   const q = filters.q.trim().toLowerCase();
   const date = filters.date.trim();
@@ -42,25 +54,6 @@ export function Home() {
     });
   }, [concerts, filters.placeId, filters.genreId, q, date]);
 
-  useEffect(() => {
-    setStart(0);
-  }, [filtered.length]);
-
-  const maxStart = Math.max(0, filtered.length - WINDOW);
-  const canSlide = filtered.length > WINDOW;
-
-  const prev = () => {
-    if (!canSlide) return;
-    setStart((s) => (s <= 0 ? maxStart : s - 1));
-  };
-
-  const next = () => {
-    if (!canSlide) return;
-    setStart((s) => (s >= maxStart ? 0 : s + 1));
-  };
-
-  const visible = filtered.slice(start, start + WINDOW);
-
   if (loading) return <p>Betöltés…</p>;
   if (error) return <p>{error}</p>;
 
@@ -81,33 +74,10 @@ export function Home() {
         <>
           <div className="sliderLabel">Koncertek</div>
 
-          <div className="cardsSliderWrap">
-            <button
-              className="cardsArrow cardsArrow--left"
-              type="button"
-              onClick={prev}
-              disabled={!canSlide}
-              aria-label="Előző"
-            >
-              ‹
-            </button>
-
-            <div className="cardsSlider">
-              {visible.map((c: any) => (
-                <ConcertCard key={c.id} concert={c} />
-              ))}
-            </div>
-
-            <button
-              className="cardsArrow cardsArrow--right"
-              type="button"
-              onClick={next}
-              disabled={!canSlide}
-              aria-label="Következő"
-            >
-              ›
-            </button>
-          </div>
+          <ConcertSlider
+            items={filtered}
+            windowSize={windowSize}
+          />
         </>
       )}
 

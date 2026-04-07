@@ -1,0 +1,275 @@
+/* =========================
+   SEATY - theme-light.css
+   Only light theme rules
+   ========================= */
+
+/* =========================
+   LIGHT TOKENS
+   ========================= */
+:root[data-theme="light"]{
+  --bg:#f7f8fb;
+  --bg2:#ffffff;
+
+  --card:#ffffff;
+  --card2:#f2f4f8;
+
+  --text:#101828;
+  --muted:#475467;
+
+  --line:rgba(16,24,40,0.10);
+
+  --green:#1aa3a3;
+  --green2:#0b6b6b;
+  --green3:#6fdad3;
+
+  --yellow:#f59e0b;
+  --gray:#667085;
+
+  --shadow:0 18px 55px rgba(16,24,40,0.10);
+
+  --text-soft: rgba(16,24,40,.78);
+  --text-faint: rgba(16,24,40,.62);
+
+  --surface: rgba(16,24,40,.03);
+  --surface-strong: rgba(255,255,255,.70);
+}
+
+/* =========================
+   LIGHT BASE
+   ========================= */
+:root[data-theme="light"] body{
+  background: var(--surface-strong);
+  color: var(--text);
+}
+
+/* hero image swap */
+:root[data-theme="light"] .heroCard{
+  background-image: url(../public/violin-bow-white-background.jpg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: bottom;
+}
+
+/* top bars */
+:root[data-theme="light"] .topbar,
+:root[data-theme="light"] .adminTop,
+:root[data-theme="light"] .userTop{
+  background: var(--surface-strong);
+  border-bottom: 1px solid var(--line);
+}
+
+/* nav */
+:root[data-theme="light"] .nav{ color: rgba(16,24,40,.75); }
+:root[data-theme="light"] .nav a:hover{ color: rgba(16,24,40,1); }
+
+/* pill */
+:root[data-theme="light"] .pill{
+  background: rgba(16,24,40,0.03);
+  color: rgba(16,24,40,.92);
+}
+
+/* cart icon */
+:root[data-theme="light"] .cartIcon{ filter: none; }
+
+/* inputs/selects */
+:root[data-theme="light"] .select{
+  background: var(--surface-strong);
+  color: var(--text);
+  border-color: var(--line);
+}
+:root[data-theme="light"] .input,
+:root[data-theme="light"] .select{
+  background: rgba(255,255,255,.70);
+}
+:root[data-theme="light"] .select option{
+  background: var(--surface-strong);
+  color: #101828;
+}
+
+/* selected seat outline in light */
+:root[data-theme="light"] .seat.sel{ outline-color: rgba(16,24,40,.75); }
+:root[data-theme="light"] .adminSeat.isSelected{ outline-color: rgba(16,24,40,.75); }
+
+/* footer in light */
+:root[data-theme="light"] footer{
+  background: var(--surface-strong);
+  border-top: 1px solid var(--line);
+}
+:root[data-theme="light"] .footGrid{ color: rgba(16,24,40,.78); }
+:root[data-theme="light"] .footGrid h5{ color: rgba(16,24,40,.92); }
+:root[data-theme="light"] .footGrid a{ color: rgba(16,24,40,.78); }
+:root[data-theme="light"] .footGrid a:hover{ color: rgba(16,24,40,1); }
+
+/* =========================
+   LIGHT MODE: Admin/User surfaces
+   ========================= */
+:root[data-theme="light"] .adminCard,
+:root[data-theme="light"] .adminPanel,
+:root[data-theme="light"] .adminStageWrap,
+:root[data-theme="light"] .adminPriceBox,
+:root[data-theme="light"] .miniCard,
+:root[data-theme="light"] .userCard,
+:root[data-theme="light"] .userPanel{
+  background: rgba(255,255,255,.85);
+  color: var(--text);
+  border-color: var(--line);
+}
+
+:root[data-theme="light"] .adminSide{
+  background: rgba(255,255,255,.55);
+  border-color: var(--line);
+}
+:root[data-theme="light"] .adminNavItem{
+  background: rgba(16,24,40,.04);
+  color: rgba(16,24,40,.92);
+  border-color: var(--line);
+}
+:root[data-theme="light"] .adminNavItem:hover{ border-color: rgba(26,163,163,.35); }
+:root[data-theme="light"] .adminNavItem.active{
+  background: rgba(26,163,163,.12);
+  border-color: rgba(26,163,163,.35);
+  color: rgba(16,24,40,1);
+}
+:root[data-theme="light"] .adminMuted{ color: rgba(16,24,40,.70); }
+
+:root[data-theme="light"] .adminBtn{
+  background: rgba(16,24,40,.04);
+  color: rgba(16,24,40,.92);
+  border-color: var(--line);
+}
+:root[data-theme="light"] .adminBtn--solid{
+  background: linear-gradient(135deg, var(--green2), var(--green));
+  color: #fff;
+}
+
+/* menu dropdown skins */
+:root[data-theme="light"] .adminMenu__drop,
+:root[data-theme="light"] .userMenu__drop{
+  background: rgba(255,255,255,.95);
+  border-color: var(--line);
+}
+:root[data-theme="light"] .adminMenu__item,
+:root[data-theme="light"] .userMenu__item{
+  color: rgba(16,24,40,.92);
+}
+:root[data-theme="light"] .adminMenu__item:hover,
+:root[data-theme="light"] .userMenu__item:hover{
+  background: rgba(16,24,40,.06);
+}
+
+/* tables */
+:root[data-theme="light"] .adminTable{
+  background: rgba(255,255,255,.90);
+  border-color: var(--line);
+}
+:root[data-theme="light"] .adminTable th{
+  background: rgba(26,163,163,.14);
+  color: rgba(16,24,40,.95);
+  border-bottom-color: var(--line);
+}
+:root[data-theme="light"] .adminTable td{
+  color: rgba(16,24,40,.90);
+  border-bottom-color: rgba(16,24,40,.08);
+}
+
+/* inputs in admin */
+:root[data-theme="light"] .adminInput,
+:root[data-theme="light"] .adminSelect,
+:root[data-theme="light"] .adminShell .select{
+  background: rgba(255,255,255,.92);
+  color: rgba(16,24,40,.92);
+  border-color: var(--line);
+}
+:root[data-theme="light"] .adminSelect option,
+:root[data-theme="light"] .adminShell .select option{
+  background: #ffffff;
+  color: rgba(16,24,40,.92);
+}
+
+:root[data-theme="light"] .adminDanger{ filter: saturate(1.05); }
+:root[data-theme="light"] .adminSeatLegend{ color: rgba(16,24,40,.72); }
+
+/* user */
+:root[data-theme="light"] .userTop{
+  background: rgba(255,255,255,.75);
+  border-bottom: 1px solid var(--line);
+}
+:root[data-theme="light"] .userSide{
+  background: rgba(255,255,255,.55);
+  border-right: 1px solid var(--line);
+}
+:root[data-theme="light"] .userCard,
+:root[data-theme="light"] .userPanel,
+:root[data-theme="light"] .userPlaceholder,
+:root[data-theme="light"] .userBox{
+  background: rgba(255,255,255,.85);
+  color: var(--text);
+  border-color: var(--line);
+}
+:root[data-theme="light"] .userLabel{ color: var(--text); }
+
+:root[data-theme="light"] .userMuted,
+:root[data-theme="light"] .userSub,
+:root[data-theme="light"] .userHint{
+  color: rgba(16,24,40,.70);
+}
+
+:root[data-theme="light"] .userNavItem{
+  background: rgba(16,24,40,.04);
+  color: rgba(16,24,40,.92);
+  border-color: var(--line);
+}
+:root[data-theme="light"] .userNavItem:hover{ border-color: rgba(26,163,163,.35); }
+:root[data-theme="light"] .userNavItem.active{
+  background: rgba(26,163,163,.12);
+  border-color: rgba(26,163,163,.35);
+  color: rgba(16,24,40,1);
+}
+
+:root[data-theme="light"] .userBtn{
+  background: rgba(16,24,40,.04);
+  color: rgba(16,24,40,.92);
+  border-color: var(--line);
+}
+:root[data-theme="light"] .userBtn--solid{
+  background: linear-gradient(135deg, var(--green2), var(--green));
+  color: #fff;
+  border: 0;
+}
+:root[data-theme="light"] .userInput,
+:root[data-theme="light"] .userSelect{
+  background: rgba(255,255,255,.92);
+  color: rgba(16,24,40,.92);
+  border-color: var(--line);
+}
+:root[data-theme="light"] .userSelect option{
+  background: #fff;
+  color: rgba(16,24,40,.92);
+}
+
+/* unified dropdowns (profile + mobile) in light */
+:root[data-theme="light"] .mobileMenuDrop,
+:root[data-theme="light"] .profileDrop{
+  background: rgba(255,255,255,.95);
+  border-color: var(--line);
+}
+:root[data-theme="light"] .mobileMenuItem{
+  color: rgba(16,24,40,.92);
+}
+:root[data-theme="light"] .mobileMenuItem:hover{
+  background: rgba(16,24,40,.06);
+}
+
+/* logo swap in light */
+:root[data-theme="light"] .logoImg--dark{ display: none; }
+:root[data-theme="light"] .logoImg--light{ display: block; }
+
+/* Light mode: ugyanaz a konténer, világos kártya */
+:root[data-theme="light"] .dropMenu{
+  background: rgba(255,255,255,.95);
+  border-color: var(--line);
+  box-shadow: var(--shadow);
+}
+:root[data-theme="light"] .dropMenuTitle{
+  color: rgba(16,24,40,.70);
+}

@@ -4,7 +4,7 @@ import { useConcerts } from "../../hooks/useConcerts";
 import { useSeatLayout, MultiplierKey } from "../../hooks/useSeatLayout";
 import { useCart } from "../../cart/cartProvider";
 import { getSoldSeats } from "../../order/ordersStorage";
-import "../../pages/admin/Admin.css";
+
 
 function seatId(r: number, c: number) {
   return `R${r}C${c}`;
