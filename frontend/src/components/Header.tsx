@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { User } from "../types";
 import { getRole } from "../utility/Auth";
 import { ThemeToggle } from "./ThemeToggle";
@@ -26,22 +26,28 @@ export function Header({ user, onLogout }: HeaderProps) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const isAdmin = role === 0;
+
   return (
     <div className="container topbar__inner">
-      <Link to="/" className="brand" aria-label="SEATY főoldal">
+      <Link to={isAdmin ? "/admin" : "/"} className="brand" aria-label="SEATY főoldal">
         <img src="/SEATY_newLogo_Black.png" alt="SEATY logó" className="logoImg logoImg--dark" />
         <img src="/SEATY_newLogo_White.jpg" alt="SEATY logó" className="logoImg logoImg--light" />
       </Link>
 
-      <nav className="nav" aria-label="Fő navigáció">
-        <Link to="/concerts">Koncertek</Link>
-        <Link to="/">Újdonság</Link>
-      </nav>
+      {!isAdmin && (
+        <nav className="nav" aria-label="Fő navigáció">
+          <NavLink to="/concerts">Koncertek</NavLink>
+          <NavLink to="/favorites">Kedvencek</NavLink>
+        </nav>
+      )}
 
       <div className="actions actions--menu" ref={menuRef}>
-        <Link to="/cart" aria-label="Kosár megnyitása">
-          <img src="/cart.png" alt="Kosár" className="cartIcon cartIcon--header" />
-        </Link>
+        {!isAdmin && (
+          <Link to="/cart" aria-label="Kosár megnyitása">
+            <img src="/cart.png" alt="Kosár" className="cartIcon cartIcon--header" />
+          </Link>
+        )}
         <ThemeToggle />
         {!user ? (
           <Link to="/login" className="pill">

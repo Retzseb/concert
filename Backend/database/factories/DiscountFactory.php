@@ -4,20 +4,13 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Discount>
- */
 class DiscountFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            //
+            'type' => $this->faker->unique()->randomElement(['normál'.'-'.$this->faker->numberBetween(1,9999), 'diák'.'-'.$this->faker->numberBetween(1,9999), 'nyugdíjas'.'-'.$this->faker->numberBetween(1,9999), 'vip'.'-'.$this->faker->numberBetween(1,9999), 'promo'.'-'.$this->faker->numberBetween(1,9999)]),
+            'value' => $this->faker->randomElement([100, 50, 45, 25, 10]),
         ];
     }
 }

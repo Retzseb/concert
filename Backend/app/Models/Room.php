@@ -9,15 +9,14 @@ use Illuminate\Validation\ValidationException;
 
 class Room extends Model
 {
-    /** @use HasFactory<\Database\Factories\RoomFactory> */
     use HasFactory;
-    
+
     protected $fillable = [
         'place_id',
-        'name',
-        'total_rows', 
-        'total_columns'
-    ];        
+        'serial_number',
+        'total_rows',
+        'total_columns',
+    ];
 
     public function place()
     {
@@ -32,7 +31,7 @@ class Room extends Model
     public function concerts()
     {
         return $this->hasMany(Concert::class);
-    }    
+    }
 
     public function syncSeats(bool $deleteOutsideBounds = true): void
     {
@@ -85,5 +84,5 @@ class Room extends Model
 
             $this->seats()->whereIn('id', $outsideBounds->pluck('id'))->delete();
         });
-    }    
+    }
 }

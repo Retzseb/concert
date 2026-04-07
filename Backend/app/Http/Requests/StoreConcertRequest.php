@@ -19,7 +19,7 @@ class StoreConcertRequest extends FormRequest
             'performer_id' => ['required', 'integer', 'exists:performers,id'],
             'room_id' => ['required', 'integer', 'exists:rooms,id'],
             'date' => ['required', 'date'],
-            'base_price' => ['required', 'integer', 'min:0'],
+            'base_price' => ['required', 'integer', 'min:1'],
             'description' => ['nullable', 'string'],
             'status' => ['nullable', 'integer', 'in:0,1,2'],
             'soft_delete' => ['nullable', 'boolean'],

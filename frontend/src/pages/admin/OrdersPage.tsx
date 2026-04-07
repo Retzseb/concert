@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { API_BASE } from "../../utility/config";
+import { formatDate } from "../../utility/date";
 
 type Reservation = {
   id: number;
@@ -160,7 +161,7 @@ export function OrdersPage() {
                       <div className="adminMuted">{order.user?.email || ""}</div>
                     </td>
                     <td data-label="Koncert">{order.concert?.name || "-"}</td>
-                    <td data-label="Dátum">{order.concert?.date || order.reservation_date || "-"}</td>
+                    <td data-label="Dátum">{formatDate(order.concert?.date || order.reservation_date)}</td>
                     <td data-label="Jegyek">
                       {(order.tickets || []).map((ticket) => {
                         const row = ticket.seat?.row_number;

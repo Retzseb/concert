@@ -5,20 +5,15 @@ namespace Database\Factories;
 use App\Models\Place;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Room>
- */
 class RoomFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition()
+    public function definition(): array
     {
         return [
-            //
+            'place_id' => Place::factory(),
+            'serial_number' => $this->faker->numberBetween(1, 10),
+            'total_rows' => $this->faker->numberBetween(5, 12),
+            'total_columns' => $this->faker->numberBetween(6, 14),
         ];
     }
 }

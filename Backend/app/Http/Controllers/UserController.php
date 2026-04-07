@@ -19,8 +19,8 @@ class UserController extends Controller
         $data = $request->validate([
             'name' => ['required','string','max:255'],
             'email' => ['required','email','max:255', Rule::unique('users','email')],
-            'password' => ['required','string','min:6','max:255'],
-            'role' => ['nullable','integer','in:0,1,2'],
+            'password' => ['required','string','min:8','max:255'],
+            'role' => ['nullable','integer','in:0,2'],
         ]);
 
         $user = User::create([
@@ -45,7 +45,7 @@ class UserController extends Controller
         $data = $request->validate([
             'name' => ['sometimes','string','max:255'],
             'email' => ['sometimes','email','max:255', Rule::unique('users','email')->ignore($user->id)],
-            'role' => ['sometimes','integer','in:0,1,2'],
+            'role' => ['sometimes','integer','in:0,2'],
         ]);
 
         $user->fill($data);
@@ -57,7 +57,7 @@ class UserController extends Controller
     public function updateRole(Request $request, string $id)
     {
         $data = $request->validate([
-            'role' => ['required','integer','in:0,1,2'],
+            'role' => ['required','integer','in:0,2'],
         ]);
 
         $user = User::findOrFail($id);
@@ -70,7 +70,7 @@ class UserController extends Controller
     public function updatePassword(Request $request, string $id)
     {
         $data = $request->validate([
-            'password' => ['required','string','min:6','max:255'],
+            'password' => ['required','string','min:8','max:255'],
         ]);
 
         $user = User::findOrFail($id);
@@ -95,7 +95,7 @@ class UserController extends Controller
         $data = $request->validate([
             'name' => ['sometimes', 'string', 'max:255'],
             'email' => ['sometimes', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
-            'password' => ['sometimes', 'string', 'min:6', 'max:255', 'confirmed'],
+            'password' => ['sometimes', 'string', 'min:8', 'max:255', 'confirmed'],
             'current_password' => ['required_with:password', 'string'],
         ]);
 

@@ -665,6 +665,19 @@
     width: 100%;
     max-width: 100%;
   }
+
+  .adminDescriptionBox {
+  padding: 12px;
+  background: var(--panel-bg, rgba(255, 255, 255, 0.04));
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12));
+  border-radius: 10px;
+  text-align: left;
+}
+
+.adminDescriptionBox strong {
+  display: block;
+  margin-bottom: 6px;
+}
 }
 
 @media (max-width: 520px){

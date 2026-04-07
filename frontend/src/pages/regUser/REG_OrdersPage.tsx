@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { API_BASE } from "../../utility/config";
+import { formatDate } from "../../utility/date";
 
 type Reservation = {
   id: number;
@@ -148,7 +149,7 @@ export function REG_OrdersPage() {
 
               <div className="userOrderMeta">
                 <div className="userOrderTitle">{order.concert?.name || `Foglalás #${order.id}`}</div>
-                <div className="userOrderDate">{order.concert?.date || order.reservation_date || "-"}</div>
+                <div className="userOrderDate">{formatDate(order.concert?.date || order.reservation_date)}</div>
                 <div className="userOrderSmall">Foglalás azonosító: #{order.id}</div>
                 <div className="userOrderSmall">Jegyek száma: {order.tickets?.length || 0}</div>
                 <div className="userOrderSmall">Végösszeg: {money(order.total_price)}</div>

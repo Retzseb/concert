@@ -4,6 +4,7 @@ import { Header } from "./components/Header";
 import { Login } from "./components/Login";
 import { ConcertPage } from "./pages/all/ConcertPage";
 import { Home } from "./pages/all/Home";
+import { Favorites } from "./pages/all/Favorites";
 import { AdminLayout } from "./pages/admin/AdminLayout";
 import { UsersPage } from "./pages/admin/UsersPage";
 import { OrdersPage } from "./pages/admin/OrdersPage";
@@ -46,9 +47,10 @@ function AppRoutes() {
         <Header user={user} onLogout={logout} />
 
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
+          <Route path="/" element={user?.role === 0 ? <Navigate to="/admin" /> : <Home />}/>
+          <Route path="/home" element={user?.role === 0 ? <Navigate to="/admin" /> : <Home />} />
           <Route path="/concerts" element={<ConcertPage />} />
+          <Route path="/favorites" element={<Favorites />} />
           <Route path="/login" element={<Login />} />
 
           <Route

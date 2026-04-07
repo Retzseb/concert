@@ -2,33 +2,24 @@
 
 namespace Database\Factories;
 
-use App\Models\Discount;
 use App\Models\Performer;
-use App\Models\Place;
 use App\Models\Room;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use PhpParser\Node\Expr\Cast\String_;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Concert>
- */
 class ConcertFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            'name' => fake()->word(),
-            'performer_id' => Performer::all()->random()->id,
-            'room_id' => Room::all()->random()->id,
-            'date' => fake()->dateTime(),
-            'base_price' => rand(15000,148000),
-            'description' => fake()->sentence(),
-            'status' => rand(0,2)
+            'picture' => null,
+            'name' => $this->faker->sentence(3),
+            'performer_id' => Performer::query()->inRandomOrder()->value('id') ?? Performer::factory(),
+            'room_id' => Room::query()->inRandomOrder()->value('id') ?? Room::factory(),
+            'date' => $this->faker->dateTimeBetween('+1 day', '+1 year'),
+            'base_price' => $this->faker->numberBetween(5000, 30000),
+            'description' => $this->faker->sentence(),
+            'status' => 0,
+            'soft_delete' => false,
         ];
     }
 }

@@ -4,6 +4,7 @@ import { useConcerts } from "../../hooks/useConcerts";
 import { useSeatLayout, MultiplierKey } from "../../hooks/useSeatLayout";
 import { useCart } from "../../cart/cartProvider";
 import { API_BASE } from "../../utility/config";
+import { formatDate } from "../../utility/date";
 
 function seatId(r: number, c: number) {
   return `R${r}C${c}`;
@@ -144,15 +145,10 @@ export function ConcertDetailsPage() {
       {concert && (
         <>
           <div className="miniCard" style={{ marginBottom: 14, overflow: "hidden" }}>
-            <img
-              src={concert.picture ?? ""}
-              alt={concert.name}
-              style={{ width: "100%", maxHeight: 280, objectFit: "cover", borderRadius: 12, marginBottom: 12 }}
-            />
             <h3 style={{ marginTop: 0 }}>{concert.name}</h3>
             <p style={{ marginBottom: 0, opacity: 0.9 }}>
               <b>Előadó:</b> {concert.performer_name} <br />
-              <b>Időpont:</b> {concert.date} <br />
+              <b>Időpont:</b> {formatDate(concert.date)} <br />
               <b>Helyszín:</b> {concert.place_name} <br />
               <b>Alapár:</b> {basePrice} Ft
             </p>

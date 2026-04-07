@@ -34,7 +34,7 @@ export type Performer = {
 export type Room = {
   id: number;
   place_id: number;
-  name: number;
+  serial_number: number;
   total_rows: number;
   total_columns: number;
 };

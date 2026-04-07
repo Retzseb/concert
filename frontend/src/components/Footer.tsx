@@ -29,14 +29,6 @@ export function Footer() {
             <Link to="/login">Bejelentkezés</Link>
           </div>
 
-          <div>
-            <h5>Jogi</h5>
-            {legalLinks.map((item) => (
-              <a key={item.label} href={item.href}>
-                {item.label}
-              </a>
-            ))}
-          </div>
         </div>
 
         <div className="authors">

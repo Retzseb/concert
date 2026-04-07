@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useShows, ShowRow, ShowStatus } from "../../hooks/useShows";
 import { API_BASE } from "../../utility/config";
+import { formatDate } from "../../utility/date";
 
 const STATUS_TO_API: Record<ShowStatus, number> = {
-  Ongoing: 0,
-  Cancelled: 1,
-  "Sold out": 2,
+  Aktív: 0,
+  Törölve: 1,
+  Teltházas: 2,
 };
 
 function formatNotifyList(data: any) {
@@ -104,7 +105,8 @@ export function ShowsPage() {
               <th>Helyszín</th>
               <th>Státusz</th>
               <th>Ár</th>
-              <th>Törölve</th>
+              <th>Lejárt</th>
+              <th>Művelet</th>              
               <th></th>
             </tr>
           </thead>
@@ -120,9 +122,9 @@ export function ShowsPage() {
                     disabled={busyId === s.id}
                     onChange={(e) => handleStatusChange(s.id, e.target.value as ShowStatus)}
                   >
-                    <option value="Ongoing">Ongoing</option>
-                    <option value="Cancelled">Cancelled</option>
-                    <option value="Sold out">Sold out</option>
+                    <option value="Aktív">Aktív</option>
+                    <option value="Törölve">Törölve</option>
+                    <option value="Teltházas">Teltházas</option>
                   </select>
                 </td>
                 <td data-label="Ár">{s.basePrice} Ft</td>

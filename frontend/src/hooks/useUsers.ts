@@ -3,7 +3,7 @@ import { API_BASE } from "../utility/config";
 
 const API = `${API_BASE}/api/users`;
 
-export type Role = "Admin" | "Jegykezelő" | "Felhasználó";
+export type Role = "Admin" | "Felhasználó";
 
 export type UserRow = {
   id: number;
@@ -18,14 +18,12 @@ export type NewUserInput = Omit<UserRow, "id"> & {
 
 const roleFromApi = (r: unknown): Role => {
   if (r === 0 || r === "0") return "Admin";
-  if (r === 1 || r === "1") return "Jegykezelő";
   if (r === 2 || r === "2") return "Felhasználó";
   return "Felhasználó";
 };
 
 const roleToApi = (role: Role): number => {
   if (role === "Admin") return 0;
-  if (role === "Jegykezelő") return 1;
   return 2;
 };
 

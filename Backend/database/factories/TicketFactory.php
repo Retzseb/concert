@@ -2,28 +2,19 @@
 
 namespace Database\Factories;
 
-use App\Models\Concert;
+use App\Models\Discount;
 use App\Models\Reservation;
 use App\Models\Seat;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Ticket>
- */
 class TicketFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            'reservation_id' => Reservation::all()->random()->id,
-            'seat_id' => Seat::all()->random()->id,            
-            'discount_type' => rand(1,4),
-            'qr_code' => fake()->sentence(),
+            'reservation_id' => Reservation::query()->inRandomOrder()->value('id') ?? Reservation::factory(),
+            'seat_id' => Seat::query()->inRandomOrder()->value('id') ?? Seat::factory(),
+            'discount_type' => Discount::query()->orderBy('id')->value('id') ?? Discount::factory(),
         ];
     }
 }

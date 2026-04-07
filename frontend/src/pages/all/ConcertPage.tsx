@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useConcerts } from "../../hooks/useConcerts";
+import { formatDate } from "../../utility/date";
 
 export function ConcertPage() {
   const { concerts, loading, error, reload } = useConcerts();
@@ -28,7 +29,7 @@ export function ConcertPage() {
                   <h3 className="cardTitle">{c.name}</h3>
                   <ul>
                     <li>Előadó: {c.performer_name}</li>
-                    <li>Időpont: {c.date} </li>
+                    <li>Időpont: {formatDate(c.date)} </li>
                     <li>Ár: {c.base_price} forinttól</li>
                     <li>Helyszín: {c.place_name}</li>
                   </ul>

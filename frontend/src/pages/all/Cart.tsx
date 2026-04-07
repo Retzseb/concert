@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { formatDate } from "../../utility/date";
 import { useCart } from "../../cart/cartProvider";
 import { API_BASE } from "../../utility/config";
 
@@ -154,7 +155,7 @@ export function Cart() {
                     </h3>
                     <ul>
                       <li>Szék: {it.seatId}</li>
-                      {it.date && <li>Időpont: {it.date}</li>}
+                      {it.date && <li>Időpont: {formatDate(it.date)}</li>}
                       {it.place && <li>Helyszín: {it.place}</li>}
                       <li>Alapár: {money(it.price)}</li>
                       <li>

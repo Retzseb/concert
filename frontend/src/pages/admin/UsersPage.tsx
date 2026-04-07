@@ -122,7 +122,6 @@ export function UsersPage() {
                       onChange={(e) => onUpdateRole(u.id, e.target.value as Role)}
                     >
                       <option value="Admin">Admin</option>
-                      <option value="Jegykezelő">Jegykezelő</option>
                       <option value="Felhasználó">Felhasználó</option>
                     </select>
                   </td>
@@ -160,7 +159,6 @@ export function UsersPage() {
                       onChange={(e) => setDraft((d) => ({ ...d, role: e.target.value as Role }))}
                     >
                       <option value="Admin">Admin</option>
-                      <option value="Jegykezelő">Jegykezelő</option>
                       <option value="Felhasználó">Felhasználó</option>
                     </select>
                   </td>

@@ -652,3 +652,17 @@ footer{
     border-radius: 0.5625rem;
   }
 }
+
+
+.featuredBlock { margin: 1rem 0 2rem; }
+.featuredCard { display: grid; grid-template-columns: minmax(260px, 420px) 1fr; gap: 1rem; align-items: start; }
+.featuredCopy { background: var(--card-bg, rgba(255,255,255,0.06)); border-radius: 12px; padding: 1rem; }
+.adminDescriptionRow { background: rgba(0,0,0,0.04); font-size: 0.95rem; }
+.performerActions { display:flex; gap:.5rem; align-items:center; }
+@media (max-width: 768px) { .featuredCard { grid-template-columns: 1fr; } }
+
+
+.topbar__inner { display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+.nav { display:flex; gap:1rem; }
+.actions--menu { display:flex; align-items:center; gap:.75rem; position:relative; }
+.profileMenu { position:absolute; top:calc(100% + 8px); right:0; z-index:9999; }

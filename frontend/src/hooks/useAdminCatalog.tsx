@@ -38,7 +38,7 @@ export type PlaceRow = {
 export type RoomRow = {
   id: number;
   place_id: number;
-  name: number;
+  serial_number: number;
   total_rows: number;
   total_columns: number;
 };
@@ -64,7 +64,7 @@ export type ConcertRow = {
   genre_id?: number | null;
   genre_name?: string;
   room_id: number;
-  room_name?: string;
+  serial_number?: string;
   place_id?: number;
   place_name?: string;
   date: string;
@@ -178,7 +178,7 @@ export function useAdminRooms() {
   return useCrudList<RoomRow>("rooms", (r) => ({
     id: Number(r.id),
     place_id: Number(r.place_id),
-    name: Number(r.name),
+    serial_number: Number(r.serial_number ?? r.name),
     total_rows: Number(r.total_rows),
     total_columns: Number(r.total_columns),
   }));
@@ -210,7 +210,7 @@ export function useAdminConcerts() {
     genre_id: c.genre_id == null ? null : Number(c.genre_id),
     genre_name: c.genre_name ?? undefined,
     room_id: Number(c.room_id),
-    room_name: c.room_name ?? undefined,
+    serial_number: c.serial_number ?? undefined,
     place_id: c.place_id == null ? undefined : Number(c.place_id),
     place_name: c.place_name ?? undefined,
     date: String(c.date ?? ""),

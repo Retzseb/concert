@@ -13,9 +13,7 @@ class Ticket extends Model
         'reservation_id',
         'seat_id',
         'discount_type',
-        'qr_code',
     ];
-
 
     public function reservation()
     {

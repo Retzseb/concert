@@ -10,9 +10,11 @@ export type Concert = {
   base_price?: number;
   status?: number;
   soft_delete?: boolean;
+  description?: string;
 
   performer_id?: number;
   performer_name?: string;
+  performer_description?: string;
 
   place_id?: number;
   place_name?: string;
@@ -22,7 +24,7 @@ export type Concert = {
   genre_name?: string;
 
   room_id?: number;
-  room_name?: string | number;
+  serial_number?: string | number;
   room_total_rows?: number;
   room_total_columns?: number;
 };
@@ -53,9 +55,11 @@ function mapConcert(c: any): Concert {
     base_price: num(c.base_price ?? c.basePrice),
     status: num(c.status ?? c.state),
     soft_delete: Boolean(c.soft_delete ?? false),
+    description: str(c.description ?? c.description),
 
     performer_id: num(c.performer_id ?? c.performerId ?? performer?.id),
     performer_name: str(c.performer_name ?? c.performerName ?? performer?.name),
+    performer_description: str(c.performer_description ?? c.performerDescripion ?? performer?.description),
 
     place_id: num(c.place_id ?? c.placeId ?? place?.id),
     place_name: str(c.place_name ?? c.placeName ?? place?.name),
@@ -65,7 +69,7 @@ function mapConcert(c: any): Concert {
     genre_name: str(c.genre_name ?? c.genreName ?? genre?.name),
 
     room_id: num(c.room_id ?? c.roomId ?? room?.id),
-    room_name: str(c.room_name ?? c.roomName ?? room?.name ?? room?.id),
+    serial_number: str(c.serial_number ?? c.roomName ?? room?.name ?? room?.id),
     room_total_rows: num(
       c.room_total_rows ??
         c.roomTotalRows ??

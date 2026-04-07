@@ -119,7 +119,7 @@ export function Search(props: {
           <option value="">Összes</option>
           {places.map((p) => (
             <option key={p.id} value={p.id} disabled={p.disabled}>
-              {p.name} ({p.city}){p.disabled ? " - nincs aktív koncert" : ""}
+              {p.name} ({p.city}){p.disabled ? "" : ""}
             </option>
           ))}
         </select>
@@ -135,7 +135,7 @@ export function Search(props: {
           <option value="">Összes</option>
           {genres.map((g) => (
             <option key={g.id} value={g.id} disabled={g.disabled}>
-              {g.name}{g.disabled ? " - nincs aktív koncert" : ""}
+              {g.name}{g.disabled ? "" : ""}
             </option>
           ))}
         </select>

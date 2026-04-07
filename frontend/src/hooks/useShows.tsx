@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { API_BASE } from "../utility/config";
 
-export type ShowStatus = "Ongoing" | "Cancelled" | "Sold out";
+export type ShowStatus = "Aktív" | "Törölve" | "Teltházas";
 
 export type ShowRow = {
   id: string;
@@ -15,10 +15,10 @@ export type ShowRow = {
 };
 
 const statusFromApi = (x: any): ShowStatus => {
-  if (x === 0 || x === "0") return "Ongoing";
-  if (x === 1 || x === "1") return "Cancelled";
-  if (x === 2 || x === "2") return "Sold out";
-  return "Ongoing";
+  if (x === 0 || x === "0") return "Aktív";
+  if (x === 1 || x === "1") return "Törölve";
+  if (x === 2 || x === "2") return "Teltházas";
+  return "Aktív";
 };
 
 export function useShows() {
@@ -56,7 +56,7 @@ export function useShows() {
           title: String(s.title ?? s.name ?? ""),
           performer_name: String(s.performer_name ?? ""),
           place_name: String(s.place_name ?? ""),
-          room: String(s.room_name ?? s.room ?? ""),
+          room: String(s.serial_number ?? s.room ?? ""),
           status: statusFromApi(s.status),
           basePrice: Number(s.basePrice ?? s.base_price ?? s.price ?? 0),
           soft_delete: Boolean(s.soft_delete ?? false),
