@@ -116,12 +116,14 @@ export function useSeatLayout(roomId: number | "") {
             price_multiplier: multiplier,
           }),
         });
+        
 
         if (!res.ok) {
           const text = await res.text();
           throw new Error(`Seat save failed (${res.status}): ${text}`);
         }
       });
+      
 
       await Promise.all(requests);
       setOriginalSeatMap(layout.seatMap);

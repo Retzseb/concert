@@ -31,7 +31,7 @@
 }
 
 :root[data-theme="light"] .heroCard{
-  background-image: url(../public/violin-bow-white-background.jpg);
+  background-image: url(../public/hero_pict.png);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: bottom;
@@ -175,10 +175,11 @@ button{
 }
 
 .heroCard{
-  background-image: url(../public/female-student-playing-violin.jpg);
-  padding-block: 9rem;
-  background-position: bottom;
-  background-size: cover;
+  background-image: url(../public/hero_pict.png);
+  padding-block: 7rem;
+  margin-bottom: 1rem;
+  background-position: center;
+  background-size: 120% 250%;
   background-repeat: no-repeat;
 }
 
@@ -186,7 +187,7 @@ button{
   max-width: 70%;
   margin: auto;
   border: 1px solid var(--line);
-  background: var(--surface-strong);
+  background: rgba(9,16,10,.8);
   border-radius: 16px;
   padding: 14px;
   display:grid;
@@ -216,7 +217,7 @@ button{
   height: 44px;
   border-radius: 12px;
   border: 1px solid var(--line);
-  background: var(--surface);
+  background: rgba(9,16,10,.8);
   color: var(--text);
   padding: 10px 12px;
   outline:none;

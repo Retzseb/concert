@@ -8,17 +8,11 @@ use App\Http\Requests\UpdatePlaceRequest;
 
 class PlaceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return Place::orderBy('name')->get();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StorePlaceRequest $request)
     {
         $place = Place::create($request->validated());
@@ -29,32 +23,22 @@ class PlaceController extends Controller
         ], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         return Place::find($id);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdatePlaceRequest $request, Place $place)
     {
         $place->update($request->validated());
         return $place;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Place $place)
     {
         $place->delete();
         return response()->noContent();
     }
-
 
     //admin
     public function adminShow(string $id)

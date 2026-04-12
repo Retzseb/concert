@@ -8,9 +8,6 @@ use App\Http\Requests\UpdateSeatRequest;
 
 class SeatController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return Seat::query()
@@ -20,26 +17,17 @@ class SeatController extends Controller
             ->get();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreSeatRequest $request)
     {
         $seat = Seat::create($request->validated());
         return response()->json($seat, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         return Seat::findOrFail($id);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateSeatRequest $request, Seat $seat)
     {
         $seat->fill($request->validated());
@@ -48,9 +36,6 @@ class SeatController extends Controller
         return response()->json($seat, 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Seat $seat)
     {
         $seat->delete();

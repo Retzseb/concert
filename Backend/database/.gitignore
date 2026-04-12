@@ -1,1 +1,34 @@
-*.sqlite*
+/.env
+/.env.backup
+/.env.production
+/.phpunit.result.cache
+
+/public/hot
+/public/storage
+/storage/*.key
+/storage/app/public
+/storage/debugbar
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+/storage/logs/*
+
+/bootstrap/cache/*.php
+!/bootstrap/cache/.gitignore
+
+/database/*.sqlite
+/database/*.sqlite-journal
+
+/vendor
+/node_modules
+concert_db.sql
+*.stackdump
+
+git rm --cached .env
+git rm --cached database/database.sqlite
+git rm --cached concert_db.sql
+git rm --cached -r storage/logs
+git rm --cached -r storage/framework/views
+git rm --cached bootstrap/cache/packages.php
+git rm --cached bootstrap/cache/services.php

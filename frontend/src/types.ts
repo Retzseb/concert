@@ -52,7 +52,7 @@ export type Concert = {
   genre_id?: number | null;
   genre_name?: string;
   room_id?: number;
-  room_name?: string | number;
+  serial_number?: string | number;
   room_total_rows?: number;
   room_total_columns?: number;
   description?: string;

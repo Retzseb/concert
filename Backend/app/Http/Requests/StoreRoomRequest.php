@@ -11,13 +11,6 @@ class StoreRoomRequest extends FormRequest
         return true;
     }
 
-    protected function prepareForValidation(): void
-    {
-        if ($this->has('name') && ! $this->has('serial_number')) {
-            $this->merge(['serial_number' => $this->input('name')]);
-        }
-    }
-
     public function rules(): array
     {
         return [

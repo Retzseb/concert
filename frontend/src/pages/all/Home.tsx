@@ -42,12 +42,6 @@ export function Home() {
     setStart(0);
   }, [filters]);
 
-
-  const featuredConcert = useMemo(() => {
-    if (concerts.length === 0) return null;
-    return concerts[0] ?? null;
-  }, [concerts]);
-
   const maxStart = Math.max(0, filtered.length - WINDOW);
   const canSlide = filtered.length > WINDOW;
   const visibleConcerts = canSlide ? filtered.slice(start, start + WINDOW) : filtered;

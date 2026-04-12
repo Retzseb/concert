@@ -21,7 +21,7 @@ class Concert extends Model
         'soft_delete'
     ];     
     
-        protected function casts(): array
+    protected function casts(): array
     {
         return [
             'date' => 'datetime',

@@ -178,7 +178,7 @@ export function useAdminRooms() {
   return useCrudList<RoomRow>("rooms", (r) => ({
     id: Number(r.id),
     place_id: Number(r.place_id),
-    serial_number: Number(r.serial_number ?? r.name),
+    serial_number: Number(r.serial_number),
     total_rows: Number(r.total_rows),
     total_columns: Number(r.total_columns),
   }));

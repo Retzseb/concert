@@ -1,9 +1,9 @@
-import { ConcertCard } from "../../components/ConcertCard";
 import { useConcerts } from "../../hooks/useConcerts";
+import { formatDate } from "../../utility/date";
 
 export function Favorites() {
   const { concerts, loading, error } = useConcerts();
-  const featured = concerts[0];
+  const featured = concerts?.[0];
 
   if (loading) return <p>Betöltés…</p>;
   if (error) return <p>{error}</p>;
@@ -28,7 +28,7 @@ export function Favorites() {
               <p>{featured.name}</p>
       <p>{featured.place_name}</p>
 
-      <p>{featured.date}</p>
+      <p>{formatDate(featured.date)}</p>
       <p>Alapár: {featured.base_price} Ft</p>
       <p>{featured.description} </p>
       </div>

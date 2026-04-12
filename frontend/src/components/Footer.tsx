@@ -21,7 +21,7 @@ export function Footer() {
           <div>
             <h5>Menü</h5>
             <Link to="/concerts">Koncertek</Link>
-            <Link to="/">Újdonság</Link>
+            <Link to="/">Kedvencek</Link>
           </div>
 
           <div>

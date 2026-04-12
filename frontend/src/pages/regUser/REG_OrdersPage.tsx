@@ -60,11 +60,14 @@ export function REG_OrdersPage() {
         },
       });
 
+      
+
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       setOrders(Array.isArray(data) ? data : []);
     } catch (e) {
       console.error(e);
+      
       setError("A foglalások betöltése nem sikerült.");
       setOrders([]);
     } finally {

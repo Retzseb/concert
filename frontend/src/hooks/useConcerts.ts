@@ -69,7 +69,7 @@ function mapConcert(c: any): Concert {
     genre_name: str(c.genre_name ?? c.genreName ?? genre?.name),
 
     room_id: num(c.room_id ?? c.roomId ?? room?.id),
-    serial_number: str(c.serial_number ?? c.roomName ?? room?.name ?? room?.id),
+    serial_number: str(c.room_serial_number ?? room?.serial_number ?? room?.id),
     room_total_rows: num(
       c.room_total_rows ??
         c.roomTotalRows ??

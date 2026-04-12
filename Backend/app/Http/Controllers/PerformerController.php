@@ -8,43 +8,28 @@ use App\Http\Requests\UpdatePerformerRequest;
 
 class PerformerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return Performer::all();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StorePerformerRequest $request)
     {
         $performer = Performer::create($request->validated());
         return response()->json($performer, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         return Performer::find($id);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdatePerformerRequest $request, Performer $performer)
     {
         $performer->update($request->validated());
         return response()->json($performer);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Performer $performer)
     {
         $performer->delete();

@@ -8,43 +8,28 @@ use App\Http\Requests\UpdateGenreRequest;
 
 class GenreController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return Genre::orderBy('name')->get();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreGenreRequest $request)
     {
         $genre = Genre::create($request->validated());
         return response()->json($genre, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         return Genre::find($id);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateGenreRequest $request, Genre $genre)
     {
         $genre->update($request->validated());
         return response()->json($genre);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Genre $genre)
     {
         $genre->delete();
