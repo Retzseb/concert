@@ -208,8 +208,8 @@ export function ConcertDetailsPage() {
                 className="adminSeatGrid adminSeatGrid--details"
                 aria-label="Seatmap"
                 style={{
-                  gridTemplateColumns: `repeat(${cols || 1}, var(--seatSize, 3rem))`,
-                  width: "max-content", // ✅ ez biztosítja, hogy legyen mit scrollozni
+                  gridTemplateColumns: `repeat(${cols || 1}, var(--seatSize))`,
+                  minWidth: `calc(${cols || 1} * var(--seatSize) + (${cols || 1} - 1) * 8px)`,
                   justifyContent: "start",
                   marginTop: 12,
                 }}
