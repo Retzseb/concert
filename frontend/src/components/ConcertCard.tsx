@@ -1,18 +1,21 @@
 import { Link } from "react-router-dom";
 import { Concert } from "../types";
 import { formatDate } from "../utility/date";
+import { toAbsoluteUrl } from "../utility/picsMedia";
 
 type ConcertCardProps = {
   concert: Concert;
 };
 
 export function ConcertCard({ concert }: ConcertCardProps) {
+  const pictureUrl = toAbsoluteUrl(concert.picture);
+
   return (
     <Link to={`/concerts/${concert.id}`} className="cardLink">
       <article className="card" role="button">
         <div
           className="thumb concertThumb"
-          style={{ backgroundImage: concert.picture ? `url(http://127.0.0.1:8000${concert.picture})` : "none" }}
+          style={{ backgroundImage: pictureUrl ? `url(${pictureUrl})` : "none" }}
         />
         <div className="cardBody">
           <h3 className="cardTitle">{concert.name}</h3>

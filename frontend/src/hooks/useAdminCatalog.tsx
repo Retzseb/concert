@@ -118,16 +118,18 @@ function useCrudList<T>(endpoint: string, mapFn: (item: any) => T) {
     load();
   }, [load]);
 
-  const createItem = useCallback(
-    async (payload: Record<string, any>) => {
+    const createItem = useCallback(
+    async (payload: Record<string, any> | FormData) => {
+      const isFormData = payload instanceof FormData;
+
       const res = await fetch(`${API}/${endpoint}`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Accept: "application/json",
           ...authHeaders(),
+          ...(isFormData ? {} : { "Content-Type": "application/json" }),
         },
-        body: JSON.stringify(payload),
+        body: isFormData ? payload : JSON.stringify(payload),
       });
 
       await ensureOk(res, `Nem sikerült létrehozni: ${endpoint}`);

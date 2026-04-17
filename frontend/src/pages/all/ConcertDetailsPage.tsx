@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useConcerts } from "../../hooks/useConcerts";
 import { useSeatLayout, MultiplierKey } from "../../hooks/useSeatLayout";
 import { useCart } from "../../cart/cartProvider";
 import { API_BASE } from "../../utility/config";
 import { formatDate } from "../../utility/date";
+import { toAbsoluteUrl } from "../../utility/picsMedia";
 
 function seatId(r: number, c: number) {
   return `R${r}C${c}`;
@@ -14,19 +15,24 @@ function seatNumber(r: number, c: number, cols: number) {
   return (r - 1) * cols + c;
 }
 
-const MULTI_UI: Record<MultiplierKey, { label: string; seatClass: string }> = {
-  M1: { label: "1.", seatClass: "adminSeat--C" },
-  M2: { label: "2.", seatClass: "adminSeat--B" },
-  M3: { label: "3.", seatClass: "adminSeat--A" },
+const MULTI_UI: Record<MultiplierKey, { seatClass: string }> = {
+  M1: { seatClass: "adminSeat--C" },
+  M2: { seatClass: "adminSeat--B" },
+  M3: { seatClass: "adminSeat--A" },
 };
 
 export function ConcertDetailsPage() {
   const params = useParams();
   const id = Number(params.id);
+
   const { concerts, loading, error } = useConcerts();
   const { addItems } = useCart();
 
   const concert = concerts.find((c) => c.id === id);
+
+  // ✅ KÉP URL JAVÍTÁS
+  const pictureUrl = useMemo(() => toAbsoluteUrl(concert?.picture), [concert?.picture]);
+
   const { layout, seatIds, loading: layoutLoading, error: layoutError } = useSeatLayout(concert?.room_id ?? "");
 
   const [selected, setSelected] = useState<Record<string, boolean>>({});
@@ -55,8 +61,8 @@ export function ConcertDetailsPage() {
           next[key] = !!seat.reserved;
         });
         setReservedSeatMap(next);
-      } catch (error) {
-        console.error(error);
+      } catch (e) {
+        console.error(e);
         if (!cancelled) setReservedSeatMap({});
       }
     };
@@ -91,9 +97,11 @@ export function ConcertDetailsPage() {
     .filter(([k, v]) => v && !reservedSeatMap[k])
     .map(([k]) => k);
 
+  const reservedCount = useMemo(() => Object.values(reservedSeatMap).filter(Boolean).length, [reservedSeatMap]);
 
   const addToCart = () => {
     if (!concert) return;
+
     if (selectedSeatIds.length === 0) {
       window.alert("Válassz ki legalább 1 széket.");
       return;
@@ -122,7 +130,9 @@ export function ConcertDetailsPage() {
     return (
       <section className="section">
         <p>Hibás koncert azonosító.</p>
-        <Link className="btn" to="/concerts">Vissza</Link>
+        <Link className="btn" to="/concerts">
+          Vissza
+        </Link>
       </section>
     );
   }
@@ -131,95 +141,104 @@ export function ConcertDetailsPage() {
     <section className="section">
       <div className="sectionHead">
         <h2>Koncert</h2>
-        <Link className="btn" to="/cart">Kosár</Link>
+        <Link className="btn" to="/cart">
+          Kosár
+        </Link>
       </div>
 
       {loading && <p>Betöltés…</p>}
       {error && <p>{error}</p>}
 
-      {!loading && !error && !concert && (
-        <p>Nem található ilyen koncert.</p>
-      )}
+      {!loading && !error && !concert && <p>Nem található ilyen koncert.</p>}
 
       {concert && (
         <>
           <div className="miniCard" style={{ marginBottom: 14, overflow: "hidden" }}>
+            {/* ✅ KÉP MEGJELENÍTÉS (ha van) */}
+            {pictureUrl && (
+              <div style={{ marginBottom: 12 }}>
+                <img
+                  src={pictureUrl}
+                  alt={concert.name}
+                  style={{ width: "100%", height: 220, objectFit: "cover", borderRadius: 12 }}
+                  loading="lazy"
+                />
+              </div>
+            )}
+
             <h3 style={{ marginTop: 0 }}>{concert.name}</h3>
             <p style={{ marginBottom: 0, opacity: 0.9 }}>
               <b>Előadó:</b> {concert.performer_name} <br />
               <b>Időpont:</b> {formatDate(concert.date)} <br />
               <b>Helyszín:</b> {concert.place_name} <br />
-              <b>Alapár:</b> {basePrice} Ft
+              <b>Alapár:</b> {basePrice} Ft <br />
+              <b>Foglalt:</b> {reservedCount}
             </p>
           </div>
+
           <div className="adminStageWrap">
-          
-          {layoutLoading && <p>Kiosztás betöltése…</p>}
-          {layoutError && <p>{layoutError}</p>}
+            {layoutLoading && <p>Kiosztás betöltése…</p>}
+            {layoutError && <p>{layoutError}</p>}
 
-          <div className="adminSeatLegend" style={{ display: "flex", gap: 16, alignItems: "center" }}>
-          {(["M1", "M2", "M3"] as MultiplierKey[]).map((k) => (
-            <span key={k} style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-              <i className={`adminSwatch ${MULTI_UI[k].seatClass.replace("adminSeat", "adminSwatch")}`} />
-              <b>{MULTI_UI[k].label} árkategória:</b> {priceFor(k)} Ft
-            </span>
-          ))}
+            <div className="adminSeatLegend" style={{ display: "flex", gap: 16, alignItems: "center" }}>
+              {(["M1", "M2", "M3"] as MultiplierKey[]).map((k) => (
+                <span key={k} style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                  <i className={`adminSwatch ${MULTI_UI[k].seatClass.replace("adminSeat", "adminSwatch")}`} />
+                  <b>{k}:</b> {priceFor(k)} Ft
+                </span>
+              ))}
+            </div>
 
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-            <i className="adminSwatch adminSwatch--SOLD" />
-            <b>FOGLALT</b>
-          </span>
+            <div className="adminStage">Színpad</div>
+
+            <div
+              className="adminSeatGrid adminSeatGrid--details"
+              aria-label="Seatmap"
+              style={{ gridTemplateColumns: `repeat(${cols || 1}, 1fr)`, marginTop: 12 }}
+            >
+              {Array.from({ length: rows }).map((_, rIdx) => {
+                const r = rIdx + 1;
+                return Array.from({ length: cols }).map((__, cIdx) => {
+                  const c = cIdx + 1;
+                  const sid = seatId(r, c);
+                  const n = seatNumber(r, c, cols || 1);
+
+                  const cat = seatCategory(sid);
+                  const isSel = !!selected[sid];
+                  const existsInDb = !!seatIds[sid];
+                  const isReserved = !!reservedSeatMap[sid];
+
+                  return (
+                    <button
+                      key={sid}
+                      type="button"
+                      className={`adminSeat ${MULTI_UI[cat].seatClass} ${isSel ? "isSelected" : ""}`}
+                      onClick={() => toggleSeat(sid)}
+                      title={isReserved ? `#${n} (${sid}) • FOGLALT` : `#${n} (${sid}) • ${seatPrice(sid)} Ft`}
+                      disabled={!existsInDb || isReserved}
+                      style={{
+                        cursor: existsInDb && !isReserved ? "pointer" : "not-allowed",
+                        opacity: existsInDb ? 1 : 0.35,
+                        backgroundColor: isReserved ? "rgb(141, 3, 3)" : undefined,
+                        color: isReserved ? "white" : undefined,
+                        position: "relative",
+                      }}
+                    >
+                      {isReserved ? "X" : n}
+                    </button>
+                  );
+                });
+              })}
+            </div>
           </div>
-          <div className="adminStage">Színpad</div>
-          <div
-            className="adminSeatGrid adminSeatGrid--details"
-            aria-label="Seatmap"
-            style={{ gridTemplateColumns: `repeat(${cols || 1}, 1fr)`, marginTop: 12 }}
-          >
-            {Array.from({ length: rows }).map((_, rIdx) => {
-              const r = rIdx + 1;
-              return Array.from({ length: cols }).map((__, cIdx) => {
-                const c = cIdx + 1;
-                const sid = seatId(r, c);
-                const n = seatNumber(r, c, cols || 1);
 
-                const cat = seatCategory(sid);
-                const isSel = !!selected[sid];
-                const existsInDb = !!seatIds[sid];
-                const isReserved = !!reservedSeatMap[sid];
-
-                return (
-                  <button
-                    key={sid}
-                    type="button"
-                    className={`adminSeat ${MULTI_UI[cat].seatClass} ${isSel ? "isSelected" : ""}`}
-                    onClick={() => toggleSeat(sid)}
-                    title={isReserved ? `#${n} (${sid}) • FOGLALT` : `#${n} (${sid}) • ${seatPrice(sid)} Ft`}
-                    disabled={!existsInDb || isReserved}
-                    style={{
-                      cursor: existsInDb && !isReserved ? "pointer" : "not-allowed",
-                      opacity: existsInDb ? 1 : 0.35,
-                      backgroundColor: isReserved ? "rgb(141, 3, 3)" : undefined,
-                      color: isReserved ? "white" : undefined,
-                      position: "relative",
-                    }}
-                  >
-                    {isReserved ? "X" : n}
-                  </button>
-                );
-              });
-            })}
-          </div>
-</div>
           <div style={{ display: "flex", gap: 12, alignItems: "center", marginTop: 14 }}>
             <button className="btn" onClick={addToCart}>
               Kosárba ({selectedSeatIds.length})
             </button>
             <div style={{ opacity: 0.85 }}>
               Összesen:{" "}
-              <b>
-                {selectedSeatIds.reduce((sum, sid) => sum + seatPrice(sid), 0)} Ft
-              </b>
+              <b>{selectedSeatIds.reduce((sum, sid) => sum + seatPrice(sid), 0)} Ft</b>
             </div>
           </div>
         </>

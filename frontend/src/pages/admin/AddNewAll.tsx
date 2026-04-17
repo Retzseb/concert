@@ -14,6 +14,7 @@ type PlaceDraft = { name: string; city: string; address: string };
 type RoomDraft = { place_id: string; serial_number: string; total_rows: string; total_columns: string };
 type PerformerDraft = { id: string; name: string; genre: string; country: string; description: string };
 type GenreDraft = { name: string };
+
 function formatNotifyList(data: any) {
   const list = data?.notify_buyers;
   if (!Array.isArray(list) || list.length === 0) return "Nincs értesítendő vásárló.";
@@ -31,6 +32,7 @@ type ConcertDraft = {
   date: string;
   base_price: string;
   description: string;
+  // itt maradhat string (ha akarod preview / meglévő érték), de feltöltéshez külön File state-et használunk
   picture: string;
 };
 
@@ -76,6 +78,9 @@ export function AddNewPage() {
   const [genreDraft, setGenreDraft] = useState<GenreDraft>(NEW_GENRE);
   const [concertDraft, setConcertDraft] = useState<ConcertDraft>(NEW_CONCERT);
 
+  // ÚJ: a feltöltött kép fájl state
+  const [concertImage, setConcertImage] = useState<File | null>(null);
+
   const [openId, setOpenId] = useState<number | null>(null);
   const [openConcertId, setOpenConcertId] = useState<number | null>(null);
 
@@ -87,6 +92,7 @@ export function AddNewPage() {
   const selectedPerformer = performersApi.items.find(
     (performer) => String(performer.id) === String(concertDraft.performer_id),
   );
+
   const selectedGenreName =
     genresApi.items.find((genre) => genre.id === selectedPerformer?.genre)?.name ?? "-";
 
@@ -103,6 +109,12 @@ export function AddNewPage() {
     }
   };
 
+  const resetConcertDraft = () => {
+    setConcertDraft(NEW_CONCERT);
+    setConcertImage(null);
+    setOpenConcertId(null);
+  };
+
   return (
     <section className="panel">
       <div className="panelHead">
@@ -117,6 +129,9 @@ export function AddNewPage() {
         <button className="actionBtn actionBtn--solid" onClick={() => setOpen(open === "concerts" ? null : "concerts")}>Új koncert</button>
       </div>
 
+      {/* =========================
+          PLACES
+         ========================= */}
       {open === "places" && (
         <div className="adminTableWrap">
           <h3>Helyszínek</h3>
@@ -132,13 +147,28 @@ export function AddNewPage() {
             <tbody>
               <tr>
                 <td data-label="Név">
-                  <input className="adminInput" placeholder="helyszín neve" value={placeDraft.name} onChange={(e) => updateDraft(setPlaceDraft, "name")(e.target.value)} />
+                  <input
+                    className="adminInput"
+                    placeholder="helyszín neve"
+                    value={placeDraft.name}
+                    onChange={(e) => updateDraft(setPlaceDraft, "name")(e.target.value)}
+                  />
                 </td>
                 <td data-label="Város">
-                  <input className="adminInput" placeholder="város" value={placeDraft.city} onChange={(e) => updateDraft(setPlaceDraft, "city")(e.target.value)} />
+                  <input
+                    className="adminInput"
+                    placeholder="város"
+                    value={placeDraft.city}
+                    onChange={(e) => updateDraft(setPlaceDraft, "city")(e.target.value)}
+                  />
                 </td>
                 <td data-label="Cím">
-                  <input className="adminInput" placeholder="cím" value={placeDraft.address} onChange={(e) => updateDraft(setPlaceDraft, "address")(e.target.value)} />
+                  <input
+                    className="adminInput"
+                    placeholder="cím"
+                    value={placeDraft.address}
+                    onChange={(e) => updateDraft(setPlaceDraft, "address")(e.target.value)}
+                  />
                 </td>
                 <td data-label="Művelet">
                   <button
@@ -151,12 +181,14 @@ export function AddNewPage() {
                     Mentés
                   </button>
                 </td>
-              </tr>              
+              </tr>
+
               {placesApi.loading && (
                 <tr>
                   <td colSpan={4}>Betöltés…</td>
                 </tr>
               )}
+
               {!placesApi.loading &&
                 placesApi.items.map((place) => (
                   <tr key={place.id}>
@@ -173,6 +205,9 @@ export function AddNewPage() {
         </div>
       )}
 
+      {/* =========================
+          ROOMS
+         ========================= */}
       {open === "rooms" && (
         <div className="adminTableWrap">
           <h3>Termek</h3>
@@ -189,7 +224,11 @@ export function AddNewPage() {
             <tbody>
               <tr>
                 <td data-label="Helyszín">
-                  <select className="adminInput" value={roomDraft.place_id} onChange={(e) => updateDraft(setRoomDraft, "place_id")(e.target.value)}>
+                  <select
+                    className="adminInput"
+                    value={roomDraft.place_id}
+                    onChange={(e) => updateDraft(setRoomDraft, "place_id")(e.target.value)}
+                  >
                     <option value="">helyszín választása</option>
                     {placesApi.items.map((place) => (
                       <option key={place.id} value={place.id}>
@@ -199,13 +238,31 @@ export function AddNewPage() {
                   </select>
                 </td>
                 <td data-label="Terem">
-                  <input className="adminInput" type="number" placeholder="terem sorszáma" value={roomDraft.serial_number} onChange={(e) => updateDraft(setRoomDraft, "serial_number")(e.target.value)} />
+                  <input
+                    className="adminInput"
+                    type="number"
+                    placeholder="terem sorszáma"
+                    value={roomDraft.serial_number}
+                    onChange={(e) => updateDraft(setRoomDraft, "serial_number")(e.target.value)}
+                  />
                 </td>
                 <td data-label="Sorok">
-                  <input className="adminInput" type="number" placeholder="sorok" value={roomDraft.total_rows} onChange={(e) => updateDraft(setRoomDraft, "total_rows")(e.target.value)} />
+                  <input
+                    className="adminInput"
+                    type="number"
+                    placeholder="sorok"
+                    value={roomDraft.total_rows}
+                    onChange={(e) => updateDraft(setRoomDraft, "total_rows")(e.target.value)}
+                  />
                 </td>
                 <td data-label="Oszlopok">
-                  <input className="adminInput" type="number" placeholder="oszlopok" value={roomDraft.total_columns} onChange={(e) => updateDraft(setRoomDraft, "total_columns")(e.target.value)} />
+                  <input
+                    className="adminInput"
+                    type="number"
+                    placeholder="oszlopok"
+                    value={roomDraft.total_columns}
+                    onChange={(e) => updateDraft(setRoomDraft, "total_columns")(e.target.value)}
+                  />
                 </td>
                 <td data-label="Művelet">
                   <button
@@ -223,12 +280,14 @@ export function AddNewPage() {
                     Mentés
                   </button>
                 </td>
-              </tr>              
+              </tr>
+
               {roomsApi.loading && (
                 <tr>
                   <td colSpan={5}>Betöltés…</td>
                 </tr>
               )}
+
               {!roomsApi.loading &&
                 roomsApi.items.map((room) => {
                   const place = placesApi.items.find((item) => item.id === room.place_id);
@@ -249,6 +308,9 @@ export function AddNewPage() {
         </div>
       )}
 
+      {/* =========================
+          PERFORMERS
+         ========================= */}
       {open === "performers" && (
         <div className="adminTableWrap">
           <h3>Előadók</h3>
@@ -264,10 +326,19 @@ export function AddNewPage() {
             <tbody>
               <tr>
                 <td data-label="Név">
-                  <input className="adminInput" placeholder="előadó neve" value={performerDraft.name} onChange={(e) => updateDraft(setPerformerDraft, "name")(e.target.value)} />
+                  <input
+                    className="adminInput"
+                    placeholder="előadó neve"
+                    value={performerDraft.name}
+                    onChange={(e) => updateDraft(setPerformerDraft, "name")(e.target.value)}
+                  />
                 </td>
                 <td data-label="Műfaj">
-                  <select className="adminInput" value={performerDraft.genre} onChange={(e) => updateDraft(setPerformerDraft, "genre")(e.target.value)}>
+                  <select
+                    className="adminInput"
+                    value={performerDraft.genre}
+                    onChange={(e) => updateDraft(setPerformerDraft, "genre")(e.target.value)}
+                  >
                     <option value="">műfaj választása</option>
                     {genresApi.items.map((genre) => (
                       <option key={genre.id} value={genre.id}>
@@ -277,10 +348,14 @@ export function AddNewPage() {
                   </select>
                 </td>
                 <td data-label="Ország">
-                  <input className="adminInput" placeholder="ország" value={performerDraft.country} onChange={(e) => updateDraft(setPerformerDraft, "country")(e.target.value)} />
+                  <input
+                    className="adminInput"
+                    placeholder="ország"
+                    value={performerDraft.country}
+                    onChange={(e) => updateDraft(setPerformerDraft, "country")(e.target.value)}
+                  />
                 </td>
                 <td data-label="Művelet">
-                  
                   <button
                     className="actionBtn actionBtn--solid"
                     onClick={async () => {
@@ -300,32 +375,51 @@ export function AddNewPage() {
               </tr>
               <tr>
                 <td colSpan={4}>
-                  <input className="adminInput" placeholder="leírás" value={performerDraft.description} onChange={(e) => updateDraft(setPerformerDraft, "description")(e.target.value)} />
+                  <input
+                    className="adminInput"
+                    placeholder="leírás"
+                    value={performerDraft.description}
+                    onChange={(e) => updateDraft(setPerformerDraft, "description")(e.target.value)}
+                  />
                 </td>
-              </tr>              
+              </tr>
+
               {performersApi.items.map((performer) => (
-                <>
-                  <tr key={performer.id}>
+                <Fragment key={performer.id}>
+                  <tr>
                     <td data-label="Név">{performer.name}</td>
-                    <td data-label="Műfaj">{genresApi.items.find((genre) => genre.id === performer.genre)?.name ?? "-"}</td>
+                    <td data-label="Műfaj">
+                      {genresApi.items.find((genre) => genre.id === performer.genre)?.name ?? "-"}
+                    </td>
                     <td data-label="Ország">{performer.country ?? "-"}</td>
                     <td data-label="Művelet" className="performerActions">
-                      <button className="actionBtn" type="button" onClick={() => setOpenId(openId === performer.id ? null : performer.id)}>ℹ</button>
+                      <button
+                        className="actionBtn"
+                        type="button"
+                        onClick={() => setOpenId(openId === performer.id ? null : performer.id)}
+                      >
+                        ℹ
+                      </button>
                       <button className="adminDanger" onClick={() => performersApi.deleteItem(performer.id)}>Törlés</button>
                     </td>
                   </tr>
                   {openId === performer.id && (
-                    <tr key={`desc-${performer.id}`}>
-                      <td colSpan={4} className="adminDescriptionRow">{performer.description || "Nincs leírás megadva."}</td>
+                    <tr>
+                      <td colSpan={4} className="adminDescriptionRow">
+                        {performer.description || "Nincs leírás megadva."}
+                      </td>
                     </tr>
                   )}
-                </>
+                </Fragment>
               ))}
             </tbody>
           </table>
         </div>
       )}
 
+      {/* =========================
+          GENRES
+         ========================= */}
       {open === "genres" && (
         <div className="adminTableWrap">
           <h3>Műfajok</h3>
@@ -339,7 +433,12 @@ export function AddNewPage() {
             <tbody>
               <tr>
                 <td data-label="Név">
-                  <input className="adminInput" placeholder="műfaj neve" value={genreDraft.name} onChange={(e) => updateDraft(setGenreDraft, "name")(e.target.value)} />
+                  <input
+                    className="adminInput"
+                    placeholder="műfaj neve"
+                    value={genreDraft.name}
+                    onChange={(e) => updateDraft(setGenreDraft, "name")(e.target.value)}
+                  />
                 </td>
                 <td data-label="Művelet">
                   <button
@@ -352,7 +451,8 @@ export function AddNewPage() {
                     Mentés
                   </button>
                 </td>
-              </tr>              
+              </tr>
+
               {genresApi.items.map((genre) => (
                 <tr key={genre.id}>
                   <td data-label="Név">{genre.name}</td>
@@ -366,158 +466,231 @@ export function AddNewPage() {
         </div>
       )}
 
+      {/* =========================
+          CONCERTS  (ITT A VÁLTOZÁS!)
+         ========================= */}
       {open === "concerts" && (
         <div className="adminTableWrap">
           <h3>Koncertek</h3>
+
           <table className="adminTable">
-            <tr>
-              <th>Név</th>
-              <th>Előadó</th>
-              <th>Műfaj</th>
-              <th>Helyszín</th>
-              <th>Terem</th>
-              <th>Dátum</th>
-              <th>Alapár</th>
-              <th>Leírás</th>
-              <th>Művelet</th>
-            </tr>
-            <tbody>
-<tr>
-  <td data-label="Név">
-    <input className="adminInput" placeholder="koncert neve" value={concertDraft.name} onChange={(e) => updateDraft(setConcertDraft, "name")(e.target.value)} />
-  </td>
-  <td data-label="Előadó">
-    <select className="adminInput" value={concertDraft.performer_id} onChange={(e) => updateDraft(setConcertDraft, "performer_id")(e.target.value)}>
-      <option value="">előadó választása</option>
-      {performersApi.items.map((performer) => (
-        <option key={performer.id} value={performer.id}>
-          {performer.name}
-        </option>
-      ))}
-    </select>
-  </td>
-  <td data-label="Műfaj">
-    <span>{selectedGenreName}</span>
-  </td>
-  <td data-label="Helyszín">
-    <select
-      className="adminInput"
-      value={concertDraft.place_id}
-      onChange={(e) => {
-        updateDraft(setConcertDraft, "place_id")(e.target.value);
-        updateDraft(setConcertDraft, "room_id")("");
-      }}
-    >
-      <option value="">helyszín választása</option>
-      {placesApi.items.map((place) => (
-        <option key={place.id} value={place.id}>
-          {place.name} – {place.city}
-        </option>
-      ))}
-    </select>
-  </td>
-  <td data-label="Terem">
-    <select className="adminInput" value={concertDraft.room_id} onChange={(e) => updateDraft(setConcertDraft, "room_id")(e.target.value)} disabled={!concertDraft.place_id}>
-      <option value="">terem választása</option>
-      {filteredRooms.map((room) => (
-        <option key={room.id} value={room.id}>
-          {room.serial_number}
-        </option>
-      ))}
-    </select>
-  </td>
-  <td data-label="Dátum">
-    <input className="adminInput" type="datetime-local" value={concertDraft.date} onChange={(e) => updateDraft(setConcertDraft, "date")(e.target.value)} />
-  </td>
-  <td data-label="Alapár">
-    <input className="adminInput" type="number" placeholder="alapár" value={concertDraft.base_price} onChange={(e) => updateDraft(setConcertDraft, "base_price")(e.target.value)} />
-  </td>
-  <td data-label="Leírás">–</td>
-  <td data-label="Művelet">
-    <button
-      className="actionBtn actionBtn--solid"
-      onClick={async () => {
-        if (!concertDraft.name.trim()) return alert("Add meg a koncert nevét!");
-        if (!concertDraft.performer_id) return alert("Válassz előadót!");
-        if (!concertDraft.place_id) return alert("Válassz helyszínt!");
-        if (!concertDraft.room_id) return alert("Válassz termet!");
-        if (!concertDraft.date) return alert("Add meg a dátumot!");
-        if (!concertDraft.base_price) return alert("Add meg az alapárat!");
-
-        await concertsApi.createItem({
-          name: concertDraft.name,
-          performer_id: Number(concertDraft.performer_id),
-          room_id: Number(concertDraft.room_id),
-          date: concertDraft.date,
-          base_price: Number(concertDraft.base_price),
-          description: concertDraft.description || "",
-          picture: concertDraft.picture || "",
-        });
-
-        setConcertDraft(NEW_CONCERT);
-      }}
-    >
-      Mentés
-    </button>
-  </td>
-</tr>
+            <thead>
               <tr>
-                <td colSpan={8}>
+                <th>Név</th>
+                <th>Előadó</th>
+                <th>Műfaj</th>
+                <th>Helyszín</th>
+                <th>Terem</th>
+                <th>Dátum</th>
+                <th>Alapár</th>
+                <th>Leírás</th>
+                <th>Művelet</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td data-label="Név">
+                  <input
+                    className="adminInput"
+                    placeholder="koncert neve"
+                    value={concertDraft.name}
+                    onChange={(e) => updateDraft(setConcertDraft, "name")(e.target.value)}
+                  />
+                </td>
+
+                <td data-label="Előadó">
+                  <select
+                    className="adminInput"
+                    value={concertDraft.performer_id}
+                    onChange={(e) => updateDraft(setConcertDraft, "performer_id")(e.target.value)}
+                  >
+                    <option value="">előadó választása</option>
+                    {performersApi.items.map((performer) => (
+                      <option key={performer.id} value={performer.id}>
+                        {performer.name}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+
+                <td data-label="Műfaj">
+                  <span>{selectedGenreName}</span>
+                </td>
+
+                <td data-label="Helyszín">
+                  <select
+                    className="adminInput"
+                    value={concertDraft.place_id}
+                    onChange={(e) => {
+                      updateDraft(setConcertDraft, "place_id")(e.target.value);
+                      updateDraft(setConcertDraft, "room_id")("");
+                    }}
+                  >
+                    <option value="">helyszín választása</option>
+                    {placesApi.items.map((place) => (
+                      <option key={place.id} value={place.id}>
+                        {place.name} – {place.city}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+
+                <td data-label="Terem">
+                  <select
+                    className="adminInput"
+                    value={concertDraft.room_id}
+                    onChange={(e) => updateDraft(setConcertDraft, "room_id")(e.target.value)}
+                    disabled={!concertDraft.place_id}
+                  >
+                    <option value="">terem választása</option>
+                    {filteredRooms.map((room) => (
+                      <option key={room.id} value={room.id}>
+                        {room.serial_number}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+
+                <td data-label="Dátum">
+                  <input
+                    className="adminInput"
+                    type="datetime-local"
+                    value={concertDraft.date}
+                    onChange={(e) => updateDraft(setConcertDraft, "date")(e.target.value)}
+                  />
+                </td>
+
+                <td data-label="Alapár">
+                  <input
+                    className="adminInput"
+                    type="number"
+                    placeholder="alapár"
+                    value={concertDraft.base_price}
+                    onChange={(e) => updateDraft(setConcertDraft, "base_price")(e.target.value)}
+                  />
+                </td>
+
+                <td data-label="Leírás">–</td>
+
+                <td data-label="Művelet">
+                  <button
+                    className="actionBtn actionBtn--solid"
+                    onClick={async () => {
+                      if (!concertDraft.name.trim()) return alert("Add meg a koncert nevét!");
+                      if (!concertDraft.performer_id) return alert("Válassz előadót!");
+                      if (!concertDraft.place_id) return alert("Válassz helyszínt!");
+                      if (!concertDraft.room_id) return alert("Válassz termet!");
+                      if (!concertDraft.date) return alert("Add meg a dátumot!");
+                      if (!concertDraft.base_price) return alert("Add meg az alapárat!");
+
+                      // ✅ FormData: így megy fel a kép is
+                      const fd = new FormData();
+                      fd.append("name", concertDraft.name);
+                      fd.append("performer_id", concertDraft.performer_id);
+                      fd.append("room_id", concertDraft.room_id);
+                      fd.append("date", concertDraft.date);
+                      fd.append("base_price", concertDraft.base_price);
+                      fd.append("description", concertDraft.description || "");
+
+                      if (concertImage) {
+                        fd.append("picture", concertImage);
+                      }
+
+                      await concertsApi.createItem(fd as any);
+
+                      resetConcertDraft();
+                    }}
+                  >
+                    Mentés
+                  </button>
+                </td>
+              </tr>
+
+              <tr>
+                <td colSpan={9}>
                   <div className="stack">
-                    <input className="adminInput" placeholder="leírás" value={concertDraft.description} onChange={(e) => updateDraft(setConcertDraft, "description")(e.target.value)} />
-                    <input className="adminInput" placeholder="kép URL" value={concertDraft.picture} onChange={(e) => updateDraft(setConcertDraft, "picture")(e.target.value)} />
+                    <input
+                      className="adminInput"
+                      placeholder="leírás"
+                      value={concertDraft.description}
+                      onChange={(e) => updateDraft(setConcertDraft, "description")(e.target.value)}
+                    />
+
+                    {/* ✅ KÉP feltöltés */}
+                    <div style={{ display: "grid", gap: 8 }}>
+                      <input
+                        className="adminInput"
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setConcertImage(e.target.files?.[0] ?? null)}
+                      />
+                      <div className="adminMuted" style={{ fontSize: 12 }}>
+                        {concertImage ? `Kiválasztva: ${concertImage.name}` : "Nincs kiválasztott kép."}
+                      </div>
+                    </div>
                   </div>
                 </td>
-              </tr>              
-{concertsApi.items.map((concert) => (
-  <Fragment key={concert.id}>
-    <tr>
-      <td data-label="Név">{concert.name}</td>
-      <td data-label="Előadó">
-        {concert.performer_name ?? performersApi.items.find((performer) => performer.id === concert.performer_id)?.name ?? concert.performer_id}
-      </td>
-      <td data-label="Műfaj">
-        {concert.genre_name ?? genresApi.items.find((genre) => genre.id === concert.genre_id)?.name ?? "-"}
-      </td>
-      <td data-label="Helyszín">
-        {concert.place_name ?? placesApi.items.find((place) => place.id === concert.place_id)?.name ?? "-"}
-      </td>
-      <td data-label="Terem">
-        {concert.serial_number ?? roomsApi.items.find((room) => room.id === concert.room_id)?.serial_number ?? concert.room_id}
-      </td>
-      <td data-label="Dátum">{formatDate(concert.date)}</td>
-      <td data-label="Alapár">{concert.base_price}</td>
-      <td data-label="Leírás">
-        <button
-          type="button"
-          className="actionBtn actionBtn--ghost"
-          onClick={() =>
-            setOpenConcertId(openConcertId === concert.id ? null : concert.id)
-          }
-          title="Leírás megjelenítése"
-        >
-          ℹ
-        </button>
-      </td>
-      <td data-label="Művelet">
-        <button className="adminDanger" onClick={() => handleConcertDelete(concert.id)}>
-          Törlés
-        </button>
-      </td>
-    </tr>
+              </tr>
 
-    {openConcertId === concert.id && (
-      <tr>
-        <td colSpan={9}>
-          <div className="adminDescriptionBox">
-            <strong>Koncert leírás:</strong>
-            <div>{concert.description || "Nincs megadott leírás."}</div>
-          </div>
-        </td>
-      </tr>
-    )}
-  </Fragment>
-))}            </tbody>
+              {concertsApi.items.map((concert) => (
+                <Fragment key={concert.id}>
+                  <tr>
+                    <td data-label="Név">{concert.name}</td>
+                    <td data-label="Előadó">
+                      {concert.performer_name ??
+                        performersApi.items.find((performer) => performer.id === concert.performer_id)?.name ??
+                        concert.performer_id}
+                    </td>
+                    <td data-label="Műfaj">
+                      {concert.genre_name ??
+                        genresApi.items.find((genre) => genre.id === concert.genre_id)?.name ??
+                        "-"}
+                    </td>
+                    <td data-label="Helyszín">
+                      {concert.place_name ??
+                        placesApi.items.find((place) => place.id === concert.place_id)?.name ??
+                        "-"}
+                    </td>
+                    <td data-label="Terem">
+                      {concert.serial_number ??
+                        roomsApi.items.find((room) => room.id === concert.room_id)?.serial_number ??
+                        concert.room_id}
+                    </td>
+                    <td data-label="Dátum">{formatDate(concert.date)}</td>
+                    <td data-label="Alapár">{concert.base_price}</td>
+
+                    <td data-label="Leírás">
+                      <button
+                        type="button"
+                        className="actionBtn actionBtn--ghost"
+                        onClick={() => setOpenConcertId(openConcertId === concert.id ? null : concert.id)}
+                        title="Leírás megjelenítése"
+                      >
+                        ℹ
+                      </button>
+                    </td>
+
+                    <td data-label="Művelet">
+                      <button className="adminDanger" onClick={() => handleConcertDelete(concert.id)}>
+                        Törlés
+                      </button>
+                    </td>
+                  </tr>
+
+                  {openConcertId === concert.id && (
+                    <tr>
+                      <td colSpan={9}>
+                        <div className="adminDescriptionBox">
+                          <strong>Koncert leírás:</strong>
+                          <div>{concert.description || "Nincs megadott leírás."}</div>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </Fragment>
+              ))}
+            </tbody>
           </table>
         </div>
       )}
