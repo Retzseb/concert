@@ -30,13 +30,13 @@ export function ConcertDetailsPage() {
 
   const concert = concerts.find((c) => c.id === id);
 
-  // ✅ KÉP URL (Railway public) – abszolút linkké alakítjuk
-  const pictureUrl = useMemo(() => toAbsoluteUrl(concert?.picture), [concert?.picture]);
-
   const { layout, seatIds, loading: layoutLoading, error: layoutError } = useSeatLayout(concert?.room_id ?? "");
 
   const [selected, setSelected] = useState<Record<string, boolean>>({});
   const [reservedSeatMap, setReservedSeatMap] = useState<Record<string, boolean>>({});
+
+  // ✅ KÉP URL (Railway public) – abszolút linkké alakítjuk
+  const pictureUrl = useMemo(() => toAbsoluteUrl(concert?.picture), [concert?.picture]);
 
   useEffect(() => {
     let cancelled = false;
@@ -52,6 +52,7 @@ export function ConcertDetailsPage() {
           headers: { Accept: "application/json" },
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
         const data = await res.json();
         if (cancelled || !Array.isArray(data)) return;
 
@@ -60,6 +61,7 @@ export function ConcertDetailsPage() {
           const key = seatId(Number(seat.row_number), Number(seat.column_number));
           next[key] = !!seat.reserved;
         });
+
         setReservedSeatMap(next);
       } catch (e) {
         console.error(e);
@@ -93,15 +95,20 @@ export function ConcertDetailsPage() {
     setSelected((prev) => ({ ...prev, [sid]: !prev[sid] }));
   };
 
-  const selectedSeatIds = Object.entries(selected)
-    .filter(([k, v]) => v && !reservedSeatMap[k])
-    .map(([k]) => k);
+  const selectedSeatIds = useMemo(
+    () =>
+      Object.entries(selected)
+        .filter(([k, v]) => v && !reservedSeatMap[k])
+        .map(([k]) => k),
+    [selected, reservedSeatMap]
+  );
 
   const reservedCount = useMemo(() => Object.values(reservedSeatMap).filter(Boolean).length, [reservedSeatMap]);
 
   const totalSelectedPrice = useMemo(
     () => selectedSeatIds.reduce((sum, sid) => sum + seatPrice(sid), 0),
-    [selectedSeatIds, reservedSeatMap, layout.seatMap, layout.multipliers, basePrice]
+    // seatPrice függ a layout-tól + basePrice-tól, ezért ezeket is figyeljük:
+    [selectedSeatIds, layout.seatMap, layout.multipliers, basePrice]
   );
 
   const addToCart = () => {
@@ -195,31 +202,21 @@ export function ConcertDetailsPage() {
 
             <div className="adminStage">Színpad</div>
 
-            {/* ✅ ÚJ: külön scroll konténer (ez szünteti meg a levágást) */}
-            <div
-              className="seatmapScroll"
-              aria-label="Seatmap scroll wrapper"
-              style={{
-                width: "100%",
-                maxWidth: "100%",
-                overflowX: "auto",
-                overflowY: "hidden",
-                WebkitOverflowScrolling: "touch",
-                padding: "6px 6px 10px",
-              }}
-            >
+            {/* ✅ SCROLL WRAPPER: ezen scrollozol, ha nem fér ki */}
+            <div className="seatmapScroll" aria-label="Seatmap scroll wrapper">
               <div
                 className="adminSeatGrid adminSeatGrid--details"
                 aria-label="Seatmap"
                 style={{
-                  // ✅ FIX: nincs minWidth matek; a grid saját tartalma határozza meg a szélességet
                   gridTemplateColumns: `repeat(${cols || 1}, var(--seatSize, 3rem))`,
+                  width: "max-content", // ✅ ez biztosítja, hogy legyen mit scrollozni
                   justifyContent: "start",
                   marginTop: 12,
                 }}
               >
                 {Array.from({ length: rows }).map((_, rIdx) => {
                   const r = rIdx + 1;
+
                   return Array.from({ length: cols }).map((__, cIdx) => {
                     const c = cIdx + 1;
                     const sid = seatId(r, c);
@@ -258,6 +255,7 @@ export function ConcertDetailsPage() {
             <button className="btn" onClick={addToCart}>
               Kosárba ({selectedSeatIds.length})
             </button>
+
             <div style={{ opacity: 0.85 }}>
               Összesen: <b>{totalSelectedPrice} Ft</b>
             </div>

@@ -23,6 +23,9 @@
 
   --surface: rgba(255,255,255,.03);
   --surface-strong: rgba(9,16,10,.45);
+
+  /* seatmap default méret */
+  --seatSize: 48px;
 }
 
 /* =========================
@@ -537,7 +540,7 @@ footer{
 .cartRemove{ border-radius: 12px; }
 
 /* =========================
-   14) SEATMAP (clean, single-source)
+   14) SEATMAP
    ========================= */
 
 /* legend */
@@ -586,7 +589,7 @@ footer{
 
   width: 100%;
   max-width: 100%;
-  overflow: hidden; /* a grid saját scrollt kap */
+  overflow: hidden; /* a wrapper scrolloz */
 }
 
 .adminStage{
@@ -600,8 +603,10 @@ footer{
   font-weight: 950;
 }
 
-/* seat button (alap) */
+/* seat button */
 .adminSeat{
+  width: var(--seatSize);
+  height: var(--seatSize);
   border-radius: 10px;
   border: 1px solid rgba(255,255,255,.12);
   display:flex;
@@ -610,6 +615,7 @@ footer{
   font-weight: 950;
   padding: 0;
   cursor: pointer;
+  font-size: calc(var(--seatSize) * 0.28);
 }
 
 /* selected */
@@ -618,7 +624,7 @@ footer{
   outline-offset: 2px;
 }
 
-/* grid alap */
+/* admin grid base (dashboard) */
 .adminSeatGrid{
   display: grid;
   gap: 10px;
@@ -626,64 +632,24 @@ footer{
   padding: 8px 0 12px;
 }
 
-/* PUBLIC DETAILS seat grid: scroll + clamp */
-.adminSeatGrid--details{
-  display: grid;
-  gap: 8px;
-  --seatsize: 3rem;
-
+/* ✅ SCROLL WRAPPER (Public details) */
+.seatmapScroll{
   width: 100%;
   max-width: 100%;
-  justify-content: start;
-
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
-
-  padding: 8px 8px 12px;
+  padding: 6px 6px 10px;
 }
 
-/* default seat méret (desktop/tablet) */
-.adminSeatGrid--details .adminSeat{
-  width: 3rem;
-  height: 3rem;
-  font-size: 0.875rem;
-}
-
-/* 680 alatt: rugalmas gombok (ez oldja a 680–520 közti csúnyaságot is) */
-@media (max-width: 680px){
-  .adminSeatGrid--details .adminSeat{
-    width: clamp(34px, 9.5vw, 46px);
-    height: clamp(34px, 9.5vw, 46px);
-    font-size: clamp(12px, 3.2vw, 14px);
-    border-radius: 10px;
-  }
-}
-
-/* 520 alatt: még tömörebb */
-@media (max-width: 520px){
-  .adminSeatGrid--details{
-    gap: 0.3125rem;
-    padding: 8px 6px 12px;
-  }
-  .adminSeatGrid--details .adminSeat{
-    width: clamp(30px, 9vw, 40px);
-    height: clamp(30px, 9vw, 40px);
-    font-size: clamp(11px, 3vw, 13px);
-    border-radius: 9px;
-  }
-}
-
-/* 420 alatt: extra kicsi kijelzőre */
-@media (max-width: 420px){
-  .adminSeatGrid--details{
-    padding: 8px 4px 12px;
-  }
-  .adminSeatGrid--details .adminSeat{
-    width: clamp(28px, 8.8vw, 36px);
-    height: clamp(28px, 8.8vw, 36px);
-    font-size: clamp(10px, 2.8vw, 12px);
-  }
+/* ✅ A details grid szélességét a tartalom adja, így lesz scroll */
+.adminSeatGrid--details{
+  display: grid;
+  gap: 8px;
+  width: max-content;
+  max-width: none;
+  margin: 0;
+  justify-content: start;
 }
 
 /* =========================
@@ -721,7 +687,6 @@ footer{
   gap: 8px;
 }
 
-/* ha még van ilyen a kódban */
 .profileMenu__actions a{
   color: white !important;
   font-weight: 400;
@@ -729,7 +694,7 @@ footer{
 }
 
 /* =========================
-   17) MISC (legacy / extra)
+   17) MISC
    ========================= */
 .pageLoading{ padding: 20px; }
 
@@ -754,6 +719,18 @@ footer{
 /* =========================
    18) RESPONSIVE
    ========================= */
+
+/* seat size breakpoints */
+@media (max-width: 680px){
+  :root{ --seatSize: 42px; }
+}
+@media (max-width: 520px){
+  :root{ --seatSize: 36px; }
+}
+@media (max-width: 420px){
+  :root{ --seatSize: 32px; }
+}
+
 @media (max-width: 980px){
   .searchPanel{
     max-width: min(58rem, 92vw);
@@ -872,21 +849,4 @@ footer{
 
 @media (max-width: 420px){
   .authPanel{ padding: 12px; }
-}
-
-
-@media (max-width: 680px){
-  .adminSeatGrid--details{
-    --seatSize: clamp(34px, 9.5vw, 46px);
-  }
-}
-@media (max-width: 520px){
-  .adminSeatGrid--details{
-    --seatSize: clamp(30px, 9vw, 40px);
-  }
-}
-@media (max-width: 420px){
-  .adminSeatGrid--details{
-    --seatSize: clamp(28px, 8.8vw, 36px);
-  }
 }
