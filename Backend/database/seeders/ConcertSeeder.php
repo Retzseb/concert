@@ -9,8 +9,6 @@ class ConcertSeeder extends Seeder
 {
     public function run(): void
     {
-        
-
         $concerts = [
             ['picture' => '/kepek/tankcsapda.jpg', 'name' => 'Tankcsapda – Tavaszi koncert', 'performer_id' => 10, 'room_id' => 1, 'date' => '2026-03-12 20:00:00', 'base_price' => 12990, 'description' => 'A legendás debreceni rocktrió ismét színpadra lép egy energikus tavaszi koncert erejéig. A jól ismert slágerek mellett új dalokkal is készülnek, garantált a pörgős hangulat és a telt házas élmény.', 'status' => 1, 'soft_delete' => false],
             ['picture' => '/kepek/halott_penz.jpg', 'name' => 'Halott Pénz – Turnéállomás', 'performer_id' => 11, 'room_id' => 3, 'date' => '2026-06-05 19:30:00', 'base_price' => 14990, 'description' => 'A Halott Pénz egy újabb állomásához érkezik országos turnéjának. Dallamos pop-rap hangzás, közönségkedvenc dalok és felejthetetlen hangulat vár minden látogatót.', 'status' => 0, 'soft_delete' => false],
@@ -22,7 +20,10 @@ class ConcertSeeder extends Seeder
         ];
 
         foreach ($concerts as $concert) {
-            Concert::query()->firstOrCreate(['name' => $concert['name'], 'room_id' => $concert['room_id'], 'date' => $concert['date']], $concert);
+            Concert::query()->updateOrCreate(
+                ['name' => $concert['name'], 'room_id' => $concert['room_id'], 'date' => $concert['date']],
+                $concert
+            );
         }
     }
 }
