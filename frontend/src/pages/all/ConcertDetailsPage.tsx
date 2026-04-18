@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useConcerts } from "../../hooks/useConcerts";
 import { useSeatLayout, MultiplierKey } from "../../hooks/useSeatLayout";
@@ -30,7 +30,9 @@ export function ConcertDetailsPage() {
 
   const concert = concerts.find((c) => c.id === id);
 
-  const { layout, seatIds, loading: layoutLoading, error: layoutError } = useSeatLayout(concert?.room_id ?? "");
+  const { layout, seatIds, loading: layoutLoading, error: layoutError } = useSeatLayout(
+    concert?.room_id ?? ""
+  );
 
   const [selected, setSelected] = useState<Record<string, boolean>>({});
   const [reservedSeatMap, setReservedSeatMap] = useState<Record<string, boolean>>({});
@@ -79,39 +81,52 @@ export function ConcertDetailsPage() {
   const cols = concert?.room_total_columns ?? 0;
   const basePrice = concert?.base_price ?? 0;
 
-  const priceFor = (m: MultiplierKey) => {
-    const mult = layout.multipliers[m] ?? 1;
-    return Math.round(basePrice * mult);
-  };
-
-  const seatCategory = (sid: string): MultiplierKey => {
-    return layout.seatMap[sid] ?? "M2";
-  };
-
-  const seatPrice = (sid: string) => priceFor(seatCategory(sid));
-
-  const toggleSeat = (sid: string) => {
-    if (!seatIds[sid] || reservedSeatMap[sid]) return;
-    setSelected((prev) => ({ ...prev, [sid]: !prev[sid] }));
-  };
-
-  const selectedSeatIds = useMemo(
-    () =>
-      Object.entries(selected)
-        .filter(([k, v]) => v && !reservedSeatMap[k])
-        .map(([k]) => k),
-    [selected, reservedSeatMap]
+  // ✅ stabil ár-számítás (hook-friendly)
+  const priceFor = useCallback(
+    (m: MultiplierKey) => {
+      const mult = layout.multipliers[m] ?? 1;
+      return Math.round(basePrice * mult);
+    },
+    [layout.multipliers, basePrice]
   );
 
-  const reservedCount = useMemo(() => Object.values(reservedSeatMap).filter(Boolean).length, [reservedSeatMap]);
-
-  const totalSelectedPrice = useMemo(
-    () => selectedSeatIds.reduce((sum, sid) => sum + seatPrice(sid), 0),
-    // seatPrice függ a layout-tól + basePrice-tól, ezért ezeket is figyeljük:
-    [selectedSeatIds, layout.seatMap, layout.multipliers, basePrice]
+  const seatCategory = useCallback(
+    (sid: string): MultiplierKey => {
+      return layout.seatMap[sid] ?? "M2";
+    },
+    [layout.seatMap]
   );
 
-  const addToCart = () => {
+  const seatPrice = useCallback(
+    (sid: string) => priceFor(seatCategory(sid)),
+    [priceFor, seatCategory]
+  );
+
+  const toggleSeat = useCallback(
+    (sid: string) => {
+      if (!seatIds[sid] || reservedSeatMap[sid]) return;
+      setSelected((prev) => ({ ...prev, [sid]: !prev[sid] }));
+    },
+    [seatIds, reservedSeatMap]
+  );
+
+  const selectedSeatIds = useMemo(() => {
+    return Object.entries(selected)
+      .filter(([k, v]) => v && !reservedSeatMap[k])
+      .map(([k]) => k);
+  }, [selected, reservedSeatMap]);
+
+  const reservedCount = useMemo(
+    () => Object.values(reservedSeatMap).filter(Boolean).length,
+    [reservedSeatMap]
+  );
+
+  // ✅ Netlify lint fix: seatPrice is dependency
+  const totalSelectedPrice = useMemo(() => {
+    return selectedSeatIds.reduce((sum, sid) => sum + seatPrice(sid), 0);
+  }, [selectedSeatIds, seatPrice]);
+
+  const addToCart = useCallback(() => {
     if (!concert) return;
 
     if (selectedSeatIds.length === 0) {
@@ -136,7 +151,7 @@ export function ConcertDetailsPage() {
 
     setSelected({});
     window.alert("Hozzáadva a kosárhoz.");
-  };
+  }, [concert, selectedSeatIds, addItems, seatIds, seatPrice]);
 
   if (!Number.isFinite(id)) {
     return (
