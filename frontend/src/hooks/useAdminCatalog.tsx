@@ -114,9 +114,9 @@ function useCrudList<T>(endpoint: string, mapFn: (item: any) => T) {
     }
   }, [endpoint, mapFn]);
 
-  useEffect(() => {
-    load();
-  }, [load]);
+  // useEffect(() => {
+  //   load();
+  // }, [load]);
 
     const createItem = useCallback(
     async (payload: Record<string, any> | FormData) => {
