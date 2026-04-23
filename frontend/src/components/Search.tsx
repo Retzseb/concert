@@ -142,7 +142,7 @@ export function Search(props: {
       </div>
 
       <div>
-        <button className="searchBtn" type="button" onClick={doSearch}>
+        <button className="searchBtn" type="submit" onClick={doSearch}>
           Keresés
         </button>
         <button
