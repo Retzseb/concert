@@ -26,7 +26,9 @@ export function ConcertDetailsPage() {
   const id = Number(params.id);
 
   const { concerts, loading, error } = useConcerts();
-  const { addItems } = useCart();
+
+ 
+  const { items: cartItems, addItems } = useCart();
 
   const concert = concerts.find((c) => c.id === id);
 
@@ -37,8 +39,17 @@ export function ConcertDetailsPage() {
   const [selected, setSelected] = useState<Record<string, boolean>>({});
   const [reservedSeatMap, setReservedSeatMap] = useState<Record<string, boolean>>({});
 
-  // ✅ KÉP URL (Railway public) – abszolút linkké alakítjuk
   const pictureUrl = useMemo(() => toAbsoluteUrl(concert?.picture), [concert?.picture]);
+
+  
+  const inCartSeatDbIds = useMemo(() => {
+    if (!concert?.id) return new Set<number>();
+    const set = new Set<number>();
+    for (const it of cartItems) {
+      if (it.concertId === concert.id) set.add(Number(it.seatDbId));
+    }
+    return set;
+  }, [cartItems, concert?.id]);
 
   useEffect(() => {
     let cancelled = false;
@@ -81,7 +92,6 @@ export function ConcertDetailsPage() {
   const cols = concert?.room_total_columns ?? 0;
   const basePrice = concert?.base_price ?? 0;
 
-  // ✅ stabil ár-számítás (hook-friendly)
   const priceFor = useCallback(
     (m: MultiplierKey) => {
       const mult = layout.multipliers[m] ?? 1;
@@ -102,26 +112,36 @@ export function ConcertDetailsPage() {
     [priceFor, seatCategory]
   );
 
+
+  const isSeatInCart = useCallback(
+    (sid: string) => {
+      const dbId = seatIds[sid];
+      if (!dbId) return false;
+      return inCartSeatDbIds.has(Number(dbId));
+    },
+    [seatIds, inCartSeatDbIds]
+  );
+
   const toggleSeat = useCallback(
     (sid: string) => {
-      if (!seatIds[sid] || reservedSeatMap[sid]) return;
+      
+      if (!seatIds[sid] || reservedSeatMap[sid] || isSeatInCart(sid)) return;
       setSelected((prev) => ({ ...prev, [sid]: !prev[sid] }));
     },
-    [seatIds, reservedSeatMap]
+    [seatIds, reservedSeatMap, isSeatInCart]
   );
 
   const selectedSeatIds = useMemo(() => {
     return Object.entries(selected)
-      .filter(([k, v]) => v && !reservedSeatMap[k])
+      .filter(([k, v]) => v && !reservedSeatMap[k] && !isSeatInCart(k))
       .map(([k]) => k);
-  }, [selected, reservedSeatMap]);
+  }, [selected, reservedSeatMap, isSeatInCart]);
 
   const reservedCount = useMemo(
     () => Object.values(reservedSeatMap).filter(Boolean).length,
     [reservedSeatMap]
   );
 
-  // ✅ Netlify lint fix: seatPrice is dependency
   const totalSelectedPrice = useMemo(() => {
     return selectedSeatIds.reduce((sum, sid) => sum + seatPrice(sid), 0);
   }, [selectedSeatIds, seatPrice]);
@@ -217,7 +237,6 @@ export function ConcertDetailsPage() {
 
             <div className="adminStage">Színpad</div>
 
-            {/* ✅ SCROLL WRAPPER: ezen scrollozol, ha nem fér ki */}
             <div className="seatmapScroll" aria-label="Seatmap scroll wrapper">
               <div
                 className="adminSeatGrid adminSeatGrid--details"
@@ -240,23 +259,39 @@ export function ConcertDetailsPage() {
                     const isSel = !!selected[sid];
                     const existsInDb = !!seatIds[sid];
                     const isReserved = !!reservedSeatMap[sid];
+                    const inCart = existsInDb ? isSeatInCart(sid) : false;
+
+                    const disabled = !existsInDb || isReserved || inCart;
+
+                    const title = isReserved
+                      ? `#${n} (${sid}) • FOGLALT`
+                      : inCart
+                        ? `#${n} (${sid}) • KOSÁRBAN`
+                        : `#${n} (${sid}) • ${seatPrice(sid)} Ft`;
 
                     return (
                       <button
                         key={sid}
                         type="button"
-                        className={`adminSeat ${MULTI_UI[cat].seatClass} ${isSel ? "isSelected" : ""}`}
+                        className={`adminSeat ${MULTI_UI[cat].seatClass} ${isSel ? "isSelected" : ""} ${inCart ? "isInCart" : ""}`}
                         onClick={() => toggleSeat(sid)}
-                        title={isReserved ? `#${n} (${sid}) • FOGLALT` : `#${n} (${sid}) • ${seatPrice(sid)} Ft`}
-                        disabled={!existsInDb || isReserved}
+                        title={title}
+                        disabled={disabled}
                         style={{
-                          cursor: existsInDb && !isReserved ? "pointer" : "not-allowed",
+                          cursor: existsInDb && !isReserved && !inCart ? "pointer" : "not-allowed",
                           opacity: existsInDb ? 1 : 0.35,
+
+                          // ✅ végleges foglalt: piros
                           backgroundColor: isReserved ? "rgb(141, 3, 3)" : undefined,
                           color: isReserved ? "white" : undefined,
+
+                          // ✅ kosárban: narancs + jelzés (csak ha nem reserved)
+                          filter: inCart && !isReserved ? "saturate(1.1)" : undefined,
+                          outline: inCart && !isReserved ? "3px solid rgba(249,115,22,.9)" : undefined,
+                          outlineOffset: inCart && !isReserved ? "2px" : undefined,
                         }}
                       >
-                        {isReserved ? "X" : n}
+                        {isReserved ? "X" : inCart ? "🛒" : n}
                       </button>
                     );
                   });

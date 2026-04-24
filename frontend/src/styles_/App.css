@@ -647,14 +647,20 @@ footer{
   padding: 6px 6px 10px;
 }
 
-/* ✅ Details grid: mindig tartalom-széles, sose 100% */
-/* A grid maga legyen "content-sized", hogy scroll esetén legyen mit scrollozni */
 .adminSeatGrid--details{
   width: max-content;     
   max-width: none;
   margin: 0 auto;    
   grid: content-fit;     
-}          
+}
+.adminSeat.isInCart{
+  background: #6b7280 !important;
+  color: #ffffff !important;
+  border-color: rgba(255,255,255,0.18);
+  outline: 3px solid rgba(255,255,255,0.35);
+  outline-offset: 2px;
+  cursor: not-allowed;
+}   
 
 
 /* =========================

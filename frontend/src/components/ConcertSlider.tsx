@@ -4,14 +4,13 @@ import { ConcertCard } from "./ConcertCard";
 
 type Props = {
   items: Concert[];
-  windowSize: number; // 1/2/3/4
+  windowSize: number;
   label?: string;
 };
 
 export function ConcertSlider({ items, windowSize, label = "Koncertek" }: Props) {
   const [start, setStart] = useState(0);
 
-  // ha változik a találati lista vagy a windowSize => reset
   useEffect(() => {
     setStart(0);
   }, [items.length, windowSize]);
