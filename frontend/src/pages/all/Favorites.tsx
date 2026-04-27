@@ -27,17 +27,18 @@ export function Favorites() {
         <p>{featured.performer_description}</p>
 
         <div
-          className="thumb concertThumb"
+          className="thumb favoriteThumb"
           style={{
             backgroundImage: pictureUrl ? `url(${pictureUrl})` : "none",
           }}
         />
 
-        <p>{featured.name}</p>
-        <p>{featured.place_name}</p>
-        <p>{formatDate(featured.date)}</p>
-        <p>Alapár: {featured.base_price} Ft</p>
+        <h3>{featured.name}</h3>
         <p>{featured.description}</p>
+        <p>Helyszín: {featured.place_name}</p>
+        <p>Időpont: {formatDate(featured.date)}</p>
+        <p>Alapár: {featured.base_price} Ft</p>
+        
       </div>
     </section>
   );

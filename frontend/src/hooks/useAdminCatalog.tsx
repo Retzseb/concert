@@ -55,7 +55,6 @@ export type NewPerformer = { name: string; genre: number | ""; description?: str
 export type NewGenre = Omit<GenreRow, "id">;
 export type NewConcert = Omit<ConcertRow, "id">;
 
-// ✅ STABIL map függvények (NEM inline)
 const mapPlace = (p: any): PlaceRow => ({
   id: Number(p.id),
   name: String(p.name ?? ""),
@@ -106,7 +105,6 @@ function useCrudList<T>(endpoint: string, mapFn: (item: any) => T) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // ✅ load NEM függ mapFn-től -> megszűnik a végtelen loop
   const load = useCallback(async () => {
     try {
       setLoading(true);
@@ -130,7 +128,7 @@ function useCrudList<T>(endpoint: string, mapFn: (item: any) => T) {
     } finally {
       setLoading(false);
     }
-  }, [endpoint]); // 👈 csak endpoint
+  }, [endpoint]); 
 
   useEffect(() => {
     load();

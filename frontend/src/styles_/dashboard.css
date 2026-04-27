@@ -1,13 +1,7 @@
-/* =========================================================
-   DASHBOARD.CSS
-   Base/Dark + Responsive (Admin + User)
-   Használja: AdminLayout.tsx, UserLayout.tsx
-   ========================================================= */
+/*  Base/Dark + Responsive (Admin + User)*/
 
 
-/* =========================================================
-   1) COMMON / SHELL (Admin + User közös)
-   ========================================================= */
+/* COMMON / SHELL (Admin + User) */
 
 .shell{
   min-height: 100vh;
@@ -159,7 +153,7 @@
   padding: 18px;
 }
 
-/* user main háttér (külön hangulat) */
+/* user main háttér  */
 .shell .dashboardMain--user{
   background: rgba(120, 160, 220, 0.18);
 }
@@ -216,9 +210,7 @@
 }
 
 
-/* =========================================================
-   2) ADMIN ONLY
-   ========================================================= */
+/* ADMIN ONLY */
 
 .shell .adminTableWrap{
   overflow-x: auto;
@@ -266,7 +258,6 @@
   font-weight: 800;
 }
 
-/* a select-ek sötét felületet kapnak */
 .shell .adminSelect,
 .shell .select{
   background: rgba(10, 9, 16, 0.85);
@@ -279,7 +270,6 @@
   background: #0b0a10;
   color: #f3f1ff;
 }
-/* ======= ADMIN SELECT DROPDOWN FIX (dark mode) ======= */
 
 .shell{
   color-scheme: dark;
@@ -398,9 +388,7 @@
 }
 
 
-/* =========================================================
-   3) USER ONLY
-   ========================================================= */
+/* USER ONLY */
 
 .shell .userFormWrap{
   max-width: 720px;
@@ -493,9 +481,7 @@
 }
 
 
-/* =========================================================
-   4) RESPONSIVE (Dashboard)
-   ========================================================= */
+/* RESPONSIVE (Dashboard) */
 
 @media (max-width: 1100px){
   .shell .userOrdersGrid{

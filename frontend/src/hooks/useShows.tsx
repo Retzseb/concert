@@ -56,7 +56,7 @@ export function useShows() {
           title: String(s.title ?? s.name ?? ""),
           performer_name: String(s.performer_name ?? ""),
           place_name: String(s.place_name ?? ""),
-          room: String(s.serial_number ?? s.room ?? ""),
+          room: String(s.room_serial_number ?? s.serial_number ?? s.room ?? ""),
           status: statusFromApi(s.status),
           basePrice: Number(s.basePrice ?? s.base_price ?? s.price ?? 0),
           soft_delete: Boolean(s.soft_delete ?? false),

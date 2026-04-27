@@ -1,7 +1,4 @@
-/* =========================================================
-   DASHBOARD.LIGHT.CSS
-   Csak light theme override-ok a Dashboard felületekre
-   ========================================================= */
+/* DASHBOARD.LIGHT.CSS */
 
 :root[data-theme="light"] .shell .topbar{
   background: rgba(255,255,255,.75);
@@ -37,7 +34,7 @@
   color: rgba(16,24,40,1);
 }
 
-/* user active eltérés */
+/* user active */
 :root[data-theme="light"] .shell .dashboardNavItem--user.active{
   background: rgba(120,170,255,.14);
   border-color: rgba(120,170,255,.30);

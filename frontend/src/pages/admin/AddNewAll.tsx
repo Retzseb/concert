@@ -32,7 +32,6 @@ type ConcertDraft = {
   date: string;
   base_price: string;
   description: string;
-  // itt maradhat string (ha akarod preview / meglévő érték), de feltöltéshez külön File state-et használunk
   picture: string;
 };
 
@@ -78,8 +77,7 @@ export function AddNewPage() {
   const [genreDraft, setGenreDraft] = useState<GenreDraft>(NEW_GENRE);
   const [concertDraft, setConcertDraft] = useState<ConcertDraft>(NEW_CONCERT);
 
-  // ÚJ: a feltöltött kép fájl state
-  const [concertImage, setConcertImage] = useState<File | null>(null);
+  //const [concertImage, setConcertImage] = useState<File | null>(null);
 
   const [openId, setOpenId] = useState<number | null>(null);
   const [openConcertId, setOpenConcertId] = useState<number | null>(null);
@@ -111,7 +109,7 @@ export function AddNewPage() {
 
   const resetConcertDraft = () => {
     setConcertDraft(NEW_CONCERT);
-    setConcertImage(null);
+    //setConcertImage(null);
     setOpenConcertId(null);
   };
 
@@ -129,9 +127,7 @@ export function AddNewPage() {
         <button className="actionBtn actionBtn--solid" onClick={() => setOpen(open === "concerts" ? null : "concerts")}>Új koncert</button>
       </div>
 
-      {/* =========================
-          PLACES
-         ========================= */}
+      {/* PLACES */}
       {open === "places" && (
         <div className="adminTableWrap">
           <h3>Helyszínek</h3>
@@ -205,9 +201,7 @@ export function AddNewPage() {
         </div>
       )}
 
-      {/* =========================
-          ROOMS
-         ========================= */}
+      {/*ROOMS */}
       {open === "rooms" && (
         <div className="adminTableWrap">
           <h3>Termek</h3>
@@ -308,9 +302,7 @@ export function AddNewPage() {
         </div>
       )}
 
-      {/* =========================
-          PERFORMERS
-         ========================= */}
+      {/* PERFORMERS */}
       {open === "performers" && (
         <div className="adminTableWrap">
           <h3>Előadók</h3>
@@ -417,9 +409,7 @@ export function AddNewPage() {
         </div>
       )}
 
-      {/* =========================
-          GENRES
-         ========================= */}
+      {/* GENRES */}
       {open === "genres" && (
         <div className="adminTableWrap">
           <h3>Műfajok</h3>
@@ -466,9 +456,7 @@ export function AddNewPage() {
         </div>
       )}
 
-      {/* =========================
-          CONCERTS  (ITT A VÁLTOZÁS!)
-         ========================= */}
+      {/* CONCERTS */}
       {open === "concerts" && (
         <div className="adminTableWrap">
           <h3>Koncertek</h3>
@@ -584,20 +572,29 @@ export function AddNewPage() {
                       if (!concertDraft.date) return alert("Add meg a dátumot!");
                       if (!concertDraft.base_price) return alert("Add meg az alapárat!");
 
-                      // ✅ FormData: így megy fel a kép is
-                      const fd = new FormData();
-                      fd.append("name", concertDraft.name);
-                      fd.append("performer_id", concertDraft.performer_id);
-                      fd.append("room_id", concertDraft.room_id);
-                      fd.append("date", concertDraft.date);
-                      fd.append("base_price", concertDraft.base_price);
-                      fd.append("description", concertDraft.description || "");
+                      // const fd = new FormData();
+                      // fd.append("name", concertDraft.name);
+                      // fd.append("performer_id", concertDraft.performer_id);
+                      // fd.append("room_id", concertDraft.room_id);
+                      // fd.append("date", concertDraft.date);
+                      // fd.append("base_price", concertDraft.base_price);
+                      // fd.append("description", concertDraft.description || "");
 
-                      if (concertImage) {
-                        fd.append("picture", concertImage);
-                      }
+                      // if (concertImage) {
+                      //   fd.append("picture", concertImage);
+                      // }
 
-                      await concertsApi.createItem(fd as any);
+                      // await concertsApi.createItem(fd as any);
+                      await concertsApi.createItem({
+      
+                        name: concertDraft.name,
+                      performer_id: Number(concertDraft.performer_id),
+                      room_id: Number(concertDraft.room_id),
+                      date: concertDraft.date,
+                      base_price: Number(concertDraft.base_price),
+                      description: concertDraft.description || "",
+                      picture: concertDraft.picture || "",
+                    });
 
                       resetConcertDraft();
                     }}
@@ -617,17 +614,23 @@ export function AddNewPage() {
                       onChange={(e) => updateDraft(setConcertDraft, "description")(e.target.value)}
                     />
 
-                    {/* ✅ KÉP feltöltés */}
+                    {/* KÉP feltöltés */}
                     <div style={{ display: "grid", gap: 8 }}>
-                      <input
+                      {/* <input
                         className="adminInput"
                         type="file"
                         accept="image/*"
                         onChange={(e) => setConcertImage(e.target.files?.[0] ?? null)}
-                      />
-                      <div className="adminMuted" style={{ fontSize: 12 }}>
+                      /> */}
+                      <input
+                      className="adminInput"
+                      placeholder="kép útvonala vagy URL, pl. /kepek/tankcsapda.jpg"
+                      value={concertDraft.picture}
+                      onChange={(e) => updateDraft(setConcertDraft, "picture")(e.target.value)}
+                    />
+                      {/* <div className="adminMuted" style={{ fontSize: 12 }}>
                         {concertImage ? `Kiválasztva: ${concertImage.name}` : "Nincs kiválasztott kép."}
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </td>

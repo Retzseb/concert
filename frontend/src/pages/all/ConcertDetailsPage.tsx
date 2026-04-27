@@ -187,7 +187,7 @@ export function ConcertDetailsPage() {
   return (
     <section className="section">
       <div className="sectionHead">
-        <h2>Koncert</h2>
+        <h2>Választott koncert</h2>
         <Link className="btn" to="/cart">
           Kosár
         </Link>
@@ -200,8 +200,8 @@ export function ConcertDetailsPage() {
 
       {concert && (
         <>
-          <div className="miniCard" style={{ marginBottom: 14, overflow: "hidden" }}>
-            {pictureUrl && (
+          <div className="" style={{ marginBottom: 14, overflow: "hidden" }}>
+            {/* {pictureUrl && (
               <div style={{ marginBottom: 12 }}>
                 <img
                   src={pictureUrl}
@@ -210,7 +210,7 @@ export function ConcertDetailsPage() {
                   loading="lazy"
                 />
               </div>
-            )}
+            )} */}
 
             <h3 style={{ marginTop: 0 }}>{concert.name}</h3>
             <p style={{ marginBottom: 0, opacity: 0.9 }}>
@@ -218,7 +218,7 @@ export function ConcertDetailsPage() {
               <b>Időpont:</b> {formatDate(concert.date)} <br />
               <b>Helyszín:</b> {concert.place_name} <br />
               <b>Alapár:</b> {basePrice} Ft <br />
-              <b>Foglalt:</b> {reservedCount}
+              {/* <b>Foglalt:</b> {reservedCount} */}
             </p>
           </div>
 
@@ -281,11 +281,9 @@ export function ConcertDetailsPage() {
                           cursor: existsInDb && !isReserved && !inCart ? "pointer" : "not-allowed",
                           opacity: existsInDb ? 1 : 0.35,
 
-                          // ✅ végleges foglalt: piros
                           backgroundColor: isReserved ? "rgb(141, 3, 3)" : undefined,
                           color: isReserved ? "white" : undefined,
 
-                          // ✅ kosárban: narancs + jelzés (csak ha nem reserved)
                           filter: inCart && !isReserved ? "saturate(1.1)" : undefined,
                           outline: inCart && !isReserved ? "3px solid rgba(249,115,22,.9)" : undefined,
                           outlineOffset: inCart && !isReserved ? "2px" : undefined,
@@ -299,6 +297,7 @@ export function ConcertDetailsPage() {
               </div>
             </div>
           </div>
+          
 
           <div style={{ display: "flex", gap: 12, alignItems: "center", marginTop: 14, flexWrap: "wrap" }}>
             <button className="btn" onClick={addToCart}>
@@ -309,6 +308,7 @@ export function ConcertDetailsPage() {
               Összesen: <b>{totalSelectedPrice} Ft</b>
             </div>
           </div>
+          
         </>
       )}
     </section>

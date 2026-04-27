@@ -1,12 +1,5 @@
-/* =========================================================
-   APP.CSS
-   Base + Dark theme + Components + Responsive
-   (Light theme külön fájl: App-light.css)
-   ========================================================= */
+/* Base + Dark theme + Components + Responsive */
 
-/* =========================
-   0) CSS VARIABLES (DARK / BASE)
-   ========================= */
 :root{
   --bg:#0b0a10;
   --text:#f3f1ff;
@@ -28,9 +21,6 @@
   --seatSize: 48px;
 }
 
-/* =========================
-   1) RESET / BASE
-   ========================= */
 *{ box-sizing:border-box; }
 
 html, body{
@@ -48,18 +38,14 @@ body{
 a{ color: inherit; text-decoration:none; }
 img{ max-width:100%; display:block; }
 
-/* =========================
-   2) LAYOUT HELPERS
-   ========================= */
+/* LAYOUT HELPERS */
 .container{
   padding-top: 30px;
   width: min(1120px, 92vw);
   margin: 0 auto;
 }
 
-/* =========================
-   3) TOPBAR / NAV
-   ========================= */
+/* TOPBAR / NAV */
 .topbar{
   position: sticky;
   top: 0;
@@ -100,9 +86,7 @@ img{ max-width:100%; display:block; }
   position: relative;
 }
 
-/* =========================
-   4) BUTTONS / PILLS
-   ========================= */
+/* BUTTONS / PILLS */
 .pill{
   border: 1px solid var(--line);
   background: rgba(255,255,255,0.03);
@@ -133,9 +117,7 @@ button{ margin-inline: 5px; }
 .cartIcon{ filter: invert(100%); }
 .cartIcon--header{ width: 30px; }
 
-/* =========================
-   5) HERO
-   ========================= */
+/* HERO */
 .heroCard{
   background-image: url("../assets/pics/hero_pict.png");
   padding-block: 7rem;
@@ -145,9 +127,7 @@ button{ margin-inline: 5px; }
   background-repeat: no-repeat;
 }
 
-/* =========================
-   6) SEARCH PANEL
-   ========================= */
+/* SEARCH PANEL */
 .searchPanel{
   max-width: 70%;
   margin: auto;
@@ -230,9 +210,7 @@ button{ margin-inline: 5px; }
 
 .searchBtn:hover{ filter: brightness(1.06); }
 
-/* =========================
-   7) GENERIC CARDS (miniCard)
-   ========================= */
+/* GENERIC CARDS (miniCard) */
 .miniCard{
   margin: auto;
   border: 1px solid var(--line);
@@ -261,9 +239,7 @@ button{ margin-inline: 5px; }
   font-size: 13px;
 }
 
-/* =========================
-   8) SLIDER (Home)
-   ========================= */
+/* SLIDER (Home) */
 .cardsSliderWrap{
   width: min(1120px, 92vw);
   margin: 18px auto 50px;
@@ -320,9 +296,7 @@ button{ margin-inline: 5px; }
 .cardsArrow:hover{ filter: brightness(1.08); }
 .cardsArrow:disabled{ opacity: .35; cursor: not-allowed; }
 
-/* =========================
-   9) SECTIONS
-   ========================= */
+/* SECTIONS */
 .section{
   width: min(1120px, 92vw);
   max-width: 100%;
@@ -351,9 +325,7 @@ button{ margin-inline: 5px; }
 }
 .sectionHead a:hover{ color:#fff; }
 
-/* =========================
-   10) CONCERT CARD
-   ========================= */
+ /* CONCERT CARD */
 .cardLink{
   text-decoration: none;
   color: inherit;
@@ -407,6 +379,12 @@ button{ margin-inline: 5px; }
   min-height: 180px;
 }
 
+.favoriteThumb{
+  background-size: cover;
+  background-position: center;
+  min-height: 40vh;
+}
+
 .cards{
   max-width: 90%;
   margin:auto;
@@ -416,17 +394,13 @@ button{ margin-inline: 5px; }
   padding-bottom: 32px;
 }
 
-/* =========================
-   11) EMPTY STATE
-   ========================= */
+/* EMPTY STATE */
 .emptyState{
   opacity: 0.8;
   margin-top: 18px;
 }
 
-/* =========================
-   12) FOOTER
-   ========================= */
+/* FOOTER */
 footer{
   margin-top: 50px;
   border-top: 1px solid var(--line);
@@ -469,9 +443,7 @@ footer{
 
 .authors{ font-size: 12px; }
 
-/* =========================
-   13) CART
-   ========================= */
+/* CART */
 .c_list{
   margin:auto;
   padding: 0;
@@ -507,9 +479,8 @@ footer{
   position: absolute;
   top: 0.75rem;
   left: 0.75rem;
-  margin: 0 !important;
-  border-top-left-radius: 999px !important;
-  border-bottom-left-radius: 0 !important;
+  margin: 0;
+  border: 999px;
 }
 
 .c_element_data{ padding: 1rem; }
@@ -540,9 +511,7 @@ footer{
 
 .cartRemove{ border-radius: 12px; }
 
-/* =========================
-   14) SEATMAP
-   ========================= */
+/* SEATMAP */
 
 /* legend */
 .adminSeatLegend span{ color: var(--text-faint); }
@@ -663,9 +632,7 @@ footer{
 }   
 
 
-/* =========================
-   15) LOGO THEME SWITCH (images)
-   ========================= */
+/* LOGO THEME SWITCH (images) */
 .logoImg{
   height: 34px;
   width: auto;
@@ -676,9 +643,7 @@ footer{
 .logoImg--light{ display: none; }
 .logoImg--dark{ display: block; }
 
-/* =========================
-   16) PROFILE MENU (dropdown)
-   ========================= */
+/* PROFILE MENU (dropdown) */
 .profileMenu{
   position: absolute;
   right: 0;
@@ -704,9 +669,7 @@ footer{
   text-align: center;
 }
 
-/* =========================
-   17) MISC
-   ========================= */
+/* MISC */
 .pageLoading{ padding: 20px; }
 
 .featuredBlock { margin: 1rem 0 2rem; }
@@ -727,11 +690,8 @@ footer{
   max-width: 520px;
 }
 
-/* =========================
-   18) RESPONSIVE
-   ========================= */
+/* RESPONSIVE */
 
-/* seat size breakpoints */
 @media (max-width: 680px){
   :root{ --seatSize: 42px; }
 }
@@ -832,7 +792,7 @@ footer{
   .desktopOnly{ display: inline-flex; }
 }
 
-/* Login/Register – 600 alatt ne csússzon össze */
+/* Login/Register */
 @media (max-width: 600px){
   .authPanel{
     max-width: 92vw;
@@ -846,7 +806,7 @@ footer{
 
   .authPanel .searchBtn{ width: 100%; }
 
-  /* a Login header sor (title + CTA) essen egymás alá */
+  /* a Login header */
   .miniCard > div[style*="justify-content: space-between"]{
     flex-direction: column;
     align-items: flex-start !important;

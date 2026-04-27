@@ -23,12 +23,10 @@ export function Header({ user, onLogout }: HeaderProps) {
     const handleClickOutside = (event: MouseEvent) => {
       const t = event.target as Node;
 
-      // Profil menü csukás
       if (open && menuRef.current && !menuRef.current.contains(t)) {
         setOpen(false);
       }
 
-      // Mobil menü csukás
       if (mobileOpen && mobileRef.current && !mobileRef.current.contains(t)) {
         setMobileOpen(false);
       }
@@ -63,7 +61,7 @@ export function Header({ user, onLogout }: HeaderProps) {
 
         <ThemeToggle />
 
-        {/* ✅ 520 ALATT: MOBIL MENÜ (ugyanazzal a profileMenu stílussal) */}
+        {/* 520 ALATT: MOBIL MENÜ */}
         {!isAdmin && (
           <div className="mobileOnly" ref={mobileRef} style={{ position: "relative" }}>
             <button
@@ -137,7 +135,7 @@ export function Header({ user, onLogout }: HeaderProps) {
           </div>
         )}
 
-        {/* ✅ Desktop bejelentkezés / profil menü (marad a mostani logika) */}
+        {/* Desktop bejelentkezés / profil menü */}
         {!user ? (
           <Link to="/login" className="pill desktopOnly">
             Bejelentkezés

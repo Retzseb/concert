@@ -71,7 +71,7 @@ export function Login() {
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
             <h3 style={{ margin: 0 }}>{title}</h3>
 
-            {/* ez a sor: szöveg + regisztráció gomb egy vonalban */}
+            {/* szöveg + regisztráció gomb egy vonalban */}
             <div className="authSwitchRow" style={{ display: "flex", gap: 8, alignItems: "center" }}>
               <p className="authHint">Nem regisztráltál még?</p>
 
